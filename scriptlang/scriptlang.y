@@ -43,7 +43,7 @@ command:
     | MAGIC
 ;
 fileword: 
-    tokenword { scriptlangy_echo(yytext,"fileword.MAGICESC"); }
+    tokenword { scriptlangy_echo(yytext,"fileword.tokenword"); }
     | MAGICESC { scriptlangy_echo("@","fileword.MAGICESC"); }
 ;
 tokenword:
