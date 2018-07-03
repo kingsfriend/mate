@@ -1,4 +1,7 @@
-/*** Definition section ***/
+/* Definition section */
+D			[0-9]
+L			[a-zA-Z_]
+
 %{
 /* C code to be copied verbatim */
     #include "scriptlang.tab.h"
@@ -14,15 +17,61 @@
 %option noyywrap
 
 %%
-"@@"            { return MAGICESC; }
-"@/*"			{ scriptlangl_multiLineComment(); }
-"@//"			{ scriptlangl_singleLineomment(); }
-"@"             { return MAGIC; }
+"@@"                { return MAGICESC; }
+"@/*"			    { scriptlangl_multiLineComment(); }
+"@//"			    { scriptlangl_singleLineomment(); }
+"@"                 { return MAGIC; }
 
-"break"			{ count(); return(BREAK); }
-"case"			{ count(); return(CASE); }
+"break"			    { count(); return(BREAK); }
+"case"			    { count(); return(CASE); }
+"continue"		    { count(); return(CONTINUE); }
+"else"			    { count(); return(ELSE); }
+"enum"			    { count(); return(ENUM); }
+"for"			    { count(); return(FOR); }
+"if"			    { count(); return(IF); }
+"switch"		    { count(); return(SWITCH); }
+"while"			    { count(); return(WHILE); }
 
-[ \t\v\n\f]		{ count(); return(WHITESPACE); }
+
+{L}({L}|{D})*	    { count(); return(IDENTIFIER); }
+{D}+?		        { count(); return(NUMBER); }
+
+L?\"(\\.|[^\\"])*\"	{ count(); return(STRING_LITERAL); }
+[ \t\v\n\f]		    { count(); return(WHITESPACE); }
+
+"++"			{ count(); return(INC_OP); }
+"--"			{ count(); return(DEC_OP); }
+"&&"			{ count(); return(AND_OP); }
+"||"			{ count(); return(OR_OP); }
+"<="			{ count(); return(LE_OP); }
+">="			{ count(); return(GE_OP); }
+"=="			{ count(); return(EQ_OP); }
+"!="			{ count(); return(NE_OP); }
+"<"		    	{ count(); return(L_OP); }
+">"		    	{ count(); return(G_OP); }
+";"			    { count(); return(';'); }
+","			    { count(); return(','); }
+":"			    { count(); return(':'); }
+"="			    { count(); return('='); }
+"]"     		{ count(); return(']'); }
+"."			    { count(); return('.'); }
+"&"			    { count(); return('&'); }
+"["     		{ count(); return('['); }
+"!"			    { count(); return('!'); }
+"~"			    { count(); return('~'); }
+"-"			    { count(); return('-'); }
+"+"			    { count(); return('+'); }
+"*"			    { count(); return('*'); }
+"/"			    { count(); return('/'); }
+"%"			    { count(); return('%'); }
+"^"			    { count(); return('^'); }
+"|"			    { count(); return('|'); }
+")"			    { count(); return(')'); }
+"}"		        { count(); return('}'); }
+"?"			    { count(); return('?'); }
+"{"     		{ count(); return('{'); }
+"("			    { count(); return('('); }
+
 .               { scriptlangy_echo(yytext,FLEX_TAG); }
 %%
 

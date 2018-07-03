@@ -23,8 +23,10 @@
 %define parse.trace
 
 %token MAGIC MAGICESC
-%token WHITESPACE
-%token BREAK CASE
+%token BREAK CASE CONTINUE ELSE ENUM FOR IF SWITCH WHILE 
+%token IDENTIFIER NUMBER STRING_LITERAL WHITESPACE 
+%token INC_OP DEC_OP AND_OP OR_OP LE_OP GE_OP EQ_OP NE_OP L_OP G_OP 
+
 
 %start script
 %%
@@ -46,9 +48,14 @@ fileword:
 ;
 tokenword:
     BREAK
-    | CASE
-    | WHITESPACE
-;
+    | CASE | CONTINUE | ELSE | ENUM | FOR | IF | SWITCH | WHILE
+    | IDENTIFIER | NUMBER | STRING_LITERAL | WHITESPACE
+    | INC_OP | DEC_OP | AND_OP | OR_OP | LE_OP | GE_OP | EQ_OP | NE_OP | L_OP | G_OP
+    | ';' | ',' | ':' | '=' | ']' | '.' | '&' | '[' | '!' | '~' | '-' | '+' | '*' | '/' | '%' | '^' | '|' | ')' | '}' | '?' | '{' | '('
+
+
+
+
 %%
 
 int main() {
