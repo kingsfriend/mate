@@ -17,20 +17,22 @@ L			[a-zA-Z_]
 %option noyywrap
 
 %%
-"@@"                { return MAGICESC; }
 "@/*"			    { scriptlangl_multiLineComment(); }
 "@//"			    { scriptlangl_singleLineomment(); }
-"@"                 { return MAGIC; }
+"@@"                { count(); return(MAGICESC); }
 
-"break"			    { count(); return(BREAK); }
-"case"			    { count(); return(CASE); }
-"continue"		    { count(); return(CONTINUE); }
-"else"			    { count(); return(ELSE); }
-"enum"			    { count(); return(ENUM); }
-"for"			    { count(); return(FOR); }
-"if"			    { count(); return(IF); }
-"switch"		    { count(); return(SWITCH); }
-"while"			    { count(); return(WHILE); }
+"@break"    	    { count(); return(BREAK); }
+"@case"			    { count(); return(CASE); }
+"@continue"		    { count(); return(CONTINUE); }
+"@default"		    { count(); return(DEFAULT); }
+"@else"			    { count(); return(ELSE); }
+"@elseif"			    { count(); return(ELSE); }
+"@end"			    { count(); return(END); }
+"@enum"			    { count(); return(ENUM); }
+"@for"			    { count(); return(FOR); }
+"@if"			    { count(); return(IF); }
+"@switch"		    { count(); return(SWITCH); }
+"@while"			    { count(); return(WHILE); }
 
 
 {L}({L}|{D})*	    { count(); return(IDENTIFIER); }
@@ -49,6 +51,8 @@ L?\"(\\.|[^\\"])*\"	{ count(); return(STRING_LITERAL); }
 "!="			{ count(); return(NE_OP); }
 "<"		    	{ count(); return(L_OP); }
 ">"		    	{ count(); return(G_OP); }
+
+"@"             { count(); return('@'); }
 ";"			    { count(); return(';'); }
 ","			    { count(); return(','); }
 ":"			    { count(); return(':'); }

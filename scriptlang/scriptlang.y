@@ -22,8 +22,8 @@
 
 %define parse.trace
 
-%token MAGIC MAGICESC
-%token BREAK CASE CONTINUE ELSE ENUM FOR IF SWITCH WHILE 
+%token MAGICESC END
+%token BREAK CASE CONTINUE DEFAULT ELSE ELSEIF ENUM FOR IF SWITCH WHILE 
 %token IDENTIFIER NUMBER STRING_LITERAL WHITESPACE 
 %token INC_OP DEC_OP AND_OP OR_OP LE_OP GE_OP EQ_OP NE_OP L_OP G_OP 
 
@@ -31,7 +31,6 @@
 %start script
 %%
 script:
-    /* empty */ 
    commands
 ;
 commands:  
@@ -40,22 +39,83 @@ commands:
 ;
 command:
     fileword
-    | MAGIC
+    | valuation
+    | alternative
 ;
 fileword: 
     tokenword { scriptlangy_echo(yytext,"fileword.tokenword"); }
     | MAGICESC { scriptlangy_echo("@","fileword.MAGICESC"); }
 ;
 tokenword:
-    BREAK
-    | CASE | CONTINUE | ELSE | ENUM | FOR | IF | SWITCH | WHILE
-    | IDENTIFIER | NUMBER | STRING_LITERAL | WHITESPACE
+    IDENTIFIER | NUMBER | STRING_LITERAL | WHITESPACE
     | INC_OP | DEC_OP | AND_OP | OR_OP | LE_OP | GE_OP | EQ_OP | NE_OP | L_OP | G_OP
     | ';' | ',' | ':' | '=' | ']' | '.' | '&' | '[' | '!' | '~' | '-' | '+' | '*' | '/' | '%' | '^' | '|' | ')' | '}' | '?' | '{' | '('
-
-
-
-
+;
+valuation:
+    '@' '(' expression ')' {
+        fprintf(yyout, "<val>");
+    }
+;
+alternative:
+    if_alternative    
+    | switch_alternative    
+;
+if_alternative:
+    if_block end_block
+    | if_block else_block end_block
+    | if_block elseif_blocks end_block
+    | if_block elseif_blocks else_block end_block
+;
+if_block:
+    IF '(' expression ')'
+    | IF '(' expression ')' commands
+;
+elseif_blocks:
+    elseif_block
+    | elseif_block elseif_blocks
+;
+elseif_block:
+    ELSEIF '(' expression ')'
+    | ELSEIF '(' expression ')' commands
+;
+else_block:
+    ELSE WHITESPACE
+    | ELSE WHITESPACE commands
+;
+switch_alternative:
+    switch_block end_block
+    | switch_block default_block end_block
+    | switch_block case_blocks end_block
+    | switch_block case_blocks default_block end_block
+;
+switch_block:
+    SWITCH '(' expression ',' expression')'
+    | SWITCH '(' expression ',' expression ')' commands
+;
+case_blocks:
+    case_block
+    | case_block case_blocks
+;
+case_block:
+    CASE '(' expression ')'
+    | CASE '(' expression ')' commands
+;
+default_block:
+    DEFAULT WHITESPACE
+    | DEFAULT WHITESPACE commands
+;
+expression:
+    primary_expression
+;
+primary_expression: 
+    IDENTIFIER
+	| NUMBER
+	| STRING_LITERAL
+	| '(' expression ')'
+;
+end_block:
+    END WHITESPACE
+;
 %%
 
 int main() {

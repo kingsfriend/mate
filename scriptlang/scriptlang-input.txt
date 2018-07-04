@@ -2,16 +2,17 @@
   * commentaire
   * multi lignes 
   *
-  */@ceci est un test
+  */@(ceci) est un test
 ecrit@(a1) sur
 plusieurs lignes.
 asni @// petit commentaire
 qwd@@(x1)=@(a)wqdeqS
-@switch(x)
-
+@switch(x,y)
+qwdwq
 @case(x)asdas
 adsd
-@if(y)
-@else; 
-@end;scs
-@end;scs
+@if(y)wdwd
+@else  
+@end scs
+@default dsa
+@end scs
