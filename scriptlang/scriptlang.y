@@ -23,7 +23,7 @@
 %define parse.trace
 
 %token MAGICESC END
-%token BREAK CASE CONTINUE DEFAULT DO EMPTY ELSE ELSEIF ENUM FOR FOREACH IF SWITCH WHILE 
+%token BREAK CASE CONTINUE DEFAULT DEFINE EMPTY ELSE ELSEIF EXTENDS FOR FOREACH IF INCLUDE NAMESPACE NEWLINE REQUIRE SECTION SWITCH WHILE 
 %token IDENTIFIER NUMBER STRING_LITERAL WHITESPACE 
 %token INC_OP DEC_OP AND_OP OR_OP LE_OP GE_OP EQ_OP NE_OP L_OP G_OP 
 
@@ -31,7 +31,33 @@
 %start script
 %%
 script:
-      commands
+    define_directive
+    | define_directive commands
+    | require_directives define_directive commands
+    | namespace define_directive commands
+    | namespace require_directives define_directive commands
+;
+require_directives:
+    require_directive
+    | require_directive require_directives
+    | require_directive WHITESPACE require_directives
+;
+require_directive:
+    REQUIRE '(' full_class_name WHITESPACE IDENTIFIER ')'
+;
+namespace:
+    NAMESPACE '(' class_name ')'
+;
+class_name:
+    IDENTIFIER
+;
+full_class_name:
+    class_name
+    | class_name '.' class_name
+;
+define_directive:
+    DEFINE '(' class_name ')'
+    | DEFINE '(' class_name EXTENDS full_class_name ')'
 ;
 commands:  
     command 
@@ -42,6 +68,7 @@ command:
     | valuation
     | alternative
     | loop
+    | command_directive
 ;
 fileword: 
     tokenword { scriptlangy_echo(yytext,"fileword.tokenword"); }
@@ -105,7 +132,6 @@ default_block:
     DEFAULT WHITESPACE
     | DEFAULT WHITESPACE commands
 ;
-
 loop:
     for_loop
     | foreach_loop
@@ -119,7 +145,6 @@ for_loop:
     FOR '(' expression_statement expression_statement expression')' end_block
     | FOR '(' expression_statement expression_statement expression')' commands end_block
 ;
-
 foreach_loop:
     foreach_block end_block
     | foreach_block empty_block end_block
@@ -132,9 +157,25 @@ empty_block:
     EMPTY
     | EMPTY commands
 ;
-
-
-
+command_directive:
+    include_directive
+    | loop_directive
+    | section_directive
+;
+section_directive:
+    SECTION '(' IDENTIFIER ')' end_block
+    | SECTION '(' IDENTIFIER ')' commands end_block
+;
+include_directive:
+    INCLUDE '(' template_name ')'
+;
+loop_directive:
+    BREAK
+    | CONTINUE 
+;
+template_name:
+    IDENTIFIER
+;
 expression:
     primary_expression
 ;

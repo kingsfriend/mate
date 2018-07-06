@@ -14,7 +14,6 @@ adsd
 @for(;;e)
   @foreach(x1:array)
 sfsdf
-@empty
 sdsd
   @end 
 @end
