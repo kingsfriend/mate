@@ -25,11 +25,14 @@ L			[a-zA-Z_]
 "@case"			    { count(); return(CASE); }
 "@continue"		    { count(); return(CONTINUE); }
 "@default"		    { count(); return(DEFAULT); }
+"@do"		    { count(); return(DO); }
+"@empty"			{ count(); return(EMPTY); }
 "@else"			    { count(); return(ELSE); }
-"@elseif"			    { count(); return(ELSE); }
+"@elseif"			{ count(); return(ELSE); }
 "@end"			    { count(); return(END); }
 "@enum"			    { count(); return(ENUM); }
 "@for"			    { count(); return(FOR); }
+"@foreach"			    { count(); return(FOREACH); }
 "@if"			    { count(); return(IF); }
 "@switch"		    { count(); return(SWITCH); }
 "@while"			    { count(); return(WHILE); }

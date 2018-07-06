@@ -23,7 +23,7 @@
 %define parse.trace
 
 %token MAGICESC END
-%token BREAK CASE CONTINUE DEFAULT ELSE ELSEIF ENUM FOR IF SWITCH WHILE 
+%token BREAK CASE CONTINUE DEFAULT DO EMPTY ELSE ELSEIF ENUM FOR FOREACH IF SWITCH WHILE 
 %token IDENTIFIER NUMBER STRING_LITERAL WHITESPACE 
 %token INC_OP DEC_OP AND_OP OR_OP LE_OP GE_OP EQ_OP NE_OP L_OP G_OP 
 
@@ -31,7 +31,7 @@
 %start script
 %%
 script:
-   commands
+      commands
 ;
 commands:  
     command 
@@ -41,6 +41,7 @@ command:
     fileword
     | valuation
     | alternative
+    | loop
 ;
 fileword: 
     tokenword { scriptlangy_echo(yytext,"fileword.tokenword"); }
@@ -104,8 +105,42 @@ default_block:
     DEFAULT WHITESPACE
     | DEFAULT WHITESPACE commands
 ;
+
+loop:
+    for_loop
+    | foreach_loop
+    | while_loop
+;
+while_loop:
+    WHILE '(' expression ')' end_block
+    | WHILE '(' expression ')' commands end_block
+;
+for_loop:
+    FOR '(' expression_statement expression_statement expression')' end_block
+    | FOR '(' expression_statement expression_statement expression')' commands end_block
+;
+
+foreach_loop:
+    foreach_block end_block
+    | foreach_block empty_block end_block
+;
+foreach_block:
+    FOREACH '(' IDENTIFIER ')'
+    | FOREACH '(' IDENTIFIER ':' expression')' commands
+;
+empty_block:
+    EMPTY
+    | EMPTY commands
+;
+
+
+
 expression:
     primary_expression
+;
+expression_statement:
+    ';'
+	| expression ';'
 ;
 primary_expression: 
     IDENTIFIER

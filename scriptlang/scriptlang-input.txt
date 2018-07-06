@@ -7,12 +7,21 @@ ecrit@(a1) sur
 plusieurs lignes.
 asni @// petit commentaire
 qwd@@(x1)=@(a)wqdeqS
-@switch(x,y)
+@switch(x,y) 
 qwdwq
 @case(x)asdas
 adsd
+@for(;;e)
+  @foreach(x1:array)
+sfsdf
+@empty
+sdsd
+  @end 
+@end
 @if(y)wdwd
 @else  
 @end scs
 @default dsa
 @end scs
+
+
