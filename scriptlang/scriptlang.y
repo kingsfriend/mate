@@ -83,6 +83,12 @@ valuation:
     '@' '(' expression ')' {
         fprintf(yyout, "<val>");
     }
+    | '@' '(' expression ',' default_value ')' {
+        fprintf(yyout, "<val>");
+    }
+;
+default_value:
+    expression
 ;
 alternative:
     if_alternative    

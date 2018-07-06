@@ -1,26 +1,31 @@
 @/*
-  * commentaire
-  * multi lignes 
+  * @Template Family
+  * @Description sample script template for Mate Programming language
+  * @Author TOUBE P.Pierre 
   *
-  */@(ceci) est un test
-ecrit@(a1) sur
-plusieurs lignes.
-asni @// petit commentaire
-qwd@@(x1)=@(a)wqdeqS
-@switch(x,y) 
-qwdwq
-@case(x)asdas
-adsd
-@for(;;e)
-  @foreach(x1:array)
-sfsdf
-sdsd
-  @end 
-@end
-@if(y)wdwd
-@else  
-@end scs
-@default dsa
-@end scs
+  */@
+
+@namespace(mate.sample)
+
+@require(String fatherName)
+@require(String motherName)
+@require(Array childrenNames = null)
+@define(Family extends Template)
+
+Family Description
+==================
+
+    Father's Name: @(fatherName)
+    Mother's Name: @(motherName)
+	Number of child: @(childrenNames.lenght, 0) @// valuation operator is null safe
+
+	List of children's names
+	------------------------
+	@foreach(childName : childrenNames)
+		> @(childName)
+	@empty
+		> there is no child name to display.
+	@end
+
 
 
