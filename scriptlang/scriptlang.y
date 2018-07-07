@@ -24,9 +24,9 @@
 
 %define parse.trace
 
-%token MAGICESC END
-%token BREAK CASE CONTINUE DEFAULT DEFINE EMPTY ELSE ELSEIF FOR FOREACH IF INCLUDE NAMESPACE REQUIRE SWITCH USE WHILE 
-%token IDENTIFIER NUMBER STRING_LITERAL WAS WEQUAL WHITESPACE WCOMMA WCOLON WLBRACE WRBRACE WLBRACKET WRBRACKET
+%token MAGICESC NEWLINE END
+%token BREAK CASE CONTINUE DEFAULT DEFINE EMPTY ELSE ELSEIF FOR FOREACH IF INCLUDE NAMESPACE PARAM REQUIRE SWITCH USE WHILE 
+%token IDENTIFIER INTEGER NUMBER STRING_LITERAL WAS WEQUAL WHITESPACE WCOMMA WCOLON WLBRACE WRBRACE WLBRACKET WRBRACKET
 %token INC_OP DEC_OP AND_OP OR_OP LE_OP GE_OP EQ_OP NE_OP L_OP G_OP 
 
 
@@ -84,9 +84,10 @@ command:
 fileword: 
     tokenword { scriptlangy_echo(yytext,"fileword.tokenword"); }
     | MAGICESC { scriptlangy_echo("@","fileword.MAGICESC"); }
+    | NEWLINE { scriptlangy_echo("\n","fileword.MAGICESC"); }
 ;
 tokenword:
-    IDENTIFIER | NUMBER | STRING_LITERAL | WEQUAL | WHITESPACE | WCOLON | WLBRACE | WRBRACE | WRBRACKET | WLBRACKET
+    IDENTIFIER | INTEGER | PARAM | NUMBER | STRING_LITERAL | WEQUAL | WHITESPACE | WCOLON | WCOMMA | WLBRACE | WRBRACE | WRBRACKET | WLBRACKET
     | INC_OP | DEC_OP | AND_OP | OR_OP | LE_OP | GE_OP | EQ_OP | NE_OP | L_OP | G_OP
     | ';' | '=' | ']' | '.' | '&' | '[' | '!' | '~' | '-' | '+' | '*' | '/' | '%' | '^' | '|' | '}' | '?' | '{'
 ;
@@ -181,18 +182,20 @@ command_directive:
 include_directive:
     INCLUDE WLBRACKET template_name WRBRACKET
     | INCLUDE WLBRACKET template_name WCOMMA WLBRACE WRBRACE WRBRACKET
-    | INCLUDE WLBRACKET template_name WCOMMA WLBRACE param_list WRBRACE WRBRACKET
+    | INCLUDE WLBRACKET template_name WCOMMA WLBRACE param_init_list WRBRACE WRBRACKET
 ;
-param_list:
-    param
-    | param WCOMMA param_list
+param_init_list:
+    param_init
+    | param_init WCOMMA param_init_list
 ;
-param:
-    '@' IDENTIFIER WEQUAL expression
+param_init:
+    PARAM WEQUAL expression
 ;
 loop_directive:
-    BREAK
-    | CONTINUE 
+    BREAK WHITESPACE
+    | CONTINUE WHITESPACE
+    | BREAK WLBRACKET INTEGER WRBRACKET
+    | CONTINUE WLBRACKET INTEGER WRBRACKET
 ;
 template_name:
     IDENTIFIER
@@ -207,6 +210,7 @@ expression_statement:
 primary_expression: 
     IDENTIFIER
 	| NUMBER
+	| INTEGER
 	| STRING_LITERAL
 	| WLBRACKET expression WRBRACKET
 ;

@@ -2,6 +2,7 @@
 D			[0-9]
 L			[a-zA-Z_]
 W 			[ \t\v\n\f]
+E			[Ee][+-]?{D}+
 
 %{
 /* C code to be copied verbatim */
@@ -17,77 +18,84 @@ W 			[ \t\v\n\f]
 /* This tells flex to read only one input file */
 %option noyywrap
 %s CONTENT_SECTION
+
 %%
 
-L?\"(\\.|[^\\"])*\"			{ count(); return(STRING_LITERAL); }
+"@/*"			    { scriptlangl_multiLineComment(); }
+"@//"			    { scriptlangl_singleLineomment(); }
+"@@"                { count(); return(MAGICESC); }
+"@\\"               { count(); return(NEWLINE); }
+"@\\"[\r]?\n        { count(); return(NEWLINE); }
 
-{L}({L}|{D})*	    		{ count(); return(IDENTIFIER); }
-{D}+?		        		{ count(); return(NUMBER); }
+"@break"    	    { count(); return(BREAK); }
+"@case"			    { count(); return(CASE); }
+"@continue"		    { count(); return(CONTINUE); }
+"@default"		    { count(); return(DEFAULT); }
+"@define"			{ BEGIN(CONTENT_SECTION); count(); return(DEFINE); }
+"@empty"			{ count(); return(EMPTY); }
+"@else"			    { count(); return(ELSE); }
+"@elseif"			{ count(); return(ELSE); }
+"@end"			    { count(); return(END); }
+"@for"			    { count(); return(FOR); }
+"@foreach"			{ count(); return(FOREACH); }
+"@if"			    { count(); return(IF); }
+"@include"			{ count(); return(INCLUDE); }
+"@namespace"		{ count(); return(NAMESPACE); }
+"@require"			{ count(); return(REQUIRE); }
+"@switch"		    { count(); return(SWITCH); }
+"@use"		    	{ count(); return(USE); }
+"@while"			{ count(); return(WHILE); }
+	
 
-{W}+						{ count(); return(WHITESPACE); }
-{W}*":"{W}* 				{ count(); return(WCOLON);}
-{W}*"("{W}* 				{ count(); return(WLBRACKET);}
-{W}*"{"{W}* 				{ count(); return(WLBRACE);}
-{W}*"}"{W}* 				{ count(); return(WRBRACE);}
-<CONTENT_SECTION>{W}*")"	{ count(); return(WRBRACKET);}
-<INITIAL>{W}*")"{W}*		{ count(); return(WRBRACKET);}
-{W}*","{W}* 				{ count(); return(WCOMMA);}
-{W}*"="{W}* 				{ count(); return(WEQUAL);}
-{W}*"@as"{W}* 	    		{ count(); return(WAS); }
+"++"				{ count(); return(INC_OP); }
+"--"				{ count(); return(DEC_OP); }
+"&&"				{ count(); return(AND_OP); }
+"||"				{ count(); return(OR_OP); }
+"<="				{ count(); return(LE_OP); }
+">="				{ count(); return(GE_OP); }
+"=="				{ count(); return(EQ_OP); }
+"!="				{ count(); return(NE_OP); }
+"<"		    		{ count(); return(L_OP); }
+">"		    		{ count(); return(G_OP); }
 
-"@/*"			    		{ scriptlangl_multiLineComment(); }
-"@//"			    		{ scriptlangl_singleLineomment(); }
-"@@"                		{ count(); return(MAGICESC); }
+"@"             	{ count(); return('@'); }
+";"			    	{ count(); return(';'); }
+"]"     			{ count(); return(']'); }
+"."			    	{ count(); return('.'); }
+"&"			    	{ count(); return('&'); }
+"["     			{ count(); return('['); }
+"!"			    	{ count(); return('!'); }
+"~"			    	{ count(); return('~'); }
+"-"			    	{ count(); return('-'); }
+"+"			    	{ count(); return('+'); }
+"*"			    	{ count(); return('*'); }
+"/"			    	{ count(); return('/'); }
+"%"			    	{ count(); return('%'); }
+"^"			    	{ count(); return('^'); }
+"|"			    	{ count(); return('|'); }
+"?"			    	{ count(); return('?'); }
 
-"@break"    	    		{ count(); return(BREAK); }
-"@case"			    		{ count(); return(CASE); }
-"@continue"		    		{ count(); return(CONTINUE); }
-"@default"		    		{ count(); return(DEFAULT); }
-"@define"					{ BEGIN(CONTENT_SECTION); count(); return(DEFINE); }
-"@empty"					{ count(); return(EMPTY); }
-"@else"			    		{ count(); return(ELSE); }
-"@elseif"					{ count(); return(ELSE); }
-"@end"			    		{ count(); return(END); }
-"@for"			    		{ count(); return(FOR); }
-"@foreach"					{ count(); return(FOREACH); }
-"@if"			    		{ count(); return(IF); }
-"@include"					{ count(); return(INCLUDE); }
-"@namespace"				{ count(); return(NAMESPACE); }
-"@require"					{ count(); return(REQUIRE); }
-"@switch"		    		{ count(); return(SWITCH); }
-"@use"		    			{ count(); return(USE); }
-"@while"					{ count(); return(WHILE); }
-		
 
-"++"						{ count(); return(INC_OP); }
-"--"						{ count(); return(DEC_OP); }
-"&&"						{ count(); return(AND_OP); }
-"||"						{ count(); return(OR_OP); }
-"<="						{ count(); return(LE_OP); }
-">="						{ count(); return(GE_OP); }
-"=="						{ count(); return(EQ_OP); }
-"!="						{ count(); return(NE_OP); }
-"<"		    				{ count(); return(L_OP); }
-">"		    				{ count(); return(G_OP); }
+L?\"(\\.|[^\\"])*\"							{ count(); return(STRING_LITERAL); }
 
-"@"             			{ count(); return('@'); }
-";"			    			{ count(); return(';'); }
-"]"     					{ count(); return(']'); }
-"."			    			{ count(); return('.'); }
-"&"			    			{ count(); return('&'); }
-"["     					{ count(); return('['); }
-"!"			    			{ count(); return('!'); }
-"~"			    			{ count(); return('~'); }
-"-"			    			{ count(); return('-'); }
-"+"			    			{ count(); return('+'); }
-"*"			    			{ count(); return('*'); }
-"/"			    			{ count(); return('/'); }
-"%"			    			{ count(); return('%'); }
-"^"			    			{ count(); return('^'); }
-"|"			    			{ count(); return('|'); }
-"?"			    			{ count(); return('?'); }
+{L}({L}|{D})*	    						{ count(); return(IDENTIFIER); }
+{D}+		        						{ count(); return(INTEGER); }
+{D}+"."{D}*({E})		    				{ count(); return(NUMBER); }
+{W}+										{ count(); return(WHITESPACE); }
+{W}*":"{W}* 								{ count(); return(WCOLON);}
+{W}*"("{W}* 								{ count(); return(WLBRACKET);}
+{W}*"{"{W}* 								{ count(); return(WLBRACE);}
+{W}*"}"{W}* 								{ count(); return(WRBRACE);}
+<CONTENT_SECTION>{W}*")"([ \t\v\f])*\n		{ count(); return(WRBRACKET);}
+<CONTENT_SECTION>{W}*")" 					{ count(); return(WRBRACKET);}
+<INITIAL>{W}*")"{W}*						{ count(); return(WRBRACKET);}
+{W}*","{W}* 								{ count(); return(WCOMMA);}
+{W}*"="{W}* 								{ count(); return(WEQUAL);}
+{W}*"@as"{W}* 	    						{ count(); return(WAS); }
+"@"{L}({L}|{D})*	    					{ count(); return(PARAM); }
 
 .              				{ scriptlangy_echo(yytext,FLEX_TAG); }
+
 %%
 
 /*** C Code section ***/
