@@ -1,6 +1,7 @@
 /* Definition section */
 D			[0-9]
 L			[a-zA-Z_]
+W 			[ \t\v\n\f]
 
 %{
 /* C code to be copied verbatim */
@@ -15,76 +16,77 @@ L			[a-zA-Z_]
 %}
 /* This tells flex to read only one input file */
 %option noyywrap
-
+%s CONTENT_SECTION
 %%
-"@/*"			    { scriptlangl_multiLineComment(); }
-"@//"			    { scriptlangl_singleLineomment(); }
-"@@"                { count(); return(MAGICESC); }
 
-"@break"    	    { count(); return(BREAK); }
-"@case"			    { count(); return(CASE); }
-"@continue"		    { count(); return(CONTINUE); }
-"@default"		    { count(); return(DEFAULT); }
-"@define"		    { count(); return(DEFINE); }
-"@empty"			{ count(); return(EMPTY); }
-"@else"			    { count(); return(ELSE); }
-"@elseif"			{ count(); return(ELSE); }
-"@end"			    { count(); return(END); }
-"@extends"			{ count(); return(EXTENDS); }
-"@for"			    { count(); return(FOR); }
-"@foreach"			{ count(); return(FOREACH); }
-"@if"			    { count(); return(IF); }
-"@include"			{ count(); return(INCLUDE); }
-"@namespace"		{ count(); return(NAMESPACE); }
-"@require"			{ count(); return(REQUIRE); }
-"@section"		    { count(); return(SECTION); }
-"@switch"		    { count(); return(SWITCH); }
-"@while"			    { count(); return(WHILE); }
+L?\"(\\.|[^\\"])*\"			{ count(); return(STRING_LITERAL); }
 
+{L}({L}|{D})*	    		{ count(); return(IDENTIFIER); }
+{D}+?		        		{ count(); return(NUMBER); }
 
-{L}({L}|{D})*	    { count(); return(IDENTIFIER); }
-{D}+?		        { count(); return(NUMBER); }
+{W}+						{ count(); return(WHITESPACE); }
+{W}*":"{W}* 				{ count(); return(WCOLON);}
+{W}*"("{W}* 				{ count(); return(WLBRACKET);}
+<CONTENT_SECTION>{W}*")"	{ count(); return(WRBRACKET);}
+<INITIAL>{W}*")"{W}*		{ count(); return(WRBRACKET);}
 
-L?\"(\\.|[^\\"])*\"	{ count(); return(STRING_LITERAL); }
-\n				    { count(); return(NEWLINE); }
-[ \t\v\n\f]		    { count(); return(WHITESPACE); }
+"@/*"			    		{ scriptlangl_multiLineComment(); }
+"@//"			    		{ scriptlangl_singleLineomment(); }
+"@@"                		{ count(); return(MAGICESC); }
 
-"++"				{ count(); return(INC_OP); }
-"--"				{ count(); return(DEC_OP); }
-"&&"				{ count(); return(AND_OP); }
-"||"				{ count(); return(OR_OP); }
-"<="				{ count(); return(LE_OP); }
-">="				{ count(); return(GE_OP); }
-"=="				{ count(); return(EQ_OP); }
-"!="				{ count(); return(NE_OP); }
-"<"		    		{ count(); return(L_OP); }
-">"		    		{ count(); return(G_OP); }
+"@break"    	    		{ count(); return(BREAK); }
+"@case"			    		{ count(); return(CASE); }
+"@continue"		    		{ count(); return(CONTINUE); }
+"@default"		    		{ count(); return(DEFAULT); }
+"@define"					{ BEGIN(CONTENT_SECTION); count(); return(DEFINE); }
+"@empty"					{ count(); return(EMPTY); }
+"@else"			    		{ count(); return(ELSE); }
+"@elseif"					{ count(); return(ELSE); }
+"@end"			    		{ count(); return(END); }
+"@for"			    		{ count(); return(FOR); }
+"@foreach"					{ count(); return(FOREACH); }
+"@if"			    		{ count(); return(IF); }
+"@include"					{ count(); return(INCLUDE); }
+"@namespace"				{ count(); return(NAMESPACE); }
+"@require"					{ count(); return(REQUIRE); }
+"@section"		    		{ count(); return(SECTION); }
+"@switch"		    		{ count(); return(SWITCH); }
+"@while"					{ count(); return(WHILE); }
+		
 
-"@"             	{ count(); return('@'); }
-";"			    	{ count(); return(';'); }
-","			    	{ count(); return(','); }
-":"			    	{ count(); return(':'); }
-"="			    	{ count(); return('='); }
-"]"     			{ count(); return(']'); }
-"."			    	{ count(); return('.'); }
-"&"			    	{ count(); return('&'); }
-"["     			{ count(); return('['); }
-"!"			    	{ count(); return('!'); }
-"~"			    	{ count(); return('~'); }
-"-"			    	{ count(); return('-'); }
-"+"			    	{ count(); return('+'); }
-"*"			    	{ count(); return('*'); }
-"/"			    	{ count(); return('/'); }
-"%"			    	{ count(); return('%'); }
-"^"			    	{ count(); return('^'); }
-"|"			    	{ count(); return('|'); }
-")"			    	{ count(); return(')'); }
-"}"		        	{ count(); return('}'); }
-"?"			    	{ count(); return('?'); }
-"{"     			{ count(); return('{'); }
-"("			    	{ count(); return('('); }
+"++"						{ count(); return(INC_OP); }
+"--"						{ count(); return(DEC_OP); }
+"&&"						{ count(); return(AND_OP); }
+"||"						{ count(); return(OR_OP); }
+"<="						{ count(); return(LE_OP); }
+">="						{ count(); return(GE_OP); }
+"=="						{ count(); return(EQ_OP); }
+"!="						{ count(); return(NE_OP); }
+"<"		    				{ count(); return(L_OP); }
+">"		    				{ count(); return(G_OP); }
 
-.              		{ scriptlangy_echo(yytext,FLEX_TAG); }
+"@"             			{ count(); return('@'); }
+";"			    			{ count(); return(';'); }
+","			    			{ count(); return(','); }
+"="			    			{ count(); return('='); }
+"]"     					{ count(); return(']'); }
+"."			    			{ count(); return('.'); }
+"&"			    			{ count(); return('&'); }
+"["     					{ count(); return('['); }
+"!"			    			{ count(); return('!'); }
+"~"			    			{ count(); return('~'); }
+"-"			    			{ count(); return('-'); }
+"+"			    			{ count(); return('+'); }
+"*"			    			{ count(); return('*'); }
+"/"			    			{ count(); return('/'); }
+"%"			    			{ count(); return('%'); }
+"^"			    			{ count(); return('^'); }
+"|"			    			{ count(); return('|'); }
+"}"		        			{ count(); return('}'); }
+"?"			    			{ count(); return('?'); }
+"{"     					{ count(); return('{'); }
+
+.              				{ scriptlangy_echo(yytext,FLEX_TAG); }
 %%
 
 /*** C Code section ***/
