@@ -5,17 +5,22 @@
   *
   */
 @namespace(pkgname)
-@require(String : fatherName)
-@require(String : motherName)
-@require(Array : childrenNames)
-@define( Family : Tamplate )
 
+@use(lang.String @as String, lang.Array)
+@use(lang.Number)
+
+@require(String fatherName, motherName)
+@require(Array childrenNames)
+
+@define( Family )
 Family Description
 ==================
 
     Father's Name: @(fatherName)
     Mother's Name: @(motherName)
 	Number of child: @(childrenNamesCount,0) @// valuation operator is null safe
+
+	@include( ChildrenSection, { @fatherName = 1, @motherName = "bla" })
 
 	List of children's names
 	------------------------
@@ -24,6 +29,4 @@ Family Description
 	@empty
 		> there is no child name to display.
 	@end
-
-@@end
 

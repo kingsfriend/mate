@@ -27,8 +27,13 @@ L?\"(\\.|[^\\"])*\"			{ count(); return(STRING_LITERAL); }
 {W}+						{ count(); return(WHITESPACE); }
 {W}*":"{W}* 				{ count(); return(WCOLON);}
 {W}*"("{W}* 				{ count(); return(WLBRACKET);}
+{W}*"{"{W}* 				{ count(); return(WLBRACE);}
+{W}*"}"{W}* 				{ count(); return(WRBRACE);}
 <CONTENT_SECTION>{W}*")"	{ count(); return(WRBRACKET);}
 <INITIAL>{W}*")"{W}*		{ count(); return(WRBRACKET);}
+{W}*","{W}* 				{ count(); return(WCOMMA);}
+{W}*"="{W}* 				{ count(); return(WEQUAL);}
+{W}*"@as"{W}* 	    		{ count(); return(WAS); }
 
 "@/*"			    		{ scriptlangl_multiLineComment(); }
 "@//"			    		{ scriptlangl_singleLineomment(); }
@@ -49,8 +54,8 @@ L?\"(\\.|[^\\"])*\"			{ count(); return(STRING_LITERAL); }
 "@include"					{ count(); return(INCLUDE); }
 "@namespace"				{ count(); return(NAMESPACE); }
 "@require"					{ count(); return(REQUIRE); }
-"@section"		    		{ count(); return(SECTION); }
 "@switch"		    		{ count(); return(SWITCH); }
+"@use"		    			{ count(); return(USE); }
 "@while"					{ count(); return(WHILE); }
 		
 
@@ -67,8 +72,6 @@ L?\"(\\.|[^\\"])*\"			{ count(); return(STRING_LITERAL); }
 
 "@"             			{ count(); return('@'); }
 ";"			    			{ count(); return(';'); }
-","			    			{ count(); return(','); }
-"="			    			{ count(); return('='); }
 "]"     					{ count(); return(']'); }
 "."			    			{ count(); return('.'); }
 "&"			    			{ count(); return('&'); }
@@ -82,9 +85,7 @@ L?\"(\\.|[^\\"])*\"			{ count(); return(STRING_LITERAL); }
 "%"			    			{ count(); return('%'); }
 "^"			    			{ count(); return('^'); }
 "|"			    			{ count(); return('|'); }
-"}"		        			{ count(); return('}'); }
 "?"			    			{ count(); return('?'); }
-"{"     					{ count(); return('{'); }
 
 .              				{ scriptlangy_echo(yytext,FLEX_TAG); }
 %%

@@ -25,31 +25,37 @@
 %define parse.trace
 
 %token MAGICESC END
-%token BREAK CASE CONTINUE DEFAULT DEFINE EMPTY ELSE ELSEIF FOR FOREACH IF INCLUDE NAMESPACE NEWLINE REQUIRE SECTION SWITCH WHILE 
-%token IDENTIFIER NUMBER STRING_LITERAL WHITESPACE WCOLON WLBRACKET WRBRACKET
+%token BREAK CASE CONTINUE DEFAULT DEFINE EMPTY ELSE ELSEIF FOR FOREACH IF INCLUDE NAMESPACE REQUIRE SWITCH USE WHILE 
+%token IDENTIFIER NUMBER STRING_LITERAL WAS WEQUAL WHITESPACE WCOMMA WCOLON WLBRACE WRBRACE WLBRACKET WRBRACKET
 %token INC_OP DEC_OP AND_OP OR_OP LE_OP GE_OP EQ_OP NE_OP L_OP G_OP 
 
 
 %start script
 %%
 script:
-    WHITESPACE define_directive
-    | WHITESPACE define_directive commands
-    | WHITESPACE require_directives define_directive commands
-    | WHITESPACE namespace WHITESPACE define_directive commands
-    | WHITESPACE namespace require_directives define_directive commands
-    | define_directive
-    | define_directive commands
-    | require_directives define_directive commands
-    | namespace define_directive commands
-    | namespace require_directives define_directive commands
+    header_directives define_directive
+    | header_directives define_directive commands
+    | WHITESPACE namespace header_directives define_directive commands
+    | namespace header_directives define_directive commands
 ;
-require_directives:
-    require_directive
-    | require_directive require_directives
+header_directives:
+    WHITESPACE
+    | require_directive
+    | require_directive header_directives
+    | use_directive
+    | use_directive header_directives
 ;
 require_directive:
-    REQUIRE WLBRACKET full_class_name WCOLON IDENTIFIER WRBRACKET
+    REQUIRE WLBRACKET full_class_name WHITESPACE identifier_list WRBRACKET
+;
+use_directive:
+    USE WLBRACKET use_stms WRBRACKET
+;
+use_stms:
+    full_class_name
+    | full_class_name WAS IDENTIFIER
+    | full_class_name WCOMMA use_stms
+    | full_class_name WAS IDENTIFIER WCOMMA use_stms
 ;
 namespace:
     NAMESPACE WLBRACKET IDENTIFIER WRBRACKET
@@ -63,7 +69,6 @@ full_class_name:
 ;
 define_directive:
     DEFINE WLBRACKET class_name WRBRACKET
-    | DEFINE WLBRACKET class_name WCOLON full_class_name WRBRACKET
 ;
 commands:  
     command 
@@ -81,15 +86,15 @@ fileword:
     | MAGICESC { scriptlangy_echo("@","fileword.MAGICESC"); }
 ;
 tokenword:
-    IDENTIFIER | NUMBER | STRING_LITERAL | WHITESPACE | WCOLON
+    IDENTIFIER | NUMBER | STRING_LITERAL | WEQUAL | WHITESPACE | WCOLON | WLBRACE | WRBRACE | WRBRACKET | WLBRACKET
     | INC_OP | DEC_OP | AND_OP | OR_OP | LE_OP | GE_OP | EQ_OP | NE_OP | L_OP | G_OP
-    | ';' | ',' | '=' | ']' | '.' | '&' | '[' | '!' | '~' | '-' | '+' | '*' | '/' | '%' | '^' | '|' | WRBRACKET | '}' | '?' | '{' | WLBRACKET
+    | ';' | '=' | ']' | '.' | '&' | '[' | '!' | '~' | '-' | '+' | '*' | '/' | '%' | '^' | '|' | '}' | '?' | '{'
 ;
 valuation:
     '@' WLBRACKET expression WRBRACKET {
         fprintf(yyout, "<val>");
     }
-    | '@' WLBRACKET expression ',' default_value WRBRACKET {
+    | '@' WLBRACKET expression WCOMMA default_value WRBRACKET {
         fprintf(yyout, "<val>");
     }
 ;
@@ -129,8 +134,8 @@ switch_alternative:
     | switch_block case_blocks default_block end_block
 ;
 switch_block:
-    SWITCH WLBRACKET expression ',' expression WRBRACKET
-    | SWITCH WLBRACKET expression ',' expression WRBRACKET commands
+    SWITCH WLBRACKET expression WCOMMA expression WRBRACKET
+    | SWITCH WLBRACKET expression WCOMMA expression WRBRACKET commands
 ;
 case_blocks:
     case_block
@@ -172,14 +177,18 @@ empty_block:
 command_directive:
     include_directive
     | loop_directive
-    | section_directive
-;
-section_directive:
-    SECTION WLBRACKET IDENTIFIER WRBRACKET end_block
-    | SECTION WLBRACKET IDENTIFIER WRBRACKET commands end_block
 ;
 include_directive:
     INCLUDE WLBRACKET template_name WRBRACKET
+    | INCLUDE WLBRACKET template_name WCOMMA WLBRACE WRBRACE WRBRACKET
+    | INCLUDE WLBRACKET template_name WCOMMA WLBRACE param_list WRBRACE WRBRACKET
+;
+param_list:
+    param
+    | param WCOMMA param_list
+;
+param:
+    '@' IDENTIFIER WEQUAL expression
 ;
 loop_directive:
     BREAK
@@ -200,6 +209,10 @@ primary_expression:
 	| NUMBER
 	| STRING_LITERAL
 	| WLBRACKET expression WRBRACKET
+;
+identifier_list: 
+    IDENTIFIER
+	| IDENTIFIER WCOMMA identifier_list
 ;
 end_block:
     END WHITESPACE
