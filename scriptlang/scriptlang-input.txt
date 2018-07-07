@@ -24,11 +24,11 @@ Family Description
 
 	List of children's names
 	------------------------
-@foreach( childName : childrenNames )
+@	@foreach( childName : childrenNames )
 		> @(childName)
 		@break(21)
 		@continue(3)
-@empty
+	@empty 
 		> there is no child name to display.
-@end
+	@end
 

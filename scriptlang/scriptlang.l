@@ -25,6 +25,7 @@ E			[Ee][+-]?{D}+
 "@//"			    { scriptlangl_singleLineomment(); }
 "@@"                { count(); return(MAGICESC); }
 "@\\"               { count(); return(NEWLINE); }
+"@"{W}              { count(); }
 "@\\"[\r]?\n        { count(); return(NEWLINE); }
 
 "@break"    	    { count(); return(BREAK); }
