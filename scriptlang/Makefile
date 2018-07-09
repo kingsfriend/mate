@@ -3,7 +3,7 @@ all: scriptlang
 scriptlang.tab.c scriptlang.tab.h:	scriptlang.y
 	bison -d scriptlang.y
 
-lex.yy.c: scriptlang.l scriptlang.tab.h
+lex.yy.c scriptlang.l.h : scriptlang.l scriptlang.tab.h
 	flex scriptlang.l
 
 scriptlang: lex.yy.c scriptlang.tab.c scriptlang.tab.h

@@ -1,20 +1,25 @@
 %{ 
     #include <stdio.h>
     #include <stdlib.h>
+    #include <string.h>
 
     extern int yylex();
     extern int yyparse();
     extern int input();
 	extern void scriptlangl_removeWhitespaces();
+    extern int yylineno;
     extern FILE* yyin;
     extern FILE* yyout;
     extern char* yytext;
 
+    extern int scriptlangl_column;
+	
     void yyerror(const char* s);
-    void scriptlangy_echo(const char* s, const char*ctx);
+    void scriptlangy_echo(const char* s, const char*ctx, int line, int column);
     void scriptlangy_disableEcho();
     void scriptlangy_enableEcho();
     int scriptlangy_canEcho =1;
+    int scriptlangy_canExeCmd =1;
     
     /* DEBUG ------------------*/
         int i=0;
@@ -82,9 +87,9 @@ command:
     | command_directive
 ;
 fileword: 
-    tokenword { scriptlangy_echo(yytext,"fileword.tokenword"); }
-    | MAGICESC { scriptlangy_echo("@","fileword.MAGICESC"); }
-    | NEWLINE { scriptlangy_echo("\n","fileword.MAGICESC"); }
+    tokenword { scriptlangy_echo(yytext,"fileword.tokenword", yylineno, scriptlangl_column); }
+    | MAGICESC { scriptlangy_echo("@","fileword.MAGICESC", yylineno, scriptlangl_column); }
+    | NEWLINE { scriptlangy_echo("\n","fileword.MAGICESC", yylineno, scriptlangl_column); }
 ;
 tokenword:
     IDENTIFIER | INTEGER | PARAM | NUMBER | STRING_LITERAL | WEQUAL | WHITESPACE | WCOLON | WCOMMA | WLBRACE | WRBRACE | WRBRACKET | WLBRACKET
@@ -108,7 +113,13 @@ alternative:
 ;
 if_alternative:
     if_block end_block
-    | if_block else_block end_block
+    | if_block{
+        scriptlangy_canEcho = 0;
+        scriptlangy_canExeCmd = 0;
+    } else_block{
+        scriptlangy_canEcho = 1;
+        scriptlangy_canExeCmd = 1;
+    } end_block 
     | if_block elseif_blocks end_block
     | if_block elseif_blocks else_block end_block
 ;
@@ -241,9 +252,9 @@ void yyerror(const char* s) {
 	fprintf(stderr, "> Parse error: %s\n", s);
 	exit(1);
 }
-void scriptlangy_echo(const char* s,const char* ctx) {
+void scriptlangy_echo(const char* s,const char* ctx, int line, int columnStart) {
     i++;
-    printf("%d %s > \"%s\" [%d]\n",i,ctx,s,scriptlangy_canEcho);
+    printf("[%3d|%3d] %s > \"%s\" \n",line, columnStart, ctx,s);
     if(scriptlangy_canEcho>0){
 	    fprintf(yyout, "%s", s);
     }
