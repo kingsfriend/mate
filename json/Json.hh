@@ -130,6 +130,15 @@
             void setValues(std::map<const std::string, JsonNode *> vals){
                 values = vals;
             }
+            JsonNode *get(const std::string k)
+            {
+                std::map<const std::string, JsonNode *>::const_iterator pos = values.find(k);
+                if(pos == values.end()){
+                    return  NULL;
+                }else{
+                    return pos->second;
+                }
+            }
             std::map<const std::string, JsonNode *> getValues(){
                 return values;
             } 
@@ -176,6 +185,11 @@
             void push(JsonArrayNode *node)
             {
                 values.push_back(node);
+            }
+
+            JsonNode *get(int i)
+            {
+                return values[i];
             }
 
             std::vector<JsonNode *> getValues()

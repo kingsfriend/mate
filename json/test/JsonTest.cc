@@ -31,6 +31,8 @@ int main(int argc, char const *argv[])
     std::cout << "jsNumber : " << jsNumber.toString() << "\n";
     std::cout << "jsObject : " << jsObject.toString() << "\n";
     std::cout << "jsObject1 : " << jsObject1.toString() << "\n";
+    std::cout << "jsObject1[str] : " << jsObject1.get("str")->toString() << "\n";
     std::cout << "jsArray : " << jsArray.toString() << "\n";
+    std::cout << "jsArray[2] : " << jsArray.get(2)->toString() << "\n";
     return 0;
 }
