@@ -2,125 +2,88 @@
 #define Json_NODE_201807_HH
 
     #include <string>
+    #include <iterator>
     #include <vector>
+    #include <map>
     #include <iostream>
     #include <sstream>
-    using namespace std;
 
-namespace json
-{
-enum NodeType
-{
-    Object,
-    Number,
-    String,
-    Array,
-    Undefined
-};
+    namespace json
+    {
+        enum NodeType
+        {
+            Object,
+            Number,
+            String,
+            Array,
+            Undefined
+        };
 
-
-class JsonNode
-{
-  public:
-    static const NodeType TYPE = Undefined;
-    JsonNode(const string &k)
-    {
-        this->key = k;
-    }
-    JsonNode() {}
-    NodeType getType()
-    {
-        return TYPE;
-    }
-    string getKey()
-    {
-        return this->key;
-    }
-    virtual string toString()
-    {
-        return "undefined";
-    }
-    static string separator()
-    {
-        return ":";
-    }
-    bool nullKey()
-    {
-        return this->key.empty();
-    }
-
-  private:
-    string key;
-  protected:
-    string getKeyWithSeparator()
-    {
-        return this->key + JsonNode::separator();
-    }
+        class JsonArrayNode;
+        
+        class JsonNode
+        {
+        public:
+            static const NodeType TYPE = Undefined;
+            NodeType getType(){
+                return TYPE;
+            }
+            virtual std::string toString(){
+                return "undefined";
+            }
+            static std::string separator(){
+                return ":";
+            }
+        protected:
+            JsonNode(){}
+            
         };
 
         class JsonStringNode : public JsonNode
         {
           public:
             static const NodeType TYPE = String;
-            JsonStringNode(const string &k, const string &v) : JsonNode(k){
-                this->value = v;
-            }
-            JsonStringNode(const string &v){
+            JsonStringNode(const std::string &v){
                 this->value = v;
             }
             JsonStringNode(){}
 
-            string getValue() { 
+            std::string val() { 
                 return this->value;
             }
-            JsonStringNode* usingKey(string k){
-                return new JsonStringNode(k, value);
+            void val(const std::string &v){
+                this->value = v;
             }
-            string toString(){
-                string str = "\"" + this->value + "\"";
-                if(this->nullKey()){
-                    return str;
-                }
-                return this->getKeyWithSeparator() + str;
+            std::string toString(){
+                std::string str = "\"" + this->value + "\"";
+                return str;
             }
 
           private:
-            string value;
+            std::string value;
         };
 
         class JsonNumberNode : public JsonNode
         {
           public:
             static const NodeType TYPE = Number;
-            JsonNumberNode(const string &k, const double &v) : JsonNode(k)
-            {
-                this->value = v;
-            }
-            JsonNumberNode(const double &v)
-            {
+            JsonNumberNode(const double &v) {
                 this->value = v;
             }
             JsonNumberNode(){
                 this->value = 0;
             }
-             double getValue()
-            {
+            double val(){
                 return this->value;
             }
-            string toString()
-            {
+            void val(const double &v){
+                this->value = v;
+            }
+            std::string toString(){
                 std::ostringstream strs;
                 strs << this->value;
                 std::string str = strs.str();
-                if (this->nullKey())
-                {
-                    return str;
-                }
-                return this->getKeyWithSeparator() + str;
-            }
-            JsonNumberNode *usingKey(string k)
-            {
-                return new JsonNumberNode(k, value);
+                return str;
             }
 
           private:
@@ -130,83 +93,100 @@ class JsonNode
         class JsonObjectNode : public JsonNode
         {
           public:
-            JsonObjectNode(const std::string &k, NodeType t) : JsonNode(k)
-            {
-                type = t;
+            static const NodeType TYPE = Object;
+            JsonObjectNode(){
             }
-            JsonObjectNode(const std::string &k) : JsonNode(k)
-            {
-                type = Object;
-            }
-            JsonObjectNode(NodeType t)
-            {
-                type = t;
-            }
-            JsonObjectNode()
-            {
-                type = Object;
-            } 
-            string toString(){
-                if(type==Array){
-                    return encloseWith("[","]");
-                }else{
-                    return encloseWith("{","}");
-                }
-            }
-            string encloseWith(string start, string end)
-            {
-                std::vector<JsonNode*> vals = this->values;
-                string str = start ;
+            std::string toString(){
+                std::map<const std::string, JsonNode*> vals = this->values;
+                std::string str = "{" ;
                 if(!vals.empty()){
-                    int i=0;
-                    int loopLimit = vals.size()-1;
-                    for (i=0; i < loopLimit; i++)
-                    {
-                        str += vals[i]->toString() + ",";
+                    std::map<const std::string, JsonNode *>::reverse_iterator it;
+                    for (it = vals.rbegin(); it != vals.rend(); it++){
+                        str += it->first + ":" +it->second->toString() + ",";
                     }
-                    str += vals[i]->toString() ;
+                    str.erase(str.size() - 1);
                 }
-                str+=end;
-                if (this->nullKey())
-                {
-                    return str;
-                }
-                return this->getKeyWithSeparator() + str;
+                str+="}";
+                return str;
             }
-            void push(JsonStringNode* node){
-                values.push_back(node);
+            void push(const std::string &k, JsonStringNode *node){
+                values.insert(make_pair(k, node));
             }
-            void push(JsonNumberNode* node){
-                values.push_back(node);
+            void push(const std::string &k, JsonNumberNode *node){
+                values.insert(make_pair(k, node));
             }
-            void push(JsonObjectNode* node){
+            void push(const std::string &k, JsonArrayNode *node)
+            {
+                values.insert(make_pair(k, node));
+            }
+            void push(const std::string &k, JsonObjectNode *node){
                 if (node == this){
                     std::cout << "EXCEP: CANNOT PUSH AN OBJECT TO ITSELF \n";
                 }else{
-                    values.push_back(node);
+                    values.insert(make_pair(k, node));
                 }
 
             }
-            JsonObjectNode *usingKey(string k)
-            {
-                JsonObjectNode *obj = new JsonObjectNode(k, type);
-                obj->setValues(getValues());
-                return obj;
-            }
-
-            void setValues(std::vector<JsonNode *> vals)
-            {
+            void setValues(std::map<const std::string, JsonNode *> vals){
                 values = vals;
             }
-            std::vector<JsonNode *> getValues()
-            {
+            std::map<const std::string, JsonNode *> getValues(){
                 return values;
             } 
             private : NodeType type;
-            std::vector<JsonNode *> values;
+            std::map<const std::string, JsonNode *> values;
         };
 
-        
+        class JsonArrayNode : public JsonNode
+        {
+          public:
+            static const NodeType TYPE = Array;
+            JsonArrayNode()
+            {
+            }
+            std::string toString()
+            {
+                std::vector<JsonNode *> vals = this->values;
+                std::string str = "[";
+                if (!vals.empty())
+                {
+                    int i;
+                    int loopLimit = vals.size()-1;
+                    for (i = 0; i < loopLimit; i++)
+                    {
+                        str += vals[i]->toString() + ",";
+                    }
+                        str += vals[i]->toString();
+                }
+                str += "]";
+                return str;
+            }
+            void push(JsonStringNode *node)
+            {
+                values.push_back(node);
+            }
+            void push(JsonNumberNode *node)
+            {
+                values.push_back(node);
+            }
+            void push(JsonObjectNode *node)
+            {
+                values.push_back(node);
+            }
+            void push(JsonArrayNode *node)
+            {
+                values.push_back(node);
+            }
+
+            std::vector<JsonNode *> getValues()
+            {
+                return values;
+            }
+
+          private:
+            NodeType type;
+            std::vector<JsonNode *> values;
+        };
     }
 
 #endif //Json_NODE_201807_HH
