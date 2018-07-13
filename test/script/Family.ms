@@ -6,13 +6,12 @@
   */
 @namespace(test)
 
-@use(lang.String @as String, lang.Array)
-@use(lang.Number)
+@use(lang)
 
 @require(String fatherName, motherName)
 @require(Array childrenNames)
-@require(Number familiesCount)
 
+@require(Number familiesCount)
 @define( Family )
 Family Description
 ==================
@@ -31,4 +30,5 @@ Family Description
 		@continue(3)
 	@empty 
 		> there is no child name to display.
-	@end
+	@end 
+	

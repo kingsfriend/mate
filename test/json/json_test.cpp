@@ -1,9 +1,9 @@
-#include "../Json.hh"
+#include "../../mate/json/Json.hh"
 
 #include <iostream>
 #include <sstream>
 
-using namespace json;
+using namespace mate::json;
 int main(int argc, char const *argv[])
 {
 
