@@ -1,7 +1,0 @@
-lex.yy.c
-scriptlang
-scriptlang.l.h
-scriptlang-output.txt
-scriptlang.tab.c
-scriptlang.tab.h
-scriptlang.output
