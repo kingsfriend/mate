@@ -49,7 +49,10 @@ json_test_dir = test/json
 
 json-build json-b:
 	mkdir -p $(json_test_dir)/output/
-	g++ $(json_test_dir)/json_test.cpp -o $(json_test_dir)/output/json_test.out
+	g++ $(json_test_dir)/json_test.cpp \
+		$(src_dir)/NumExpression.cpp \
+		$(src_dir)/Command.cpp \
+		-o $(json_test_dir)/output/json_test.out
 
 json-run json-r: json-b
 	./$(json_test_dir)/output/json_test.out

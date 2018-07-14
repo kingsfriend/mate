@@ -3,7 +3,7 @@
 
 #include <map>
 #include <string>
-#include "json/Json.hh"
+#include "Json.hpp"
 
 using namespace std;
 namespace mate
@@ -26,9 +26,9 @@ namespace mate
         void setChild(Context* c);
         Context* getChild();
 
-        void put(const std::string, json::JsonNode* var);
-        void set(const std::string, json::JsonNode* var);
-        json::JsonNode* get(const std::string);
+        void put(const std::string, JsonNode* var);
+        void set(const std::string, JsonNode* var);
+        JsonNode* get(const std::string);
         void remove(const std::string);
         void clear();
 
@@ -36,7 +36,7 @@ namespace mate
         Context* parent;
         Context* child;
         ContextType type;
-        std::map<const std::string, json::JsonNode*> vars;
+        std::map<const std::string, JsonNode*> vars;
         unsigned int id;
     
     private:

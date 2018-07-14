@@ -26,13 +26,13 @@ namespace mate {
 
     }
 
-    void Context::put(const std::string, json::JsonNode* var){
+    void Context::put(const std::string, JsonNode* var){
 
     }
-    void Context::set(const std::string, json::JsonNode* var){
+    void Context::set(const std::string, JsonNode* var){
 
     }
-    json::JsonNode* Context::get(const std::string){
+    JsonNode* Context::get(const std::string){
 
     }
     void Context::remove(const std::string){

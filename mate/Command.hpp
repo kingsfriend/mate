@@ -1,28 +1,30 @@
 #ifndef MATE_BASE_COMMAND_HH
     #define MATE_BASE_COMMAND_HH
 
-#include "Context.hpp"
-
+    #include <memory>
+    #include "Context.hpp"
+    #include "Json.hpp"
+    
     namespace mate{
-        enum CommandType
-        {
-            BASE
-        };
-        
-        class Command
-        {
-        private:
-            Context context;
+    enum CommandType
+    {
+        CMD_BASE,
+        CMD_NUM_EXP
+    };
 
-        public:
-            static const CommandType TYPE;
-            static std::string execute(Context ctx);
-            static std::string toString();
+    class Command
+    {
+      private:
+      public:
+        static const CommandType CMD_TYPE = CMD_BASE;
 
-            virtual std::string execute();
+        std::string toString();
 
-            Command(Context ctx);
-            ~Command();
+        virtual JsonNode *execute() = 0;
+        virtual void update() = 0;
+
+        Command();
+        ~Command();
 
         };
         
