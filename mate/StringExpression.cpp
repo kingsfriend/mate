@@ -13,15 +13,15 @@ StringExpression::StringExpression(){}
 
 StringExpression::~StringExpression(){}
 
-JsonStringNode *StringExpression::executeAsNum() {
+JsonStringNode *StringExpression::executeAsString() {
     return op1;
 }
 
 JsonNode* StringExpression::execute(){
-    return executeAsNum();
+    return executeAsString();
 }
 void StringExpression::update(){
-    executeAsNum();
+    executeAsString();
 }
 
 void StringExpression::val1(std::string v1){
@@ -35,8 +35,8 @@ UnaryStringExp::UnaryStringExp(UnaryStringExpType expType, StringExpression *op)
 
 UnaryStringExp::~UnaryStringExp() {}
 
-    JsonStringNode *UnaryStringExp::executeAsNum(){
-        std::string v1 = op1->executeAsNum()->val();
+    JsonStringNode *UnaryStringExp::executeAsString(){
+        std::string v1 = op1->executeAsString()->val();
         std::string v;
         switch (expType)
         {
@@ -53,11 +53,11 @@ UnaryStringExp::~UnaryStringExp() {}
     }
 
     JsonNode* UnaryStringExp::execute(){
-        return executeAsNum();
+        return executeAsString();
     }
 
     void UnaryStringExp::update(){
-        executeAsNum();
+        executeAsString();
     }
 
     void UnaryStringExp::val1(std::string v1){
@@ -71,9 +71,9 @@ UnaryStringExp::~UnaryStringExp() {}
 
     BinaryStringExp::~BinaryStringExp() {}
 
-    JsonStringNode* BinaryStringExp::executeAsNum(){
-        std::string v1 = op1->executeAsNum()->val();
-        std::string v2 = op2->executeAsNum()->val();
+    JsonStringNode* BinaryStringExp::executeAsString(){
+        std::string v1 = op1->executeAsString()->val();
+        std::string v2 = op2->executeAsString()->val();
         std::string v;
         
         switch (expType)
@@ -100,11 +100,11 @@ UnaryStringExp::~UnaryStringExp() {}
     }
 
     JsonNode *BinaryStringExp::execute(){
-        return executeAsNum();
+        return executeAsString();
     }
 
     void BinaryStringExp::update(){
-        executeAsNum();
+        executeAsString();
     }
 
     void BinaryStringExp::val1(std::string v1){

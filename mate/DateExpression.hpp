@@ -30,7 +30,7 @@
             DateExpression(time_t v);
             ~DateExpression();
 
-            static const CommandType COMMAND_TYPE = CMD_DATE_EXP;
+            static const CommandType CMD_TYPE = CMD_EXP_DATE;
             static const DateExpressionType DATE_EXP_TYPE = DATE_EXP_JSON_NODE;
             JsonDateNode *executeAsDate();
             JsonNode *execute();

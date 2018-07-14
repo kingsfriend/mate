@@ -28,9 +28,9 @@
             BoolExpression(bool v);
             ~BoolExpression();
 
-            static const CommandType COMMAND_TYPE = CMD_BOOL_EXP;
+            static const CommandType CMD_TYPE = CMD_EXP_BOOL;
             static const BoolExpressionType BOOL_EXP_TYPE = BOOL_EXP_JSON_NODE;
-            JsonBoolNode *executeAsNum();
+            JsonBoolNode *executeAsBool();
             JsonNode *execute();
             void update();
             void val1(bool v1);
@@ -49,7 +49,7 @@
             ~UnaryBoolExp();
 
             static const BoolExpressionType BOOL_EXP_TYPE = BOOL_EXP_UNARY;
-            JsonBoolNode *executeAsNum();
+            JsonBoolNode *executeAsBool();
             JsonNode* execute();
             void update();
             void val1(double v1);
@@ -76,7 +76,7 @@
             ~BinaryBoolExp();
 
             static const BoolExpressionType BOOL_EXP_TYPE = BOOL_EXP_BINARY;
-            JsonBoolNode *executeAsNum();
+            JsonBoolNode *executeAsBool();
             JsonNode *execute();
             void update();
             void val1(double v1);

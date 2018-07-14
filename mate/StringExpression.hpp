@@ -30,9 +30,9 @@
             StringExpression(std::string v);
             ~StringExpression();
 
-            static const CommandType COMMAND_TYPE = CMD_STR_EXP;
+            static const CommandType CMD_TYPE = CMD_EXP_STR;
             static const StringExpressionType STR_EXP_TYPE = STR_EXP_JSON_NODE;
-            JsonStringNode *executeAsNum();
+            JsonStringNode *executeAsString();
             JsonNode *execute();
             void update();
             void val1(std::string v1);
@@ -51,7 +51,7 @@
             ~UnaryStringExp();
 
             static const StringExpressionType STR_EXP_TYPE = STR_EXP_UNARY;
-            JsonStringNode *executeAsNum();
+            JsonStringNode *executeAsString();
             JsonNode* execute();
             void update();
             void val1(std::string v1);
@@ -76,7 +76,7 @@
             ~BinaryStringExp();
 
             static const StringExpressionType STR_EXP_TYPE = STR_EXP_BINARY;
-            JsonStringNode *executeAsNum();
+            JsonStringNode *executeAsString();
             JsonNode *execute();
             void update();
             void val1(std::string v1);

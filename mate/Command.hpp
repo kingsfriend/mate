@@ -9,10 +9,15 @@
     enum CommandType
     {
         CMD_BASE,
-        CMD_NUM_EXP,
-        CMD_BOOL_EXP,
-        CMD_STR_EXP,
-        CMD_DATE_EXP
+        CMD_EXP_NUM,
+        CMD_EXP_BOOL,
+        CMD_EXP_STR,
+        CMD_EXP_DATE,
+        CMD_CMP,
+        CMD_CMP_BOOL,
+        CMD_CMP_DATE,
+        CMD_CMP_NUM,
+        CMD_CMP_STRING
     };
 
     class Command

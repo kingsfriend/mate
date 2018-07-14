@@ -33,7 +33,7 @@
             NumExpression(double v);
             ~NumExpression();
 
-            static const CommandType COMMAND_TYPE = CMD_NUM_EXP;
+            static const CommandType CMD_TYPE = CMD_EXP_NUM;
             static const NumExpressionType NUM_EXP_TYPE = NUM_EXP_JSON_NODE;
             JsonNumberNode *executeAsNum();
             JsonNode *execute();

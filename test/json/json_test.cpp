@@ -1,5 +1,6 @@
 #include "../../mate/Json.hpp"
 #include "../../mate/BoolExpression.hpp"
+#include "../../mate/CmpExpression.hpp"
 #include "../../mate/DateExpression.hpp"
 #include "../../mate/NumExpression.hpp"
 #include "../../mate/StringExpression.hpp"
@@ -21,11 +22,16 @@ int main(int argc, char const *argv[])
     JsonObjectNode jsObject1;
     JsonArrayNode jsArray;
     JsonArrayNode jsArray1;
+    JsonDateNode jsdate1;
+
+    std::string str("abcde");
+    std::string str2("abcde");
+
+    std::cout << "String cmp : " << (str<=str2) << "\n";
 
     std::string now(JsonDateNode::now().toString());
     std::cout << "Now : " << now << "\n";
 
-    std::string str("bonjour");
     std::string reverse;
     reverse = JsonStringNode::reverse(str);
     std::cout << "Reverse : " << str << " => " << reverse << "\n";
@@ -54,6 +60,7 @@ int main(int argc, char const *argv[])
     jsArray.push(&jsObject);
     jsArray.push(&jsArray1);
 
+    std::cout << "jsdate1 : " << jsdate1.toString() << "\n";
     std::cout << "jsString : " << jsString.toString() << "\n";
     std::cout << "jsObject : " << jsObject.toString() << "\n";
     std::cout << "jsObject1 : " << jsObject1.toString() << "\n";
