@@ -123,33 +123,21 @@ namespace mate
         }
         void val(const time_t &v){
             this->value = v;
+            ltm = localtime(&value);
         }
         std::string toString(){
             std::string str = ctime(&value);
+            str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
             return "\"" + str +"\"";
         }
         std::string format(std::string format){
             return JsonDateNode::format(*this, format);
-        }
-        JsonDateNode dateDiff(JsonDateNode node2) {
-            return JsonDateNode::dateDiff(*this, node2);
-        }
-        JsonDateNode dateSum(JsonDateNode node2) {
-            return JsonDateNode::dateSum(*this, node2);
         }
         static  std::string format(JsonDateNode node, std::string format) {
             char buffer[256];
             std::strftime(buffer, sizeof(buffer), format.c_str(), node.ltm);
             std::string bufferString(buffer);
             return "\"" + bufferString + "\"";
-        }
-        static  JsonDateNode dateDiff(JsonDateNode node1, JsonDateNode node2) {
-            JsonDateNode diff(difftime(node1.value, node2.value));
-            return diff;
-        }
-        static  JsonDateNode dateSum(JsonDateNode node1, JsonDateNode node2) {
-            JsonDateNode sum(node1.value + node2.value);
-            return sum;
         }
         static JsonDateNode now (){
             return JsonDateNode(time(0));

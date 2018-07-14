@@ -11,7 +11,8 @@
         CMD_BASE,
         CMD_NUM_EXP,
         CMD_BOOL_EXP,
-        CMD_STR_EXP
+        CMD_STR_EXP,
+        CMD_DATE_EXP
     };
 
     class Command

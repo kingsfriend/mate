@@ -1,5 +1,6 @@
 #include "../../mate/Json.hpp"
 #include "../../mate/BoolExpression.hpp"
+#include "../../mate/DateExpression.hpp"
 #include "../../mate/NumExpression.hpp"
 #include "../../mate/StringExpression.hpp"
 
@@ -21,6 +22,8 @@ int main(int argc, char const *argv[])
     JsonArrayNode jsArray;
     JsonArrayNode jsArray1;
 
+    std::string now(JsonDateNode::now().toString());
+    std::cout << "Now : " << now << "\n";
 
     std::string str("bonjour");
     std::string reverse;

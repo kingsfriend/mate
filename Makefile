@@ -51,6 +51,7 @@ json-build json-b:
 	mkdir -p $(json_test_dir)/output/
 	g++ $(json_test_dir)/json_test.cpp \
 		$(src_dir)/BoolExpression.cpp \
+		$(src_dir)/DateExpression.cpp \
 		$(src_dir)/NumExpression.cpp \
 		$(src_dir)/StringExpression.cpp \
 		$(src_dir)/Command.cpp \
