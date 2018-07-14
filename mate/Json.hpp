@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iterator>
+#include <algorithm>
 #include <vector>
 #include <map>
 #include <iostream>
@@ -89,8 +90,18 @@ namespace mate
             std::string str = "\"" + this->value + "\"";
             return str;
         }
+        static std::string reverse(std::string s)
+        {
+            std::string copy(s);
+            std::reverse(copy.begin(), copy.end());
+            return copy;
+        }
+        std::string reverse()
+        {
+            return reverse(value);
+        }
 
-    private:
+      private:
         std::string value;
     };
 

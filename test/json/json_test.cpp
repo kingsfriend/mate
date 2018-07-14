@@ -1,9 +1,11 @@
 #include "../../mate/Json.hpp"
 #include "../../mate/BoolExpression.hpp"
 #include "../../mate/NumExpression.hpp"
+#include "../../mate/StringExpression.hpp"
 
 #include <iostream>
 #include <sstream>
+#include <string>
 
 using namespace mate;
 int main(int argc, char const *argv[])
@@ -18,6 +20,12 @@ int main(int argc, char const *argv[])
     JsonObjectNode jsObject1;
     JsonArrayNode jsArray;
     JsonArrayNode jsArray1;
+
+
+    std::string str("bonjour");
+    std::string reverse;
+    reverse = JsonStringNode::reverse(str);
+    std::cout << "Reverse : " << str << " => " << reverse << "\n";
 
     NumExpression numExp1(&jsNumber1);
     NumExpression numExp2(100);
