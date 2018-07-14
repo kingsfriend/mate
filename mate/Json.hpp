@@ -8,6 +8,7 @@
 #include <map>
 #include <iostream>
 #include <sstream>
+#include <ctime>
 
 namespace mate
 {
@@ -105,6 +106,68 @@ namespace mate
         std::string value;
     };
 
+    class JsonDateNode : public JsonNode
+    {
+    public:
+        static const NodeType TYPE = Number;
+        JsonDateNode(const time_t &v){
+            this->value = v;
+            ltm = localtime(&value);
+        }
+        JsonDateNode(){
+            this->value = now().val();
+            ltm = localtime(&value);
+        }
+        time_t val(){
+            return this->value;
+        }
+        void val(const time_t &v){
+            this->value = v;
+        }
+        std::string toString(){
+            std::string str = ctime(&value);
+            return "\"" + str +"\"";
+        }
+        std::string format(std::string format){
+            return JsonDateNode::format(*this, format);
+        }
+        JsonDateNode dateDiff(JsonDateNode node2) {
+            return JsonDateNode::dateDiff(*this, node2);
+        }
+        JsonDateNode dateSum(JsonDateNode node2) {
+            return JsonDateNode::dateSum(*this, node2);
+        }
+        static  std::string format(JsonDateNode node, std::string format) {
+            char buffer[256];
+            std::strftime(buffer, sizeof(buffer), format.c_str(), node.ltm);
+            std::string bufferString(buffer);
+            return "\"" + bufferString + "\"";
+        }
+        static  JsonDateNode dateDiff(JsonDateNode node1, JsonDateNode node2) {
+            JsonDateNode diff(difftime(node1.value, node2.value));
+            return diff;
+        }
+        static  JsonDateNode dateSum(JsonDateNode node1, JsonDateNode node2) {
+            JsonDateNode sum(node1.value + node2.value);
+            return sum;
+        }
+        static JsonDateNode now (){
+            return JsonDateNode(time(0));
+        }
+        int sec(){ return ltm->tm_sec;}
+        int min(){ return ltm->tm_min;}
+        int hour(){ return ltm->tm_hour;}
+        int day(){ return ltm->tm_mday;}
+        int month(){ return ltm->tm_mon;}
+        int year(){ return ltm->tm_year;}
+        int weekDay(){ return ltm->tm_wday;}
+        int yearDay(){ return ltm->tm_yday;}
+        
+    private:
+      time_t value;
+      tm *ltm;
+    };
+
     class JsonNumberNode : public JsonNode
     {
     public:
@@ -159,6 +222,10 @@ namespace mate
             }
             str += "}";
             return str;
+        }
+        void push(const std::string &k, JsonDateNode *node)
+        {
+            values.insert(make_pair(k, node));
         }
         void push(const std::string &k, JsonBoolNode *node)
         {
@@ -236,6 +303,10 @@ namespace mate
             }
             str += "]";
             return str;
+        }
+        void push(JsonDateNode *node)
+        {
+            values.push_back(node);
         }
         void push(JsonBoolNode *node)
         {
