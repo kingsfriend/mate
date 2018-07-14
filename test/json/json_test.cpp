@@ -1,4 +1,5 @@
 #include "../../mate/Json.hpp"
+#include "../../mate/BoolExpression.hpp"
 #include "../../mate/NumExpression.hpp"
 
 #include <iostream>

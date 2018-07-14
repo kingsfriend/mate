@@ -9,7 +9,8 @@
     enum CommandType
     {
         CMD_BASE,
-        CMD_NUM_EXP
+        CMD_NUM_EXP,
+        CMD_BOOL_EXP
     };
 
     class Command

@@ -15,8 +15,12 @@
             NUM_EXP_JSON_NODE
         };
         enum UnaryNumberExpType{
-            EXP_UN_NUM_INC,
-            EXP_UN_NUM_DEC
+            EXP_UN_NUM_PREF_PLUS,
+            EXP_UN_NUM_PREF_MINUS,
+            EXP_UN_NUM_POST_INC,
+            EXP_UN_NUM_POST_DEC,
+            EXP_UN_NUM_PREF_INC,
+            EXP_UN_NUM_PREF_DEC
         };
         
         class NumExpression : public Command
@@ -26,7 +30,7 @@
 
         public:
             NumExpression(JsonNumberNode *op1);
-            NumExpression(double d);
+            NumExpression(double v);
             ~NumExpression();
 
             static const CommandType COMMAND_TYPE = CMD_NUM_EXP;
@@ -34,6 +38,7 @@
             JsonNumberNode *executeAsNum();
             JsonNode *execute();
             void update();
+            void val1(double v1);
 
           protected:
             NumExpression();
@@ -52,14 +57,21 @@
             JsonNumberNode *executeAsNum();
             JsonNode* execute();
             void update();
+            void val1(double v1);
         };
-        
+
         enum BinaryNumberExpType{
+            EXP_BI_NUM_ASSIGN,
+            EXP_BI_NUM_ASSIGN_MUL,
+            EXP_BI_NUM_ASSIGN_DIV,
+            EXP_BI_NUM_ASSIGN_ADD,
+            EXP_BI_NUM_ASSIGN_SUB,
+            EXP_BI_NUM_ASSIGN_MOD,
             EXP_BI_NUM_MUL,
             EXP_BI_NUM_DIV,
-            EXP_BI_NUM_MOD,
             EXP_BI_NUM_ADD,
-            EXP_BI_NUM_SUB
+            EXP_BI_NUM_SUB,
+            EXP_BI_NUM_MOD
         };
         class BinaryNumberExp : public NumExpression
         {
@@ -76,6 +88,8 @@
             JsonNumberNode *executeAsNum();
             JsonNode *execute();
             void update();
+            void val1(double v1);
+            void val2(double v2);
         };
         
         
