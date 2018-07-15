@@ -54,7 +54,7 @@ json-build json-b:
 		$(src_dir)/BoolExpression.cpp \
 		$(src_dir)/BreakableStatement.cpp \
 		$(src_dir)/Command.cpp \
-		$(src_dir)/ConditionStatement.cpp \
+		$(src_dir)/ConditionalStatement.cpp \
 		$(src_dir)/CmpExpression.cpp \
 		$(src_dir)/DateExpression.cpp \
 		$(src_dir)/Json.cpp \

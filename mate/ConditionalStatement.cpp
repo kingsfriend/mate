@@ -1,4 +1,4 @@
-#include "ConditionStatement.hpp"
+#include "ConditionalStatement.hpp"
 
 namespace mate
 {
@@ -61,12 +61,12 @@ JsonBoolNode *ConditionExpression::executeAsBool(){
     return r;
 }
 
-// ConditionStatement ----------------------
+// ConditionalStatement ----------------------
 
-ConditionStatement::ConditionStatement(ConditionExpression *condition) : condition(condition){}
-ConditionStatement::~ConditionStatement(){}
+ConditionalStatement::ConditionalStatement(ConditionExpression *condition) : condition(condition){}
+ConditionalStatement::~ConditionalStatement(){}
 
-bool ConditionStatement::valuateCondition(){
+bool ConditionalStatement::valuateCondition(){
     if (condition != NULL){
         return false;
     }
@@ -75,7 +75,7 @@ bool ConditionStatement::valuateCondition(){
 
 // IfStatement ----------------------
 
-IfStatement::IfStatement(ConditionExpression *condition) : ConditionStatement(condition) {}
+IfStatement::IfStatement(ConditionExpression *condition) : ConditionalStatement(condition) {}
 IfStatement::~IfStatement(){}
 
 JsonNode* IfStatement::execute(){

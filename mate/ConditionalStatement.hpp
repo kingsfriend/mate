@@ -26,7 +26,7 @@
 
         };
         
-        enum ConditionStatementType{
+        enum ConditionalStatementType{
             COND_STM,
             COND_STM_IF,
             COND_STM_SWITCH,
@@ -35,14 +35,14 @@
             COND_STM_WHILE,
         };
 
-        class ConditionStatement : public Command
+        class ConditionalStatement : public Command
         {
         public:
-            ~ConditionStatement();
-            ConditionStatement(ConditionExpression* condition);
+            ~ConditionalStatement();
+            ConditionalStatement(ConditionExpression* condition);
 
             static const CommandType CMD_TYPE = CMD_COND_EXP;
-            static const ConditionStatementType COND_STM_TYPE = COND_STM;
+            static const ConditionalStatementType COND_STM_TYPE = COND_STM;
 
             bool valuateCondition();
 
@@ -50,7 +50,7 @@
             ConditionExpression* condition;
         };
 
-        class IfStatement : public ConditionStatement
+        class IfStatement : public ConditionalStatement
         {
           private:
             ConditionExpression* condition;
@@ -65,7 +65,7 @@
             IfStatement(ConditionExpression *condition, std::vector<Command *> commandes, IfStatement *nextBlok);
 
             static const CommandType CMD_TYPE = CMD_COND_STM_IF;
-            static const ConditionStatementType COND_STM_TYPE = COND_STM_IF;
+            static const ConditionalStatementType COND_STM_TYPE = COND_STM_IF;
 
             JsonNode* execute();
         };
