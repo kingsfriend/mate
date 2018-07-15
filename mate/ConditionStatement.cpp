@@ -4,6 +4,9 @@ namespace mate
 {
 // ConditionExpression ----------------------
 
+ConditionExpression *ConditionExpression::TRUE_CONDITION = new ConditionExpression(BoolExpression::BOOL_EXP_TRUE);
+ConditionExpression *ConditionExpression::FALSE_CONDITION = new ConditionExpression(BoolExpression::BOOL_EXP_FALSE);
+
 ConditionExpression::ConditionExpression(BoolExpression *boolExp){
     this->boolExp = boolExp;
     this->type = EXP_BI_BOOL_UNDEFINED;
@@ -70,12 +73,12 @@ bool ConditionStatement::valuateCondition(){
     return condition->executeAsBool();
 }
 
-// IfCondStm ----------------------
+// IfStatement ----------------------
 
-IfCondStm::IfCondStm(ConditionExpression *condition) : ConditionStatement(condition) {}
-IfCondStm::~IfCondStm(){}
+IfStatement::IfStatement(ConditionExpression *condition) : ConditionStatement(condition) {}
+IfStatement::~IfStatement(){}
 
-JsonNode* IfCondStm::execute(){
+JsonNode* IfStatement::execute(){
     if(valuateCondition()){
         int i;
         int loopLimit = commandes.size();

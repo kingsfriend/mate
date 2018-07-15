@@ -20,6 +20,11 @@
         CMD_CMP_STRING,
         CMD_COND_EXP,
         CMD_COND_STM_IF,
+        CMD_BREAK,
+        CMD_BREAK_EXP,
+        CMD_BREAK_STM_SWITCH,
+        CMD_BREAK_STM_CASE,
+        CMD_BREAK_STM_DEFAULT,
     };
 
     class Command

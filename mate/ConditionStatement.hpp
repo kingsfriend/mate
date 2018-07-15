@@ -5,9 +5,6 @@
     
     namespace mate
     {
-        enum ConditionExpressionType{
-            COND_EXP
-        };
         
         class ConditionExpression : public BoolExpression
         {
@@ -28,12 +25,14 @@
             JsonBoolNode *executeAsBool();
 
         };
-        ConditionExpression* ConditionExpression::TRUE_CONDITION = new ConditionExpression(BoolExpression::BOOL_EXP_TRUE);
-        ConditionExpression* ConditionExpression::FALSE_CONDITION = new  ConditionExpression(BoolExpression::BOOL_EXP_FALSE);
         
         enum ConditionStatementType{
             COND_STM,
-            COND_STM_IF
+            COND_STM_IF,
+            COND_STM_SWITCH,
+            COND_STM_FOR,
+            COND_STM_FOREACH,
+            COND_STM_WHILE,
         };
 
         class ConditionStatement : public Command
@@ -51,19 +50,19 @@
             ConditionExpression* condition;
         };
 
-        class IfCondStm : public ConditionStatement
+        class IfStatement : public ConditionStatement
         {
           private:
             ConditionExpression* condition;
-            IfCondStm* nextBlok; // ELSEIF or ELSE section
+            IfStatement* nextBlok; // ELSEIF or ELSE section
             std::vector<Command*> commandes;
 
           public:
-            ~IfCondStm();
-            IfCondStm(); // for else section
-            IfCondStm(ConditionExpression *condition);
-            IfCondStm(ConditionExpression *condition, std::vector<Command *> commandes);
-            IfCondStm(ConditionExpression *condition, std::vector<Command *> commandes, IfCondStm *nextBlok);
+            ~IfStatement();
+            IfStatement(); // for else section
+            IfStatement(ConditionExpression *condition);
+            IfStatement(ConditionExpression *condition, std::vector<Command *> commandes);
+            IfStatement(ConditionExpression *condition, std::vector<Command *> commandes, IfStatement *nextBlok);
 
             static const CommandType CMD_TYPE = CMD_COND_STM_IF;
             static const ConditionStatementType COND_STM_TYPE = COND_STM_IF;
