@@ -46,6 +46,8 @@ namespace mate
     {
     public:
         static const NodeType TYPE = Bool;
+        static const JsonBoolNode BOOL_NODE_TRUE;
+        static const JsonBoolNode BOOL_NODE_FALSE;
         JsonBoolNode(const bool &v)
         {
             this->value = v;
@@ -68,6 +70,7 @@ namespace mate
     private:
         bool value;
     };
+
     class JsonStringNode : public JsonNode
     {
     public:

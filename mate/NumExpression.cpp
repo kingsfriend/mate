@@ -20,9 +20,6 @@ JsonNumberNode *NumExpression::executeAsNum() {
 JsonNode* NumExpression::execute(){
     return executeAsNum();
 }
-void NumExpression::update(){
-    executeAsNum();
-}
 
 void NumExpression::val1(double v1){
     op1->val(v1);
@@ -66,10 +63,6 @@ UnaryNumberExp::~UnaryNumberExp() {}
 
     JsonNode* UnaryNumberExp::execute(){
         return executeAsNum();
-    }
-
-    void UnaryNumberExp::update(){
-        executeAsNum();
     }
 
     void UnaryNumberExp::val1(double v1){
@@ -131,10 +124,6 @@ UnaryNumberExp::~UnaryNumberExp() {}
 
     JsonNode *BinaryNumberExp::execute(){
         return executeAsNum();
-    }
-
-    void BinaryNumberExp::update(){
-        executeAsNum();
     }
 
     void BinaryNumberExp::val1(double v1){

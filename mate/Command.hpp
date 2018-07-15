@@ -17,7 +17,9 @@
         CMD_CMP_BOOL,
         CMD_CMP_DATE,
         CMD_CMP_NUM,
-        CMD_CMP_STRING
+        CMD_CMP_STRING,
+        CMD_COND_EXP,
+        CMD_COND_STM_IF,
     };
 
     class Command
@@ -29,7 +31,6 @@
         std::string toString();
 
         virtual JsonNode *execute() = 0;
-        virtual void update() = 0;
 
         Command();
         ~Command();

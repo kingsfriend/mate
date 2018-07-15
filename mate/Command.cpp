@@ -6,5 +6,8 @@ namespace mate
 
     Command::~Command(){}
 
-    std::string Command::toString(){}
+    std::string Command::toString(){
+        std:: string r("{}");
+        return r;
+    }
 }

@@ -20,9 +20,6 @@ JsonStringNode *StringExpression::executeAsString() {
 JsonNode* StringExpression::execute(){
     return executeAsString();
 }
-void StringExpression::update(){
-    executeAsString();
-}
 
 void StringExpression::val1(std::string v1){
     op1->val(v1);
@@ -54,10 +51,6 @@ UnaryStringExp::~UnaryStringExp() {}
 
     JsonNode* UnaryStringExp::execute(){
         return executeAsString();
-    }
-
-    void UnaryStringExp::update(){
-        executeAsString();
     }
 
     void UnaryStringExp::val1(std::string v1){
@@ -101,10 +94,6 @@ UnaryStringExp::~UnaryStringExp() {}
 
     JsonNode *BinaryStringExp::execute(){
         return executeAsString();
-    }
-
-    void BinaryStringExp::update(){
-        executeAsString();
     }
 
     void BinaryStringExp::val1(std::string v1){

@@ -20,9 +20,6 @@ JsonDateNode *DateExpression::executeAsDate() {
 JsonNode* DateExpression::execute(){
     return executeAsDate();
 }
-void DateExpression::update(){
-    executeAsDate();
-}
 
 void DateExpression::val1(time_t v1){
     op1->val(v1);
@@ -54,10 +51,6 @@ UnaryDateExp::~UnaryDateExp() {}
 
     JsonNode* UnaryDateExp::execute(){
         return executeAsDate();
-    }
-
-    void UnaryDateExp::update(){
-        executeAsDate();
     }
 
     void UnaryDateExp::val1(time_t v1){
@@ -101,10 +94,6 @@ UnaryDateExp::~UnaryDateExp() {}
 
     JsonNode *BinaryDateExp::execute(){
         return executeAsDate();
-    }
-
-    void BinaryDateExp::update(){
-        executeAsDate();
     }
 
     void BinaryDateExp::val1(time_t v1){

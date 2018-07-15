@@ -12,7 +12,8 @@
         enum BoolExpressionType{
             BOOL_EXP_BINARY,
             BOOL_EXP_UNARY,
-            BOOL_EXP_JSON_NODE
+            BOOL_EXP_JSON_NODE,
+            BOOL_EXP_COND
         };
         enum UnaryBoolExpType{
             EXP_UN_BOOL_NOT
@@ -30,15 +31,16 @@
 
             static const CommandType CMD_TYPE = CMD_EXP_BOOL;
             static const BoolExpressionType BOOL_EXP_TYPE = BOOL_EXP_JSON_NODE;
+            static BoolExpression* BOOL_EXP_TRUE;
+            static BoolExpression* BOOL_EXP_FALSE;
             JsonBoolNode *executeAsBool();
             JsonNode *execute();
-            void update();
             void val1(bool v1);
 
           protected:
             BoolExpression();
         };
-
+        
         class UnaryBoolExp : public BoolExpression
         {
         private:
@@ -51,7 +53,6 @@
             static const BoolExpressionType BOOL_EXP_TYPE = BOOL_EXP_UNARY;
             JsonBoolNode *executeAsBool();
             JsonNode* execute();
-            void update();
             void val1(double v1);
         };
 
@@ -62,7 +63,8 @@
             EXP_BI_BOOL_ASSIGN_XOR,
             EXP_BI_BOOL_AND,
             EXP_BI_BOOL_OR,
-            EXP_BI_BOOL_XOR
+            EXP_BI_BOOL_XOR,
+            EXP_BI_BOOL_UNDEFINED,
         };
         class BinaryBoolExp : public BoolExpression
         {
@@ -78,7 +80,6 @@
             static const BoolExpressionType BOOL_EXP_TYPE = BOOL_EXP_BINARY;
             JsonBoolNode *executeAsBool();
             JsonNode *execute();
-            void update();
             void val1(double v1);
             void val2(bool v2);
         };

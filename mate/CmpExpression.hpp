@@ -28,7 +28,6 @@
 
             virtual JsonBoolNode *executeAsBool()=0;
             JsonNode *execute();
-            void update();
 
         protected:
           CmpType op;

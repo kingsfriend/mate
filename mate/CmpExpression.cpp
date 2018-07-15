@@ -11,9 +11,6 @@ CmpExpression::~CmpExpression(){}
 JsonNode* CmpExpression::execute(){
     return executeAsBool();
 }
-void CmpExpression::update(){
-    executeAsBool();
-}
 
 // CmpNumExp ----------------------
 

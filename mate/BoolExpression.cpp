@@ -3,6 +3,8 @@
 namespace mate
 {
 // BoolExpression ----------------------
+BoolExpression *BoolExpression::BOOL_EXP_TRUE = new BoolExpression(true);
+BoolExpression *BoolExpression::BOOL_EXP_FALSE = new BoolExpression(false);
 
 BoolExpression::BoolExpression(JsonBoolNode *op1)
     : op1(op1) {}
@@ -19,9 +21,6 @@ JsonBoolNode *BoolExpression::executeAsBool() {
 
 JsonNode* BoolExpression::execute(){
     return executeAsBool();
-}
-void BoolExpression::update(){
-    executeAsBool();
 }
 
 void BoolExpression::val1(bool v1){
@@ -51,10 +50,6 @@ UnaryBoolExp::~UnaryBoolExp() {}
 
     JsonNode* UnaryBoolExp::execute(){
         return executeAsBool();
-    }
-
-    void UnaryBoolExp::update(){
-        executeAsBool();
     }
 
     void UnaryBoolExp::val1(double v1){
@@ -96,6 +91,9 @@ UnaryBoolExp::~UnaryBoolExp() {}
         case EXP_BI_BOOL_XOR:
             v = v1 ^ v2;
             break;
+        case EXP_BI_BOOL_UNDEFINED:
+            v = false;
+            break;
         }
         val1(v1);
         JsonBoolNode* r = new JsonBoolNode(v);
@@ -104,10 +102,6 @@ UnaryBoolExp::~UnaryBoolExp() {}
 
     JsonNode *BinaryBoolExp::execute(){
         return executeAsBool();
-    }
-
-    void BinaryBoolExp::update(){
-        executeAsBool();
     }
 
     void BinaryBoolExp::val1(double v1){

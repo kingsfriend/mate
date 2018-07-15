@@ -34,7 +34,6 @@
             static const StringExpressionType STR_EXP_TYPE = STR_EXP_JSON_NODE;
             JsonStringNode *executeAsString();
             JsonNode *execute();
-            void update();
             void val1(std::string v1);
 
           protected:
@@ -53,7 +52,6 @@
             static const StringExpressionType STR_EXP_TYPE = STR_EXP_UNARY;
             JsonStringNode *executeAsString();
             JsonNode* execute();
-            void update();
             void val1(std::string v1);
         };
 
@@ -78,7 +76,6 @@
             static const StringExpressionType STR_EXP_TYPE = STR_EXP_BINARY;
             JsonStringNode *executeAsString();
             JsonNode *execute();
-            void update();
             void val1(std::string v1);
             void val2(std::string v2);
         };

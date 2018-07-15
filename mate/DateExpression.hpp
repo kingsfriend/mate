@@ -34,7 +34,6 @@
             static const DateExpressionType DATE_EXP_TYPE = DATE_EXP_JSON_NODE;
             JsonDateNode *executeAsDate();
             JsonNode *execute();
-            void update();
             void val1(time_t v1);
 
           protected:
@@ -53,7 +52,6 @@
             static const DateExpressionType DATE_EXP_TYPE = DATE_EXP_UNARY;
             JsonDateNode *executeAsDate();
             JsonNode* execute();
-            void update();
             void val1(time_t v1);
         };
 
@@ -78,7 +76,6 @@
             static const DateExpressionType DATE_EXP_TYPE = DATE_EXP_BINARY;
             JsonDateNode *executeAsDate();
             JsonNode *execute();
-            void update();
             void val1(time_t v1);
             void val2(time_t v2);
         };

@@ -37,7 +37,6 @@
             static const NumExpressionType NUM_EXP_TYPE = NUM_EXP_JSON_NODE;
             JsonNumberNode *executeAsNum();
             JsonNode *execute();
-            void update();
             void val1(double v1);
 
           protected:
@@ -56,7 +55,6 @@
             static const NumExpressionType NUM_EXP_TYPE = NUM_EXP_UNARY;
             JsonNumberNode *executeAsNum();
             JsonNode* execute();
-            void update();
             void val1(double v1);
         };
 
@@ -87,7 +85,6 @@
             static const NumExpressionType NUM_EXP_TYPE = NUM_EXP_BINARY;
             JsonNumberNode *executeAsNum();
             JsonNode *execute();
-            void update();
             void val1(double v1);
             void val2(double v2);
         };
