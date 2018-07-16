@@ -13,6 +13,7 @@ namespace mate {
 
 class Command;
 
+class ContextStack;
 class Interpreter
 {
 public:

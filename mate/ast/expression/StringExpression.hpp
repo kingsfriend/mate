@@ -30,8 +30,8 @@ class StringExpression : public Expression
     static const CommandType CMD_TYPE = CMD_EXP_STR;
     static const ExpressionType EXP_TYPE = EXP_STRING;
     static const StringExpressionType STR_EXP_TYPE = STR_EXP_JSON_NODE;
-    JsonStringNode *executeAsString();
-    JsonNode *execute();
+    JsonStringNode *executeAsString(Interpreter *interpreter);
+    JsonNode *execute(Interpreter* interpreter);
     void val1(std::string v1);
 
   protected:
@@ -48,8 +48,8 @@ class StringExpression : public Expression
             ~UnaryStringExp();
 
             static const StringExpressionType STR_EXP_TYPE = STR_EXP_UNARY;
-            JsonStringNode *executeAsString();
-            JsonNode* execute();
+            JsonStringNode *executeAsString(Interpreter *interpreter);
+            JsonNode *execute(Interpreter* interpreter);
             void val1(std::string v1);
         };
 
@@ -72,8 +72,8 @@ class StringExpression : public Expression
             ~BinaryStringExp();
 
             static const StringExpressionType STR_EXP_TYPE = STR_EXP_BINARY;
-            JsonStringNode *executeAsString();
-            JsonNode *execute();
+            JsonStringNode *executeAsString(Interpreter *interpreter);
+            JsonNode *execute(Interpreter* interpreter);
             void val1(std::string v1);
             void val2(std::string v2);
         };

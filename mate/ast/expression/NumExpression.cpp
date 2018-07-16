@@ -13,12 +13,12 @@ NumExpression::NumExpression(){}
 
 NumExpression::~NumExpression(){}
 
-JsonNumberNode *NumExpression::executeAsNum() {
+JsonNumberNode *NumExpression::executeAsNum(Interpreter* interpreter) {
     return op1;
 }
 
-JsonNode* NumExpression::execute(){
-    return executeAsNum();
+JsonNode* NumExpression::execute(Interpreter* interpreter){
+    return executeAsNum(interpreter);
 }
 
 void NumExpression::val1(double v1){
@@ -32,8 +32,8 @@ UnaryNumberExp::UnaryNumberExp(UnaryNumberExpType expType, NumExpression *op)
 
 UnaryNumberExp::~UnaryNumberExp() {}
 
-    JsonNumberNode *UnaryNumberExp::executeAsNum(){
-        double v1 = op1->executeAsNum()->val();
+    JsonNumberNode *UnaryNumberExp::executeAsNum(Interpreter* interpreter){
+        double v1 = op1->executeAsNum(interpreter)->val();
         double v;
         switch (expType)
         {
@@ -61,8 +61,8 @@ UnaryNumberExp::~UnaryNumberExp() {}
         return r;
     }
 
-    JsonNode* UnaryNumberExp::execute(){
-        return executeAsNum();
+    JsonNode* UnaryNumberExp::execute(Interpreter* interpreter){
+        return executeAsNum(interpreter);
     }
 
     void UnaryNumberExp::val1(double v1){
@@ -76,9 +76,9 @@ UnaryNumberExp::~UnaryNumberExp() {}
 
     BinaryNumberExp::~BinaryNumberExp() {}
 
-    JsonNumberNode* BinaryNumberExp::executeAsNum(){
-        double v1 = op1->executeAsNum()->val();
-        double v2 = op2->executeAsNum()->val();
+    JsonNumberNode* BinaryNumberExp::executeAsNum(Interpreter* interpreter){
+        double v1 = op1->executeAsNum(interpreter)->val();
+        double v2 = op2->executeAsNum(interpreter)->val();
         double v;
         
         switch (expType)
@@ -122,8 +122,8 @@ UnaryNumberExp::~UnaryNumberExp() {}
         return r;
     }
 
-    JsonNode *BinaryNumberExp::execute(){
-        return executeAsNum();
+    JsonNode *BinaryNumberExp::execute(Interpreter* interpreter){
+        return executeAsNum(interpreter);
     }
 
     void BinaryNumberExp::val1(double v1){

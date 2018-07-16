@@ -17,7 +17,7 @@
 
             static const CommandType CMD_TYPE = CMD_ECHO;
 
-            JsonNode *execute();
+            JsonNode *execute(Interpreter* interpreter);
         };
         
     } // mate

@@ -7,6 +7,7 @@
 using namespace std;
 namespace mate
 {
+    class Context;
     class ContextStack
     {
     public:

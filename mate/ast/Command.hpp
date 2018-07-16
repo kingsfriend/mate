@@ -3,6 +3,7 @@
 
     #include <memory>
     #include "Json.hpp"
+    #include "Interpreter.hpp"
     
     namespace mate{
     enum CommandType
@@ -34,6 +35,7 @@
         CMD_ECHO,
     };
 
+    class Interpreter;
     class Context;
     class Command
     {
@@ -43,7 +45,7 @@
 
         std::string toString();
 
-        virtual JsonNode *execute() = 0;
+        virtual JsonNode *execute(Interpreter* interpreter) = 0;
 
         Command();
         ~Command();

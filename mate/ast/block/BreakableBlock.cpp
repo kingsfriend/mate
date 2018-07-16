@@ -13,7 +13,7 @@ BreakCommand::BreakCommand (){
     block = NULL;
 }
 
-JsonNode *BreakCommand::execute()
+JsonNode *BreakCommand::execute(Interpreter* interpreter)
 {
     if(block!=NULL){
         block->setBroken(true);
@@ -71,7 +71,7 @@ JsonNode *SwitchBlock::getBaseNode(){
     return baseNode;
 }
 
-JsonNode *SwitchBlock::execute(){
+JsonNode *SwitchBlock::execute(Interpreter* interpreter){
     if (!caseStms.empty()){
         int i, loopLimit = caseStms.size();
         setBroken(false);
@@ -79,13 +79,13 @@ JsonNode *SwitchBlock::execute(){
             if (isBroken()){
                 break;
             }else{
-                caseStms[i]->execute();
+                caseStms[i]->execute(interpreter);
             }
         }
     }
     if (!isBroken()){
         if (defaultStm!=NULL&&!isBroken()){
-            defaultStm->execute();
+            defaultStm->execute(interpreter);
         }
     }
     return NULL;
@@ -103,7 +103,7 @@ CaseBlock::CaseBlock(JsonNode *compareNode, std::vector<Command *> commands)
 void CaseBlock::setSwitchStm(SwitchBlock *v){
     switchStm = v;
 }
-JsonNode *CaseBlock::execute(){
+JsonNode *CaseBlock::execute(Interpreter* interpreter){
     if(switchStm!=NULL){
         JsonNode *baseNode = switchStm->getBaseNode();
         JsonNode *cmpNode ;
@@ -116,7 +116,7 @@ JsonNode *CaseBlock::execute(){
                     break;
                 }else{
                     Command* cmd = commands[i];
-                    cmd->execute();
+                    cmd->execute(interpreter);
                     if(cmd->CMD_TYPE==CMD_BREAK){
                         break;
                     }
@@ -138,7 +138,7 @@ DefaultBlock::DefaultBlock(std::vector<Command *> commands){
 void DefaultBlock::setSwitch(SwitchBlock *v){
     switchStm = v;
 }
-JsonNode *DefaultBlock::execute(){
+JsonNode *DefaultBlock::execute(Interpreter* interpreter){
     int i, loopLimit = commands.size();
     setBroken(false);
     for(i=0; i<loopLimit;i++){
@@ -146,7 +146,7 @@ JsonNode *DefaultBlock::execute(){
             break;
         }else{
             Command* cmd = commands[i];
-            cmd->execute();
+            cmd->execute(interpreter);
             if(cmd->CMD_TYPE==CMD_BREAK){
                 break;
             }

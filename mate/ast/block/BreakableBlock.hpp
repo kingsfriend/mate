@@ -24,7 +24,7 @@
             BreakableBlock *getBlock();
             void setBlock(BreakableBlock *stm);
 
-            JsonNode *execute();
+            JsonNode *execute(Interpreter* interpreter);
         };
 
         enum BreakableBlockType{
@@ -70,7 +70,7 @@
             SwitchBlock(JsonNode *baseNode, DefaultBlock *defaultStm);
 
             JsonNode* getBaseNode();
-            JsonNode* execute();
+            JsonNode *execute(Interpreter* interpreter);
         };
 
         class CaseBlock : public BreakableBlock {
@@ -88,7 +88,7 @@
             CaseBlock(JsonNode *compareNode, std::vector<Command*> commands);
 
             void setSwitchStm(SwitchBlock *switchStm);
-            JsonNode* execute();
+            JsonNode *execute(Interpreter* interpreter);
 
         };
 
@@ -106,7 +106,7 @@
             DefaultBlock(std::vector<Command*> commands);
 
             void setSwitch(SwitchBlock *switchStm);
-            JsonNode* execute();
+            JsonNode *execute(Interpreter* interpreter);
         };
 
     } // mate

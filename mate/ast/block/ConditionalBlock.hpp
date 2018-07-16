@@ -22,8 +22,7 @@
             static ConditionExpression* TRUE_CONDITION;
             static ConditionExpression* FALSE_CONDITION;
 
-            JsonBoolNode *executeAsBool();
-
+            JsonBoolNode *executeAsBool(Interpreter *interpreter);
         };
         
         enum ConditionalBlockType{
@@ -66,7 +65,7 @@
             static const CommandType CMD_TYPE = CMD_COND_BLOCK_IF;
             static const ConditionalBlockType COND_BLOCK_TYPE = COND_BLOCK_IF;
 
-            JsonNode* execute();
+            JsonNode *execute(Interpreter* interpreter);
         };
 
     } // mate

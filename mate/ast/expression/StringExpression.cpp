@@ -13,12 +13,12 @@ StringExpression::StringExpression(){}
 
 StringExpression::~StringExpression(){}
 
-JsonStringNode *StringExpression::executeAsString() {
+JsonStringNode *StringExpression::executeAsString(Interpreter* interpreter) {
     return op1;
 }
 
-JsonNode* StringExpression::execute(){
-    return executeAsString();
+JsonNode* StringExpression::execute(Interpreter* interpreter){
+    return executeAsString(interpreter);
 }
 
 void StringExpression::val1(std::string v1){
@@ -32,8 +32,8 @@ UnaryStringExp::UnaryStringExp(UnaryStringExpType expType, StringExpression *op)
 
 UnaryStringExp::~UnaryStringExp() {}
 
-    JsonStringNode *UnaryStringExp::executeAsString(){
-        std::string v1 = op1->executeAsString()->val();
+    JsonStringNode *UnaryStringExp::executeAsString(Interpreter* interpreter){
+        std::string v1 = op1->executeAsString(interpreter)->val();
         std::string v;
         switch (expType)
         {
@@ -49,8 +49,8 @@ UnaryStringExp::~UnaryStringExp() {}
         return r;
     }
 
-    JsonNode* UnaryStringExp::execute(){
-        return executeAsString();
+    JsonNode* UnaryStringExp::execute(Interpreter* interpreter){
+        return executeAsString(interpreter);
     }
 
     void UnaryStringExp::val1(std::string v1){
@@ -64,9 +64,9 @@ UnaryStringExp::~UnaryStringExp() {}
 
     BinaryStringExp::~BinaryStringExp() {}
 
-    JsonStringNode* BinaryStringExp::executeAsString(){
-        std::string v1 = op1->executeAsString()->val();
-        std::string v2 = op2->executeAsString()->val();
+    JsonStringNode* BinaryStringExp::executeAsString(Interpreter* interpreter){
+        std::string v1 = op1->executeAsString(interpreter)->val();
+        std::string v2 = op2->executeAsString(interpreter)->val();
         std::string v;
         
         switch (expType)
@@ -92,8 +92,8 @@ UnaryStringExp::~UnaryStringExp() {}
         return r;
     }
 
-    JsonNode *BinaryStringExp::execute(){
-        return executeAsString();
+    JsonNode *BinaryStringExp::execute(Interpreter* interpreter){
+        return executeAsString(interpreter);
     }
 
     void BinaryStringExp::val1(std::string v1){

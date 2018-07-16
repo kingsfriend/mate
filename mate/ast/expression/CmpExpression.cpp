@@ -8,8 +8,8 @@ CmpExpression::CmpExpression(CmpType op): op(op) {}
 
 CmpExpression::~CmpExpression(){}
 
-JsonNode* CmpExpression::execute(){
-    return executeAsBool();
+JsonNode* CmpExpression::execute(Interpreter* interpreter){
+    return executeAsBool(interpreter);
 }
 
 // CmpNumExp ----------------------
@@ -23,7 +23,7 @@ CmpNumExp::CmpNumExp(CmpType op, double v1, double v2) : CmpExpression(op){
 
 CmpNumExp::~CmpNumExp(){}
 
-JsonBoolNode *CmpNumExp::executeAsBool()
+JsonBoolNode *CmpNumExp::executeAsBool(Interpreter* interpreter)
 {
     bool v;
     double v1 = p1->val();
@@ -73,7 +73,7 @@ CmpBoolExp::CmpBoolExp(CmpType op, bool v1, bool v2) : CmpExpression(op)
 
 CmpBoolExp::~CmpBoolExp() {}
 
-JsonBoolNode *CmpBoolExp::executeAsBool()
+JsonBoolNode *CmpBoolExp::executeAsBool(Interpreter* interpreter)
 {
     bool v;
     bool v1 = p1->val();
@@ -125,7 +125,7 @@ CmpDateExp::CmpDateExp(CmpType op, time_t v1, time_t v2) : CmpExpression(op)
 
 CmpDateExp::~CmpDateExp() {}
 
-JsonBoolNode *CmpDateExp::executeAsBool()
+JsonBoolNode *CmpDateExp::executeAsBool(Interpreter* interpreter)
 {
     bool v;
     time_t v1 = p1->val();
@@ -177,7 +177,7 @@ CmpStringExp::CmpStringExp(CmpType op, std::string v1, std::string v2) : CmpExpr
 
 CmpStringExp::~CmpStringExp() {}
 
-JsonBoolNode *CmpStringExp::executeAsBool()
+JsonBoolNode *CmpStringExp::executeAsBool(Interpreter* interpreter)
 {
     bool v;
     std::string v1 = p1->val();

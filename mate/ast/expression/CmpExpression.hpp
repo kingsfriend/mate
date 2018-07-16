@@ -23,8 +23,8 @@
             static const CommandType CMD_TYPE = CMD_CMP;
             static const ExpressionType EXP_TYPE = EXP_CMP;
 
-            virtual JsonBoolNode *executeAsBool()=0;
-            JsonNode *execute();
+            virtual JsonBoolNode *executeAsBool(Interpreter *interpreter) = 0;
+            JsonNode *execute(Interpreter* interpreter);
 
         protected:
           CmpType op;
@@ -43,7 +43,7 @@
 
             static const CommandType CMD_TYPE = CMD_CMP_NUM;
 
-            JsonBoolNode *executeAsBool();
+            JsonBoolNode *executeAsBool(Interpreter *interpreter);
             void param1(double v1);
             void param2(double v1);
         };
@@ -60,8 +60,8 @@
             CmpBoolExp(CmpType op, bool v1, bool v2);
 
             static const CommandType CMD_TYPE = CMD_CMP_BOOL;
-            
-            JsonBoolNode *executeAsBool();
+
+            JsonBoolNode *executeAsBool(Interpreter *interpreter);
             void param1(bool v1);
             void param2(bool v1);
         };
@@ -79,7 +79,7 @@
 
             static const CommandType CMD_TYPE = CMD_CMP_DATE;
 
-            JsonBoolNode *executeAsBool();
+            JsonBoolNode *executeAsBool(Interpreter *interpreter);
             void param1(time_t v1);
             void param2(time_t v1);
         };
@@ -97,7 +97,7 @@
 
             static const CommandType CMD_TYPE = CMD_CMP_STRING;
 
-            JsonBoolNode *executeAsBool();
+            JsonBoolNode *executeAsBool(Interpreter *interpreter);
             void param1(std::string v1);
             void param2(std::string v1);
         };

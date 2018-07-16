@@ -13,12 +13,12 @@ DateExpression::DateExpression(){}
 
 DateExpression::~DateExpression(){}
 
-JsonDateNode *DateExpression::executeAsDate() {
+JsonDateNode *DateExpression::executeAsDate(Interpreter* interpreter) {
     return op1;
 }
 
-JsonNode* DateExpression::execute(){
-    return executeAsDate();
+JsonNode* DateExpression::execute(Interpreter* interpreter){
+    return executeAsDate(interpreter);
 }
 
 void DateExpression::val1(time_t v1){
@@ -32,8 +32,8 @@ UnaryDateExp::UnaryDateExp(UnaryDateExpType expType, DateExpression *op)
 
 UnaryDateExp::~UnaryDateExp() {}
 
-    JsonDateNode *UnaryDateExp::executeAsDate(){
-        time_t v1 = op1->executeAsDate()->val();
+    JsonDateNode *UnaryDateExp::executeAsDate(Interpreter* interpreter){
+        time_t v1 = op1->executeAsDate(interpreter)->val();
         time_t v;
         switch (expType)
         {
@@ -49,8 +49,8 @@ UnaryDateExp::~UnaryDateExp() {}
         return r;
     }
 
-    JsonNode* UnaryDateExp::execute(){
-        return executeAsDate();
+    JsonNode* UnaryDateExp::execute(Interpreter* interpreter){
+        return executeAsDate(interpreter);
     }
 
     void UnaryDateExp::val1(time_t v1){
@@ -64,9 +64,9 @@ UnaryDateExp::~UnaryDateExp() {}
 
     BinaryDateExp::~BinaryDateExp() {}
 
-    JsonDateNode* BinaryDateExp::executeAsDate(){
-        time_t v1 = op1->executeAsDate()->val();
-        time_t v2 = op2->executeAsDate()->val();
+    JsonDateNode* BinaryDateExp::executeAsDate(Interpreter* interpreter){
+        time_t v1 = op1->executeAsDate(interpreter)->val();
+        time_t v2 = op2->executeAsDate(interpreter)->val();
         time_t v;
         
         switch (expType)
@@ -92,8 +92,8 @@ UnaryDateExp::~UnaryDateExp() {}
         return r;
     }
 
-    JsonNode *BinaryDateExp::execute(){
-        return executeAsDate();
+    JsonNode *BinaryDateExp::execute(Interpreter* interpreter){
+        return executeAsDate(interpreter);
     }
 
     void BinaryDateExp::val1(time_t v1){

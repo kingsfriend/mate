@@ -13,7 +13,7 @@ ContinueCommand::ContinueCommand (){
 }
 
 
-JsonNode* ContinueCommand::execute(){
+JsonNode* ContinueCommand::execute(Interpreter* interpreter){
     if(block!=NULL){
         block->setContinued(true);
     }
@@ -46,7 +46,7 @@ WhileBlock::WhileBlock(ConditionExpression *condition, std::vector<Command *> co
     : ContinueableBlock(condition), commands(commands){}
 
 
-JsonNode *WhileBlock::execute(){
+JsonNode *WhileBlock::execute(Interpreter* interpreter){
     if (!commands.empty()){
         int i, loopLimit = commands.size();
         setBroken(false);
@@ -57,7 +57,7 @@ JsonNode *WhileBlock::execute(){
                 if (isBroken() || isContinued()){
                     break;
                 }else{
-                    commands[i]->execute();
+                    commands[i]->execute(interpreter);
                 }
             }
             if (isBroken()){
@@ -101,51 +101,51 @@ void ForBlock::setCommands(std::vector<Command *> commands){
     this->commands = commands;
 }
 
-bool ForBlock::valuateConditions(){
+bool ForBlock::valuateConditions(Interpreter* interpreter){
         bool valuation = true;
     if (!expConds.empty()){
         int i, loopLimit = expConds.size();
         for (i = 0; i < loopLimit; i++){
-            valuation = valuation && expConds[i]->executeAsBool();
+            valuation = valuation && expConds[i]->executeAsBool(interpreter);
         }
     }
     return valuation;
 }
 
-void ForBlock::executeIncrs(){
+void ForBlock::executeIncrs(Interpreter* interpreter){
     if (!expIncrs.empty()){
         int i, loopLimit = expIncrs.size();
         for (i = 0; i < loopLimit; i++){
-            expIncrs[i]->execute();
+            expIncrs[i]->execute(interpreter);
         }
     }
 }
 
-void ForBlock::executeInits(){
+void ForBlock::executeInits(Interpreter* interpreter){
     if (!expInits.empty()){
         int i, loopLimit = expInits.size();
         for (i = 0; i < loopLimit; i++){
-            expInits[i]->execute();
+            expInits[i]->execute(interpreter);
         }
     }
 }
 
-JsonNode *ForBlock::execute(){
+JsonNode *ForBlock::execute(Interpreter* interpreter){
     if (!commands.empty()){
         int i, loopLimit = commands.size();
         setBroken(false);
-        executeInits();
-        while(valuateConditions()){
+        executeInits(interpreter);
+        while(valuateConditions(interpreter)){
             int i, loopLimit = commands.size();
             setContinued(false);
             for (i = 0; i < loopLimit; i++)        {
                 if (isBroken() || isContinued()){
                     break;
                 }else{
-                    commands[i]->execute();
+                    commands[i]->execute(interpreter);
                 }
             }
-            executeIncrs();
+            executeIncrs(interpreter);
             if (isBroken()){
                 break;
             }else if(isContinued()){
@@ -186,7 +186,7 @@ void ForeachBlock::resetIndex(){
     currentItemIndex = 0;
 }
 
-JsonNode *ForeachBlock::execute(){
+JsonNode *ForeachBlock::execute(Interpreter* interpreter){
     if (!commands.empty()){
         int i, loopLimit = commands.size();
         setBroken(false);
@@ -198,7 +198,7 @@ JsonNode *ForeachBlock::execute(){
                 if (isBroken() || isContinued()){
                     break;
                 }else{
-                    commands[i]->execute();
+                    commands[i]->execute(interpreter);
                 }
             }
             if (isBroken()){

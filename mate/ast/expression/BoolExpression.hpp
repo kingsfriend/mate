@@ -30,8 +30,8 @@
             static const BoolExpressionType BOOL_EXP_TYPE = BOOL_EXP_JSON_NODE;
             static BoolExpression* BOOL_EXP_TRUE;
             static BoolExpression* BOOL_EXP_FALSE;
-            JsonBoolNode *executeAsBool();
-            JsonNode *execute();
+            JsonBoolNode *executeAsBool(Interpreter *interpreter);
+            JsonNode *execute(Interpreter* interpreter);
             void val1(bool v1);
 
           protected:
@@ -48,8 +48,8 @@
             ~UnaryBoolExp();
 
             static const BoolExpressionType BOOL_EXP_TYPE = BOOL_EXP_UNARY;
-            JsonBoolNode *executeAsBool();
-            JsonNode* execute();
+            JsonBoolNode *executeAsBool(Interpreter *interpreter);
+            JsonNode *execute(Interpreter* interpreter);
             void val1(double v1);
         };
 
@@ -75,8 +75,8 @@
             ~BinaryBoolExp();
 
             static const BoolExpressionType BOOL_EXP_TYPE = BOOL_EXP_BINARY;
-            JsonBoolNode *executeAsBool();
-            JsonNode *execute();
+            JsonBoolNode *executeAsBool(Interpreter *interpreter);
+            JsonNode *execute(Interpreter* interpreter);
             void val1(double v1);
             void val2(bool v2);
         };

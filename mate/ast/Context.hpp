@@ -7,6 +7,7 @@
 #include <string>
 #include "Json.hpp"
 #include "Command.hpp"
+#include "Interpreter.hpp"
 
 using namespace std;
 namespace mate
@@ -15,8 +16,13 @@ namespace mate
         CONTEXT_ISOLATED,
         CONTEXT_NAVIGABLE
     };
-    class Context{
-    private:
+
+    class Command;
+    class Interpreter;
+    
+    class Context
+    {
+      private:
         ContextType type;
         std::map<const std::string, JsonNode*> vars;
         unsigned int id;
@@ -46,7 +52,7 @@ namespace mate
         void clear();
 
         void addCommand(Command *cmd);
-        void execute();
+        JsonNode *execute(Interpreter* interpreter);
 
         ContextType getType();
 

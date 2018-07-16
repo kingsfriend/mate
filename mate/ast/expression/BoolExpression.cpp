@@ -15,12 +15,12 @@ BoolExpression::BoolExpression(){}
 
 BoolExpression::~BoolExpression(){}
 
-JsonBoolNode *BoolExpression::executeAsBool() {
+JsonBoolNode *BoolExpression::executeAsBool(Interpreter* interpreter) {
     return op1;
 }
 
-JsonNode* BoolExpression::execute(){
-    return executeAsBool();
+JsonNode* BoolExpression::execute(Interpreter* interpreter){
+    return executeAsBool(interpreter);
 }
 
 void BoolExpression::val1(bool v1){
@@ -34,8 +34,8 @@ UnaryBoolExp::UnaryBoolExp(UnaryBoolExpType expType, BoolExpression *op)
 
 UnaryBoolExp::~UnaryBoolExp() {}
 
-    JsonBoolNode *UnaryBoolExp::executeAsBool(){
-        bool v1 = op1->executeAsBool()->val();
+    JsonBoolNode *UnaryBoolExp::executeAsBool(Interpreter* interpreter){
+        bool v1 = op1->executeAsBool(interpreter)->val();
         bool v;
         switch (expType)
         {
@@ -48,8 +48,8 @@ UnaryBoolExp::~UnaryBoolExp() {}
         return r;
     }
 
-    JsonNode* UnaryBoolExp::execute(){
-        return executeAsBool();
+    JsonNode* UnaryBoolExp::execute(Interpreter* interpreter){
+        return executeAsBool(interpreter);
     }
 
     void UnaryBoolExp::val1(double v1){
@@ -63,9 +63,9 @@ UnaryBoolExp::~UnaryBoolExp() {}
 
     BinaryBoolExp::~BinaryBoolExp() {}
 
-    JsonBoolNode* BinaryBoolExp::executeAsBool(){
-        bool v1 = op1->executeAsBool()->val();
-        bool v2 = op2->executeAsBool()->val();
+    JsonBoolNode* BinaryBoolExp::executeAsBool(Interpreter* interpreter){
+        bool v1 = op1->executeAsBool(interpreter)->val();
+        bool v2 = op2->executeAsBool(interpreter)->val();
         bool v;
         
         switch (expType)
@@ -100,8 +100,8 @@ UnaryBoolExp::~UnaryBoolExp() {}
         return r;
     }
 
-    JsonNode *BinaryBoolExp::execute(){
-        return executeAsBool();
+    JsonNode *BinaryBoolExp::execute(Interpreter* interpreter){
+        return executeAsBool(interpreter);
     }
 
     void BinaryBoolExp::val1(double v1){

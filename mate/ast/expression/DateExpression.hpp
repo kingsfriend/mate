@@ -28,8 +28,8 @@
             static const CommandType CMD_TYPE = CMD_EXP_DATE;
             static const ExpressionType EXP_TYPE = EXP_DATE;
             static const DateExpressionType DATE_EXP_TYPE = DATE_EXP_JSON_NODE;
-            JsonDateNode *executeAsDate();
-            JsonNode *execute();
+            JsonDateNode *executeAsDate(Interpreter *interpreter);
+            JsonNode *execute(Interpreter* interpreter);
             void val1(time_t v1);
 
           protected:
@@ -46,8 +46,8 @@
             ~UnaryDateExp();
 
             static const DateExpressionType DATE_EXP_TYPE = DATE_EXP_UNARY;
-            JsonDateNode *executeAsDate();
-            JsonNode* execute();
+            JsonDateNode *executeAsDate(Interpreter *interpreter);
+            JsonNode *execute(Interpreter* interpreter);
             void val1(time_t v1);
         };
 
@@ -70,8 +70,8 @@
             ~BinaryDateExp();
 
             static const DateExpressionType DATE_EXP_TYPE = DATE_EXP_BINARY;
-            JsonDateNode *executeAsDate();
-            JsonNode *execute();
+            JsonDateNode *executeAsDate(Interpreter *interpreter);
+            JsonNode *execute(Interpreter* interpreter);
             void val1(time_t v1);
             void val2(time_t v2);
         };

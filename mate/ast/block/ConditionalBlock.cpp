@@ -19,14 +19,14 @@ ConditionExpression::ConditionExpression(BoolExpression *boolExp, BinaryBoolExpT
 }
 ConditionExpression::~ConditionExpression(){}
 
-JsonBoolNode *ConditionExpression::executeAsBool(){
-    bool v1 = boolExp->executeAsBool()->val();
+JsonBoolNode *ConditionExpression::executeAsBool(Interpreter* interpreter){
+    bool v1 = boolExp->executeAsBool(interpreter)->val();
     bool v2 = false;
     bool v;
     JsonBoolNode* r;
 
     if(condExp!=NULL){
-        v2 = condExp->executeAsBool()->val();
+        v2 = condExp->executeAsBool(interpreter)->val();
     }
 
     switch (type)
@@ -68,7 +68,7 @@ ConditionalBlock::~ConditionalBlock(){}
 
 bool ConditionalBlock::valuateCondition(){
     if (condition != NULL){
-        return condition->executeAsBool();
+        return condition->executeAsBool(interpreter);
     }
     return false;
 }
@@ -78,16 +78,16 @@ bool ConditionalBlock::valuateCondition(){
 IfBlock::IfBlock(ConditionExpression *condition) : ConditionalBlock(condition) {}
 IfBlock::~IfBlock(){}
 
-JsonNode* IfBlock::execute(){
+JsonNode* IfBlock::execute(Interpreter* interpreter){
     if(valuateCondition()){
         int i;
         int loopLimit = commandes.size();
         for (i = 0; i < loopLimit; i++){
-            commandes[i]->execute();
+            commandes[i]->execute(interpreter);
         }
     }else if(nextBlok!=NULL && nextBlok->valuateCondition())
     {
-        return nextBlok->execute();
+        return nextBlok->execute(interpreter);
     }
     return NULL;
 }

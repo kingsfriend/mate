@@ -32,8 +32,8 @@
             static const CommandType CMD_TYPE = CMD_EXP_NUM;
             static const ExpressionType EXP_TYPE = EXP_NUM;
             static const NumExpressionType NUM_EXP_TYPE = NUM_EXP_JSON_NODE;
-            JsonNumberNode *executeAsNum();
-            JsonNode *execute();
+            JsonNumberNode *executeAsNum(Interpreter *interpreter);
+            JsonNode *execute(Interpreter* interpreter);
             void val1(double v1);
 
           protected:
@@ -50,8 +50,8 @@
             ~UnaryNumberExp();
 
             static const NumExpressionType NUM_EXP_TYPE = NUM_EXP_UNARY;
-            JsonNumberNode *executeAsNum();
-            JsonNode* execute();
+            JsonNumberNode *executeAsNum(Interpreter *interpreter);
+            JsonNode *execute(Interpreter* interpreter);
             void val1(double v1);
         };
 
@@ -80,8 +80,8 @@
             ~BinaryNumberExp();
 
             static const NumExpressionType NUM_EXP_TYPE = NUM_EXP_BINARY;
-            JsonNumberNode *executeAsNum();
-            JsonNode *execute();
+            JsonNumberNode *executeAsNum(Interpreter *interpreter);
+            JsonNode *execute(Interpreter* interpreter);
             void val1(double v1);
             void val2(double v2);
         };

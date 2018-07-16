@@ -8,7 +8,7 @@ EchoCommand::EchoCommand(std::string word) : word(word) {}
 
 EchoCommand::~EchoCommand(){}
 
-JsonNode *EchoCommand::execute(){
+JsonNode *EchoCommand::execute(Interpreter* interpreter){
 
     return NULL;
 }

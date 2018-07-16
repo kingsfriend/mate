@@ -25,7 +25,7 @@
             ContinueableBlock *getBlock();
             void setBlock(ContinueableBlock *stm);
 
-            JsonNode *execute();
+            JsonNode *execute(Interpreter* interpreter);
         };
 
         enum ContinueableBlockType{
@@ -65,7 +65,7 @@
             WhileBlock(ConditionExpression *condition);
             WhileBlock(ConditionExpression *condition, std::vector<Command *> commands);
 
-            JsonNode* execute();
+            JsonNode *execute(Interpreter* interpreter);
         };
 
         class ForBlock : public ContinueableBlock{
@@ -93,10 +93,10 @@
             void setExpCond(std::vector<ConditionExpression *> expConds);
             void setCommands(std::vector<Command *> commands);
 
-            bool valuateConditions();
-            void executeIncrs();
-            void executeInits();
-            JsonNode* execute();
+            bool valuateConditions(Interpreter* interpreter);
+            void executeIncrs(Interpreter* interpreter);
+            void executeInits(Interpreter* interpreter);
+            JsonNode *execute(Interpreter* interpreter);
         };
 
         class ForeachBlock : public ContinueableBlock{
@@ -116,7 +116,7 @@
             ForeachBlock(JsonArrayNode *array, JsonNode *item, std::vector<Command *> commands);
             ForeachBlock(JsonArrayNode *array, JsonNode *item, std::vector<Command *> commands, std::vector<Command *> emptyCommands);
 
-            JsonNode* execute();
+            JsonNode *execute(Interpreter* interpreter);
         protected:
             bool updateCurrentItem();
             void resetIndex();
