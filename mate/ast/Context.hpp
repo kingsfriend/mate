@@ -2,9 +2,11 @@
 #define MATE_CONTEXT_HH
 
 #include <map>
+#include <vector>
 #include <iterator>
 #include <string>
 #include "Json.hpp"
+#include "Command.hpp"
 
 using namespace std;
 namespace mate
@@ -21,8 +23,9 @@ namespace mate
         bool breakFlag;
         bool continueFlag;
         bool lastGetSucceed;
-    
-    public:
+        std::vector<Command *> commands;
+
+      public:
         Context();
         Context(ContextType type);
         ~Context();
@@ -41,6 +44,9 @@ namespace mate
         bool containt(const std::string);
         bool remove(const std::string);
         void clear();
+
+        void addCommand(Command *cmd);
+        void execute();
 
         ContextType getType();
 

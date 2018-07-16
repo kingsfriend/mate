@@ -25,8 +25,10 @@ script-build-test script-bt  : script-build-base
 			$(src_script_dir)/ScriptScanner.cpp \
 			$(src_script_dir)/ScriptInterpreter.cpp \
 			$(src_ast_dir)/Command.cpp \
+			$(src_ast_dir)/Interpreter.cpp \
 			$(src_ast_dir)/Json.cpp \
 			$(src_ast_dir)/Context.cpp \
+			$(src_ast_dir)/ContextStack.cpp \
 			-o $(test_script_dir)/output/script_test.out
 
 	

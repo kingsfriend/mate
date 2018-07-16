@@ -5,44 +5,40 @@
 #include <iostream>
 #include <fstream>
 
-#include "ScriptScanner.hpp"
-#include "ScriptParser.hpp"
 #include "../ast/Context.hpp"
 #include "../ast/Command.hpp"
+#include "../ast/Interpreter.hpp"
+
+#include "ScriptScanner.hpp"
+#include "ScriptParser.hpp"
 
 namespace mate {
 
 class Command;
 
-class ScriptInterpreter
+class ScriptInterpreter : public Interpreter
 {
 public:
     ScriptInterpreter();
     ScriptInterpreter(std::istream* new_in);
     ScriptInterpreter(std::istream *new_in, std::ostream *new_os);
+    ScriptInterpreter(ContextStack *contextStack);
+    ScriptInterpreter(ContextStack *contextStack, std::istream *new_in);
+    ScriptInterpreter(ContextStack *contextStack, std::istream *new_in, std::ostream *new_os);
 
     int parse();
-    void clear();
     void echo(const std::string s);
-
-    std::string str() const;
-
     void switchInputStream(std::istream *is, std::ostream *os);
+
+    ScriptScanner *getScanner();
+    ScriptParser *getParser();
 
     friend class ScriptParser;
     friend class ScriptScanner;
     
 private:
-    void addCommand(Command* cmd);
-    void increaseLocation(unsigned int loc);
-    unsigned int getLocation() const;
-    
-private:
     ScriptScanner* scanner;
     ScriptParser* parser;
-    std::vector<Command*>  commands;
-    mate::Context context;
-    unsigned int location;
 };
 
 }

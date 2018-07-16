@@ -1,5 +1,5 @@
-#ifndef MATE__EXPRESSIONCOMMAND_HH
-    #define MATE__EXPRESSIONCOMMAND_HH
+#ifndef MATE_EXPRESSION_COMMAND_HH
+    #define MATE_EXPRESSION_COMMAND_HH
     
     #include <cmath>
     #include <memory>
@@ -35,4 +35,4 @@
         
     } // mate
 
-#endif //MATE__EXPRESSIONCOMMAND_HH
+#endif //MATE_EXPRESSION_COMMAND_HH

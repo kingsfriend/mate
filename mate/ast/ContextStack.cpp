@@ -2,12 +2,7 @@
 
 namespace mate {
     ContextStack::~ContextStack(){ 
-        while(!empty()){
-            Context *ctx = contextStack.top();
-            contextStack.pop();
-            delete ctx;
-            ctx = NULL;
-        }
+        clearAll();
     }
 
     ContextStack::ContextStack(){
@@ -40,6 +35,15 @@ namespace mate {
     void ContextStack::clearLast(){
         lastGetSucceed = false;
         if (size() > 1){
+            Context *ctx = contextStack.top();
+            contextStack.pop();
+            delete ctx;
+            ctx = NULL;
+        }
+    }
+
+    void ContextStack::clearAll(){
+        while(!empty()){
             Context *ctx = contextStack.top();
             contextStack.pop();
             delete ctx;

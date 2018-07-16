@@ -2,26 +2,35 @@
 
 #include <sstream>
 
-using namespace mate;
-
-ScriptInterpreter::ScriptInterpreter() :
-     commands(),
-    location(0)
+namespace mate
 {
+
+ScriptInterpreter::ScriptInterpreter(){
     scanner = new ScriptScanner(*this);
     parser = new ScriptParser(*scanner, *this);
+
 }
-ScriptInterpreter::ScriptInterpreter(std::istream *new_in) :  commands(),
-                                                             location(0)
-{
+ScriptInterpreter::ScriptInterpreter(std::istream *new_in) : Interpreter(new_in){
     scanner = new ScriptScanner(*this, new_in);
     parser = new ScriptParser(*scanner, *this);
 }
-ScriptInterpreter::ScriptInterpreter(std::istream *new_in, std::ostream *new_os) :  commands(),
-                                                                                   location(0)
-{
-    scanner = new ScriptScanner(*this, new_in, new_os);
-    parser = new ScriptParser(*scanner, *this);
+ScriptInterpreter::ScriptInterpreter(std::istream *new_in, std::ostream *new_os)
+    : Interpreter(new_in,new_os){
+        scanner = new ScriptScanner(*this, new_in, new_os);
+        parser = new ScriptParser(*scanner, *this);
+}
+
+ScriptInterpreter::ScriptInterpreter(ContextStack *contextStack)
+    : Interpreter(contextStack){
+
+}
+ScriptInterpreter::ScriptInterpreter(ContextStack *contextStack, std::istream *new_in)
+    : Interpreter(contextStack, new_in){
+
+}
+ScriptInterpreter::ScriptInterpreter(ContextStack *contextStack, std::istream *new_in, std::ostream *new_os)
+    : Interpreter(contextStack, new_in, new_os){
+
 }
 
 int ScriptInterpreter::parse() {
@@ -29,28 +38,21 @@ int ScriptInterpreter::parse() {
     return parser->parse();
 }
 
-void ScriptInterpreter::clear() {
-    location = 0;
-     commands.clear();
-}
-
-std::string ScriptInterpreter::str() const {
-
+void ScriptInterpreter::echo(const std::string s){
+    scanner->echo(s);
 }
 
 void ScriptInterpreter::switchInputStream(std::istream *is, std::ostream *os){
+    new_in = is;
+    new_os = os;
     scanner->switch_streams(is, os);
-     commands.clear();    
+    clear();    
 }
 
-void ScriptInterpreter::addCommand(Command* cmd){
-     commands.push_back(cmd);
+ScriptScanner *ScriptInterpreter::getScanner(){
+    return scanner;
 }
-
-void ScriptInterpreter::increaseLocation(unsigned int loc) {
-    location += loc;
+ScriptParser *ScriptInterpreter::getParser(){
+    return parser;
 }
-
-unsigned int ScriptInterpreter::getLocation() const {
-    return location;
 }

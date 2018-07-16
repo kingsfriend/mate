@@ -1,8 +1,7 @@
-#ifndef MATE_BASE_COMMAND_HH
-    #define MATE_BASE_COMMAND_HH
+#ifndef MATE_COMMAND_HH
+    #define MATE_COMMAND_HH
 
     #include <memory>
-    #include "Context.hpp"
     #include "Json.hpp"
     
     namespace mate{
@@ -32,8 +31,10 @@
         CMD_CONTINUE_BLOCK_WHILE,
         CMD_CONTINUE_BLOCK_FOR,
         CMD_CONTINUE_BLOCK_FOREACH,
+        CMD_FILEWORD,
     };
 
+    class Context;
     class Command
     {
       private:
@@ -51,4 +52,4 @@
         
     }
 
-#endif //MATE_BASE_COMMAND_HH
+#endif //MATE_COMMAND_HH

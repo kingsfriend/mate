@@ -19,6 +19,7 @@ namespace mate
         bool empty();
         void clearLast();
         bool succeed();
+        void clearAll();
 
         bool putVal(const std::string, JsonNode *var);
         bool setVal(const std::string, JsonNode* var);
