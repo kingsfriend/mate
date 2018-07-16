@@ -5,27 +5,18 @@ namespace mate
 // BreakCommand ----------------------
 
 BreakCommand::~BreakCommand(){}
-BreakCommand::BreakCommand(double level, BreakableStatement* breakStm)
-    : breakLevel(level), breakStm(breakStm){}
+BreakCommand::BreakCommand(BreakableStatement* statement)
+    : statement(statement){}
 
 BreakCommand::BreakCommand (){
-    breakLevel = 0;
-    breakStm = NULL;
+    level = 0;
+    statement = NULL;
 }
 
-BreakCommand::BreakCommand(double level) : breakLevel(level) {
-    breakStm = NULL;
-}
-
-JsonNode* BreakCommand::execute(){
-    int level = breakLevel;
-    if(breakStm!=NULL && level>0){
-        BreakableStatement* parent = breakStm->getParent();
-        while(level>0&&parent!=NULL){
-            parent->setBroken(true);
-            parent = parent->getParent();
-            level--;
-        }
+JsonNode *BreakCommand::execute()
+{
+    if(statement!=NULL){
+        statement->setBroken(true);
     }
     return  NULL;
 }
@@ -33,23 +24,17 @@ JsonNode* BreakCommand::execute(){
 // BreakableStatement ----------------------
 
 BreakableStatement::~BreakableStatement(){}
-BreakableStatement::BreakableStatement(){}
-BreakableStatement::BreakableStatement(BreakableStatement *parent):parent(parent){}
+
+BreakableStatement::BreakableStatement(): ConditionalStatement(NULL){}
+
+
+BreakableStatement::BreakableStatement(ConditionExpression *condition) : ConditionalStatement(condition) {}
 
 void BreakableStatement::setBroken(bool v){
     broken = v;
 }
 
-void BreakableStatement::setParent(BreakableStatement *parent){
-    parent = parent;
-}
-
-
-BreakableStatement* BreakableStatement::getParent(){
-    return parent;
-}
-
-double BreakableStatement::isBroken(){
+bool BreakableStatement::isBroken(){
     return broken;
 }
 
@@ -90,8 +75,7 @@ JsonNode *SwitchStatement::execute(){
     if (!caseStms.empty()){
         int i, loopLimit = caseStms.size();
         setBroken(false);
-        for (i = 0; i < loopLimit; i++)
-        {
+        for (i = 0; i < loopLimit; i++)        {
             if (isBroken()){
                 break;
             }else{

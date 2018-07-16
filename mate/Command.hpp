@@ -9,6 +9,7 @@
     enum CommandType
     {
         CMD_BASE,
+        CMD_EXP,
         CMD_EXP_NUM,
         CMD_EXP_BOOL,
         CMD_EXP_STR,
@@ -25,6 +26,11 @@
         CMD_BREAK_STM_SWITCH,
         CMD_BREAK_STM_CASE,
         CMD_BREAK_STM_DEFAULT,
+        CMD_CONTINUE,
+        CMD_CONTINUE_EXP,
+        CMD_CONTINUE_STM_WHILE,
+        CMD_CONTINUE_STM_FOR,
+        CMD_CONTINUE_STM_FOREACH,
     };
 
     class Command

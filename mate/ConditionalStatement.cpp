@@ -68,9 +68,9 @@ ConditionalStatement::~ConditionalStatement(){}
 
 bool ConditionalStatement::valuateCondition(){
     if (condition != NULL){
-        return false;
+        return condition->executeAsBool();
     }
-    return condition->executeAsBool();
+    return false;
 }
 
 // IfStatement ----------------------

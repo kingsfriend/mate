@@ -53,10 +53,13 @@ json-build json-b:
 	g++ $(json_test_dir)/json_test.cpp \
 		$(src_dir)/BoolExpression.cpp \
 		$(src_dir)/BreakableStatement.cpp \
+		$(src_dir)/CmpExpression.cpp \
 		$(src_dir)/Command.cpp \
 		$(src_dir)/ConditionalStatement.cpp \
-		$(src_dir)/CmpExpression.cpp \
+		$(src_dir)/Context.cpp \
+		$(src_dir)/ContinueableStatement.cpp \
 		$(src_dir)/DateExpression.cpp \
+		$(src_dir)/Expression.cpp \
 		$(src_dir)/Json.cpp \
 		$(src_dir)/NumExpression.cpp \
 		$(src_dir)/StringExpression.cpp \

@@ -53,7 +53,6 @@
         class IfStatement : public ConditionalStatement
         {
           private:
-            ConditionExpression* condition;
             IfStatement* nextBlok; // ELSEIF or ELSE section
             std::vector<Command*> commandes;
 

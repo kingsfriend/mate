@@ -255,6 +255,10 @@ void JsonObjectNode::setValues(std::map<const std::string, JsonNode *> vals){
     values = vals;
 }
 
+int JsonObjectNode::size(){
+    return values.size();
+}
+
 JsonNode *JsonObjectNode::get(const std::string k){
     std::map<const std::string, JsonNode *>::const_iterator pos = values.find(k);
     if (pos == values.end())    {
@@ -322,6 +326,10 @@ void JsonArrayNode::push(JsonObjectNode *node){
 }
 void JsonArrayNode::push(JsonArrayNode *node){
     values.push_back(node);
+}
+
+int JsonArrayNode::size(){
+    return values.size();
 }
 
 JsonNode *JsonArrayNode::get(int i){

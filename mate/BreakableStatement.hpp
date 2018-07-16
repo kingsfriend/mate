@@ -12,19 +12,14 @@
         class BreakCommand : public Command
         {
         private:
-            double breakLevel;
-            BreakableStatement* breakStm;
+            double level;
+            BreakableStatement* statement;
         public:
             BreakCommand();
-            BreakCommand(BreakableStatement *breakStm);
-            BreakCommand(double breakLevel, BreakableStatement *breakStm);
-            BreakCommand(double breakLevel);
+            BreakCommand(BreakableStatement *statement);
             ~BreakCommand();
 
             static const CommandType CMD_TYPE = CMD_BREAK;
-
-            void level(double breakLevel);
-            double level();
 
             BreakableStatement *getStatement();
             void setStatement(BreakableStatement *stm);
@@ -32,8 +27,7 @@
             JsonNode *execute();
         };
 
-        enum BreakableStatementType
-        {
+        enum BreakableStatementType{
             BREAK_STM,
             BREAK_STM_SWITCH,
             BREAK_STM_CASE,
@@ -43,10 +37,8 @@
             BREAK_STM_WHILE,
         };
 
-        class BreakableStatement : public Command
-        {
+        class BreakableStatement : public ConditionalStatement{
         private:
-            BreakableStatement *parent;
             bool broken;
 
         public:
@@ -55,19 +47,13 @@
             
             ~BreakableStatement();
             BreakableStatement();
-            BreakableStatement(BreakableStatement* parent);
+            BreakableStatement(ConditionExpression *condition);
 
             void setBroken(bool v);
-            
-            void setParent(BreakableStatement *parent);
-            
-            BreakableStatement* getParent();
-            double isBroken();
-
+            bool isBroken();
         };
 
-        class SwitchStatement : public BreakableStatement
-        {
+        class SwitchStatement : public BreakableStatement{
         private:
             JsonNode* baseNode;
             std::vector<CaseStatement*> caseStms;

@@ -136,6 +136,8 @@ namespace mate
         void push(const std::string &k, JsonArrayNode *node);
         void push(const std::string &k, JsonObjectNode *node);
         void setValues(std::map<const std::string, JsonNode *> vals);
+        int size();
+
         JsonNode *get(const std::string k);
         std::map<const std::string, JsonNode *> getValues();
         bool equals(JsonNode *node);
@@ -158,6 +160,7 @@ namespace mate
         void push(JsonNumberNode *node);
         void push(JsonObjectNode *node);
         void push(JsonArrayNode *node);
+        int size();
 
         JsonNode *get(int i);
 
