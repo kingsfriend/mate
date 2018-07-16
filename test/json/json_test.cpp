@@ -2,6 +2,7 @@
 #include "../../mate/BoolExpression.hpp"
 #include "../../mate/CmpExpression.hpp"
 #include "../../mate/Context.hpp"
+#include "../../mate/ContextStack.hpp"
 #include "../../mate/ContinueableStatement.hpp"
 #include "../../mate/DateExpression.hpp"
 #include "../../mate/NumExpression.hpp"

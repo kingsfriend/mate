@@ -57,6 +57,7 @@ json-build json-b:
 		$(src_dir)/Command.cpp \
 		$(src_dir)/ConditionalStatement.cpp \
 		$(src_dir)/Context.cpp \
+		$(src_dir)/ContextStack.cpp \
 		$(src_dir)/ContinueableStatement.cpp \
 		$(src_dir)/DateExpression.cpp \
 		$(src_dir)/Expression.cpp \
