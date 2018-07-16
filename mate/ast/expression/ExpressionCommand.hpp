@@ -1,13 +1,13 @@
-#ifndef MATE_EXPRESSION_HH
-    #define MATE_EXPRESSION_HH
+#ifndef MATE__EXPRESSIONCOMMAND_HH
+    #define MATE__EXPRESSIONCOMMAND_HH
     
     #include <cmath>
     #include <memory>
     #include <string>
     #include <stdlib.h>
     #include <ctime>
-    #include "Command.hpp"
-    #include "Json.hpp"
+    #include "../Command.hpp"
+    #include "../Json.hpp"
     
     namespace mate
     {
@@ -35,4 +35,4 @@
         
     } // mate
 
-#endif //MATE_EXPRESSION_HH
+#endif //MATE__EXPRESSIONCOMMAND_HH

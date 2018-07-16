@@ -7,7 +7,8 @@
 
 #include "ScriptScanner.hpp"
 #include "ScriptParser.hpp"
-#include "../Context.hpp"
+#include "../ast/Context.hpp"
+#include "../ast/Command.hpp"
 
 namespace mate {
 

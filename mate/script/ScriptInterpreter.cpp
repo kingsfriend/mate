@@ -1,5 +1,4 @@
 #include "ScriptInterpreter.hpp"
-#include "../Command.hpp"
 
 #include <sstream>
 

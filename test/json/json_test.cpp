@@ -1,12 +1,12 @@
-#include "../../mate/Json.hpp"
-#include "../../mate/BoolExpression.hpp"
-#include "../../mate/CmpExpression.hpp"
-#include "../../mate/Context.hpp"
-#include "../../mate/ContextStack.hpp"
-#include "../../mate/ContinueableStatement.hpp"
-#include "../../mate/DateExpression.hpp"
-#include "../../mate/NumExpression.hpp"
-#include "../../mate/StringExpression.hpp"
+#include "../../mate/ast/Json.hpp"
+#include "../../mate/ast/expression/BoolExpression.hpp"
+#include "../../mate/ast/expression/CmpExpression.hpp"
+#include "../../mate/ast/Context.hpp"
+#include "../../mate/ast/ContextStack.hpp"
+#include "../../mate/ast/block/ContinueableBlock.hpp"
+#include "../../mate/ast/expression/DateExpression.hpp"
+#include "../../mate/ast/expression/NumExpression.hpp"
+#include "../../mate/ast/expression/StringExpression.hpp"
 
 #include <iostream>
 #include <sstream>

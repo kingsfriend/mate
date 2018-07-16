@@ -1,7 +1,7 @@
 #ifndef MATE_NUM_EXPRESSION_HH
     #define MATE_NUM_EXPRESSION_HH
     
-    #include "Expression.hpp"
+    #include "ExpressionCommand.hpp"
     
     namespace mate
     {

@@ -1,49 +1,49 @@
-#include "BreakableStatement.hpp"
+#include "BreakableBlock.hpp"
 
 namespace mate
 {
 // BreakCommand ----------------------
 
 BreakCommand::~BreakCommand(){}
-BreakCommand::BreakCommand(BreakableStatement* statement)
-    : statement(statement){}
+BreakCommand::BreakCommand(BreakableBlock* block)
+    : block(block){}
 
 BreakCommand::BreakCommand (){
     level = 0;
-    statement = NULL;
+    block = NULL;
 }
 
 JsonNode *BreakCommand::execute()
 {
-    if(statement!=NULL){
-        statement->setBroken(true);
+    if(block!=NULL){
+        block->setBroken(true);
     }
     return  NULL;
 }
 
-// BreakableStatement ----------------------
+// BreakableBlock ----------------------
 
-BreakableStatement::~BreakableStatement(){}
+BreakableBlock::~BreakableBlock(){}
 
-BreakableStatement::BreakableStatement(): ConditionalStatement(NULL){}
+BreakableBlock::BreakableBlock(): ConditionalBlock(NULL){}
 
 
-BreakableStatement::BreakableStatement(ConditionExpression *condition) : ConditionalStatement(condition) {}
+BreakableBlock::BreakableBlock(ConditionExpression *condition) : ConditionalBlock(condition) {}
 
-void BreakableStatement::setBroken(bool v){
+void BreakableBlock::setBroken(bool v){
     broken = v;
 }
 
-bool BreakableStatement::isBroken(){
+bool BreakableBlock::isBroken(){
     return broken;
 }
 
-// SwitchStatement ----------------------
+// SwitchBlock ----------------------
 
-SwitchStatement::~SwitchStatement(){}
-SwitchStatement::SwitchStatement(JsonNode *baseNode): baseNode(baseNode){}
+SwitchBlock::~SwitchBlock(){}
+SwitchBlock::SwitchBlock(JsonNode *baseNode): baseNode(baseNode){}
 
-SwitchStatement::SwitchStatement(JsonNode *baseNode, std::vector<CaseStatement *> caseStms): baseNode(baseNode), caseStms(caseStms){
+SwitchBlock::SwitchBlock(JsonNode *baseNode, std::vector<CaseBlock *> caseStms): baseNode(baseNode), caseStms(caseStms){
     int i, loopLimit = caseStms.size();
     for(i=0; i<loopLimit;i++){
         caseStms[i]->setSwitchStm(this);
@@ -51,13 +51,13 @@ SwitchStatement::SwitchStatement(JsonNode *baseNode, std::vector<CaseStatement *
     defaultStm = NULL;
 }
 
-SwitchStatement::SwitchStatement(JsonNode *baseNode, DefaultStatement *defaultStm) : baseNode(baseNode), defaultStm(defaultStm) {
+SwitchBlock::SwitchBlock(JsonNode *baseNode, DefaultBlock *defaultStm) : baseNode(baseNode), defaultStm(defaultStm) {
     if (defaultStm!=NULL){
         defaultStm->setSwitch(this);
     }
 }
 
-SwitchStatement::SwitchStatement(JsonNode *baseNode, std::vector<CaseStatement *> caseStms, DefaultStatement *defaultStm) : baseNode(baseNode), caseStms(caseStms), defaultStm(defaultStm) {
+SwitchBlock::SwitchBlock(JsonNode *baseNode, std::vector<CaseBlock *> caseStms, DefaultBlock *defaultStm) : baseNode(baseNode), caseStms(caseStms), defaultStm(defaultStm) {
     int i, loopLimit = caseStms.size();
     for(i=0; i<loopLimit;i++){
         caseStms[i]->setSwitchStm(this);
@@ -67,11 +67,11 @@ SwitchStatement::SwitchStatement(JsonNode *baseNode, std::vector<CaseStatement *
     }
 }
 
-JsonNode *SwitchStatement::getBaseNode(){
+JsonNode *SwitchBlock::getBaseNode(){
     return baseNode;
 }
 
-JsonNode *SwitchStatement::execute(){
+JsonNode *SwitchBlock::execute(){
     if (!caseStms.empty()){
         int i, loopLimit = caseStms.size();
         setBroken(false);
@@ -91,19 +91,19 @@ JsonNode *SwitchStatement::execute(){
     return NULL;
 }
 
-// CaseStatement ----------------------
+// CaseBlock ----------------------
 
-CaseStatement::~CaseStatement(){}
+CaseBlock::~CaseBlock(){}
 
-CaseStatement::CaseStatement(JsonNode *compareNode): compareNode(compareNode){}
+CaseBlock::CaseBlock(JsonNode *compareNode): compareNode(compareNode){}
 
-CaseStatement::CaseStatement(JsonNode *compareNode, std::vector<Command *> commands) 
+CaseBlock::CaseBlock(JsonNode *compareNode, std::vector<Command *> commands) 
     : compareNode(compareNode), commands(commands){}
 
-void CaseStatement::setSwitchStm(SwitchStatement *v){
+void CaseBlock::setSwitchStm(SwitchBlock *v){
     switchStm = v;
 }
-JsonNode *CaseStatement::execute(){
+JsonNode *CaseBlock::execute(){
     if(switchStm!=NULL){
         JsonNode *baseNode = switchStm->getBaseNode();
         JsonNode *cmpNode ;
@@ -127,18 +127,18 @@ JsonNode *CaseStatement::execute(){
     return NULL;
 }
 
-// DefaultStatement ----------------------
+// DefaultBlock ----------------------
 
-DefaultStatement::~DefaultStatement(){}
-DefaultStatement::DefaultStatement(){}
-DefaultStatement::DefaultStatement(std::vector<Command *> commands){
+DefaultBlock::~DefaultBlock(){}
+DefaultBlock::DefaultBlock(){}
+DefaultBlock::DefaultBlock(std::vector<Command *> commands){
 
 }
 
-void DefaultStatement::setSwitch(SwitchStatement *v){
+void DefaultBlock::setSwitch(SwitchBlock *v){
     switchStm = v;
 }
-JsonNode *DefaultStatement::execute(){
+JsonNode *DefaultBlock::execute(){
     int i, loopLimit = commands.size();
     setBroken(false);
     for(i=0; i<loopLimit;i++){

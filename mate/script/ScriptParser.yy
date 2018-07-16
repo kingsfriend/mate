@@ -13,7 +13,7 @@
     #include <string>
     #include <vector>
     #include <stdint.h>
-    #include "../Command.hpp"
+    #include "../ast/Command.hpp"
 
     using namespace std;
 

@@ -1,39 +1,41 @@
 #ifndef MATE_STR_EXPRESSION_HH
     #define MATE_STR_EXPRESSION_HH
-    
-    #include "Expression.hpp"
-    
-    namespace mate
-    {
-        enum StringExpressionType{
-            STR_EXP_BINARY,
-            STR_EXP_UNARY,
-            STR_EXP_JSON_NODE
-        };
-        enum UnaryStringExpType{
-            EXP_UN_STR_PREF_PLUS,
-            EXP_UN_STR_PREF_MINUS
-        };
 
-        class StringExpression : public Expression
-        {
-        private:
-            JsonStringNode* op1;
+#include "ExpressionCommand.hpp"
 
-        public:
-            StringExpression(JsonStringNode *op1);
-            StringExpression(std::string v);
-            ~StringExpression();
+namespace mate
+{
+enum StringExpressionType
+{
+    STR_EXP_BINARY,
+    STR_EXP_UNARY,
+    STR_EXP_JSON_NODE
+};
+enum UnaryStringExpType
+{
+    EXP_UN_STR_PREF_PLUS,
+    EXP_UN_STR_PREF_MINUS
+};
 
-            static const CommandType CMD_TYPE = CMD_EXP_STR;
-            static const ExpressionType EXP_TYPE = EXP_STRING;
-            static const StringExpressionType STR_EXP_TYPE = STR_EXP_JSON_NODE;
-            JsonStringNode *executeAsString();
-            JsonNode *execute();
-            void val1(std::string v1);
+class StringExpression : public Expression
+{
+  private:
+    JsonStringNode *op1;
 
-          protected:
-            StringExpression();
+  public:
+    StringExpression(JsonStringNode *op1);
+    StringExpression(std::string v);
+    ~StringExpression();
+
+    static const CommandType CMD_TYPE = CMD_EXP_STR;
+    static const ExpressionType EXP_TYPE = EXP_STRING;
+    static const StringExpressionType STR_EXP_TYPE = STR_EXP_JSON_NODE;
+    JsonStringNode *executeAsString();
+    JsonNode *execute();
+    void val1(std::string v1);
+
+  protected:
+    StringExpression();
         };
 
         class UnaryStringExp : public StringExpression

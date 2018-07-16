@@ -1,4 +1,4 @@
-#include "ConditionalStatement.hpp"
+#include "ConditionalBlock.hpp"
 
 namespace mate
 {
@@ -61,24 +61,24 @@ JsonBoolNode *ConditionExpression::executeAsBool(){
     return r;
 }
 
-// ConditionalStatement ----------------------
+// ConditionalBlock ----------------------
 
-ConditionalStatement::ConditionalStatement(ConditionExpression *condition) : condition(condition){}
-ConditionalStatement::~ConditionalStatement(){}
+ConditionalBlock::ConditionalBlock(ConditionExpression *condition) : condition(condition){}
+ConditionalBlock::~ConditionalBlock(){}
 
-bool ConditionalStatement::valuateCondition(){
+bool ConditionalBlock::valuateCondition(){
     if (condition != NULL){
         return condition->executeAsBool();
     }
     return false;
 }
 
-// IfStatement ----------------------
+// IfBlock ----------------------
 
-IfStatement::IfStatement(ConditionExpression *condition) : ConditionalStatement(condition) {}
-IfStatement::~IfStatement(){}
+IfBlock::IfBlock(ConditionExpression *condition) : ConditionalBlock(condition) {}
+IfBlock::~IfBlock(){}
 
-JsonNode* IfStatement::execute(){
+JsonNode* IfBlock::execute(){
     if(valuateCondition()){
         int i;
         int loopLimit = commandes.size();

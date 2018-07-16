@@ -1,52 +1,52 @@
-#include "ContinueableStatement.hpp"
+#include "ContinueableBlock.hpp"
 
 namespace mate
 {
 // ContinueCommand ----------------------
 
 ContinueCommand::~ContinueCommand(){}
-ContinueCommand::ContinueCommand(ContinueableStatement *continueStm)
-    : statement(continueStm) {}
+ContinueCommand::ContinueCommand(ContinueableBlock *continueStm)
+    : block(continueStm) {}
 
 ContinueCommand::ContinueCommand (){
-    statement = NULL;
+    block = NULL;
 }
 
 
 JsonNode* ContinueCommand::execute(){
-    if(statement!=NULL){
-        statement->setContinued(true);
+    if(block!=NULL){
+        block->setContinued(true);
     }
     return  NULL;
 }
 
-// ContinueableStatement ----------------------
+// ContinueableBlock ----------------------
 
-ContinueableStatement::~ContinueableStatement(){}
-ContinueableStatement::ContinueableStatement(){}
+ContinueableBlock::~ContinueableBlock(){}
+ContinueableBlock::ContinueableBlock(){}
 
-ContinueableStatement::ContinueableStatement(ConditionExpression *condition)
-    : BreakableStatement(condition){}
+ContinueableBlock::ContinueableBlock(ConditionExpression *condition)
+    : BreakableBlock(condition){}
 
-void ContinueableStatement::setContinued(bool v){
+void ContinueableBlock::setContinued(bool v){
     continued = v;
 }
 
-bool ContinueableStatement::isContinued(){
+bool ContinueableBlock::isContinued(){
     return continued;
 }
 
-// WhileStatement ----------------------
+// WhileBlock ----------------------
 
-WhileStatement::~WhileStatement(){}
-WhileStatement::WhileStatement(ConditionExpression *condition) 
-    : ContinueableStatement(condition) {}
+WhileBlock::~WhileBlock(){}
+WhileBlock::WhileBlock(ConditionExpression *condition) 
+    : ContinueableBlock(condition) {}
 
-WhileStatement::WhileStatement(ConditionExpression *condition, std::vector<Command *> commands) 
-    : ContinueableStatement(condition), commands(commands){}
+WhileBlock::WhileBlock(ConditionExpression *condition, std::vector<Command *> commands) 
+    : ContinueableBlock(condition), commands(commands){}
 
 
-JsonNode *WhileStatement::execute(){
+JsonNode *WhileBlock::execute(){
     if (!commands.empty()){
         int i, loopLimit = commands.size();
         setBroken(false);
@@ -70,38 +70,38 @@ JsonNode *WhileStatement::execute(){
     return NULL;
 }
 
-// ForStatement ----------------------
+// ForBlock ----------------------
 
-ForStatement::~ForStatement(){}
-ForStatement::ForStatement(std::vector<Expression *> expInits, std::vector<Expression *> expIncrs, std::vector<ConditionExpression *> expConds){}
-ForStatement::ForStatement(std::vector<Expression *> expInits, std::vector<Expression *> expIncrs, std::vector<ConditionExpression *> expConds, std::vector<Command *> commands){}
+ForBlock::~ForBlock(){}
+ForBlock::ForBlock(std::vector<Expression *> expInits, std::vector<Expression *> expIncrs, std::vector<ConditionExpression *> expConds){}
+ForBlock::ForBlock(std::vector<Expression *> expInits, std::vector<Expression *> expIncrs, std::vector<ConditionExpression *> expConds, std::vector<Command *> commands){}
 
-std::vector<Expression *> ForStatement::getExpInit(){
+std::vector<Expression *> ForBlock::getExpInit(){
     return expInits;
 }
-std::vector<Expression *> ForStatement::getExpIncr(){
+std::vector<Expression *> ForBlock::getExpIncr(){
     return expIncrs;
 }
-std::vector<ConditionExpression *> ForStatement::getExpCond(){
+std::vector<ConditionExpression *> ForBlock::getExpCond(){
     return expConds;
 }
-std::vector<Command *> ForStatement::getCommands(){
+std::vector<Command *> ForBlock::getCommands(){
     return commands;
 }
-void ForStatement::setExpInit(std::vector<Expression *> expInits){
+void ForBlock::setExpInit(std::vector<Expression *> expInits){
     this->expInits = expInits;
 }
-void ForStatement::setExpIncr(std::vector<Expression *> expIncrs){
+void ForBlock::setExpIncr(std::vector<Expression *> expIncrs){
     this->expIncrs = expIncrs;
 }
-void ForStatement::setExpCond(std::vector<ConditionExpression *> expConds){
+void ForBlock::setExpCond(std::vector<ConditionExpression *> expConds){
     this->expConds = expConds;
 }
-void ForStatement::setCommands(std::vector<Command *> commands){
+void ForBlock::setCommands(std::vector<Command *> commands){
     this->commands = commands;
 }
 
-bool ForStatement::valuateConditions(){
+bool ForBlock::valuateConditions(){
         bool valuation = true;
     if (!expConds.empty()){
         int i, loopLimit = expConds.size();
@@ -112,7 +112,7 @@ bool ForStatement::valuateConditions(){
     return valuation;
 }
 
-void ForStatement::executeIncrs(){
+void ForBlock::executeIncrs(){
     if (!expIncrs.empty()){
         int i, loopLimit = expIncrs.size();
         for (i = 0; i < loopLimit; i++){
@@ -121,7 +121,7 @@ void ForStatement::executeIncrs(){
     }
 }
 
-void ForStatement::executeInits(){
+void ForBlock::executeInits(){
     if (!expInits.empty()){
         int i, loopLimit = expInits.size();
         for (i = 0; i < loopLimit; i++){
@@ -130,7 +130,7 @@ void ForStatement::executeInits(){
     }
 }
 
-JsonNode *ForStatement::execute(){
+JsonNode *ForBlock::execute(){
     if (!commands.empty()){
         int i, loopLimit = commands.size();
         setBroken(false);
@@ -156,24 +156,24 @@ JsonNode *ForStatement::execute(){
     return NULL;
 }
 
-// ForeachStatement ----------------------
+// ForeachBlock ----------------------
 
-ForeachStatement::~ForeachStatement(){}
+ForeachBlock::~ForeachBlock(){}
 
-ForeachStatement::ForeachStatement(JsonArrayNode *array, JsonNode *item)
+ForeachBlock::ForeachBlock(JsonArrayNode *array, JsonNode *item)
     : array(array), currentItem(item){
         currentItemIndex = 0;
     }
-ForeachStatement::ForeachStatement(JsonArrayNode *array, JsonNode *item, std::vector<Command *> commands)
+ForeachBlock::ForeachBlock(JsonArrayNode *array, JsonNode *item, std::vector<Command *> commands)
     : array(array), currentItem(item), commands(commands) {
         currentItemIndex = 0;
     }
-ForeachStatement::ForeachStatement(JsonArrayNode *array, JsonNode *item, std::vector<Command *> commands, std::vector<Command *> emptyCommands)
+ForeachBlock::ForeachBlock(JsonArrayNode *array, JsonNode *item, std::vector<Command *> commands, std::vector<Command *> emptyCommands)
     : array(array), currentItem(item), commands(commands), emptyCommands(emptyCommands) {
         currentItemIndex = 0;
     }
 
-bool ForeachStatement::updateCurrentItem(){
+bool ForeachBlock::updateCurrentItem(){
     if(array!=NULL || currentItemIndex < array->size()>0){
         currentItem = array->get(++currentItemIndex);
         return true;
@@ -181,12 +181,12 @@ bool ForeachStatement::updateCurrentItem(){
     return false;
 }
 
-void ForeachStatement::resetIndex(){
+void ForeachBlock::resetIndex(){
     currentItem = NULL;
     currentItemIndex = 0;
 }
 
-JsonNode *ForeachStatement::execute(){
+JsonNode *ForeachBlock::execute(){
     if (!commands.empty()){
         int i, loopLimit = commands.size();
         setBroken(false);
