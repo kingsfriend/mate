@@ -3,6 +3,7 @@
     
     #include <cmath>
     #include <memory>
+    #include <string>
     #include <stdlib.h>
     #include <ctime>
     #include "Command.hpp"
@@ -12,6 +13,11 @@
     {
         enum ExpressionType{
             EXP,
+            EXP_STRING,
+            EXP_NUM,
+            EXP_DATE,
+            EXP_CMP,
+            EXP_BOOL,
             EXP_,
         };
         

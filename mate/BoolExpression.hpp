@@ -1,11 +1,7 @@
 #ifndef MATE_BOOL_EXPRESSION_HH
     #define MATE_BOOL_EXPRESSION_HH
     
-    #include <cmath>
-    #include <memory>
-    #include <stdlib.h>
-    #include "Command.hpp"
-    #include "Json.hpp"
+    #include "Expression.hpp"
     
     namespace mate
     {
@@ -19,7 +15,7 @@
             EXP_UN_BOOL_NOT
         };
         
-        class BoolExpression : public Command
+        class BoolExpression : public Expression
         {
         private:
             JsonBoolNode* op1;
@@ -30,6 +26,7 @@
             ~BoolExpression();
 
             static const CommandType CMD_TYPE = CMD_EXP_BOOL;
+            static const ExpressionType EXP_TYPE = EXP_BOOL;
             static const BoolExpressionType BOOL_EXP_TYPE = BOOL_EXP_JSON_NODE;
             static BoolExpression* BOOL_EXP_TRUE;
             static BoolExpression* BOOL_EXP_FALSE;

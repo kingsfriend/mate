@@ -1,12 +1,7 @@
 #ifndef MATE_STR_EXPRESSION_HH
     #define MATE_STR_EXPRESSION_HH
     
-    #include <cmath>
-    #include <memory>
-    #include <string>
-    #include <stdlib.h>
-    #include "Command.hpp"
-    #include "Json.hpp"
+    #include "Expression.hpp"
     
     namespace mate
     {
@@ -19,8 +14,8 @@
             EXP_UN_STR_PREF_PLUS,
             EXP_UN_STR_PREF_MINUS
         };
-        
-        class StringExpression : public Command
+
+        class StringExpression : public Expression
         {
         private:
             JsonStringNode* op1;
@@ -31,6 +26,7 @@
             ~StringExpression();
 
             static const CommandType CMD_TYPE = CMD_EXP_STR;
+            static const ExpressionType EXP_TYPE = EXP_STRING;
             static const StringExpressionType STR_EXP_TYPE = STR_EXP_JSON_NODE;
             JsonStringNode *executeAsString();
             JsonNode *execute();

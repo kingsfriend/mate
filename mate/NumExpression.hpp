@@ -1,11 +1,7 @@
 #ifndef MATE_NUM_EXPRESSION_HH
     #define MATE_NUM_EXPRESSION_HH
     
-    #include <cmath>
-    #include <memory>
-    #include <stdlib.h>
-    #include "Command.hpp"
-    #include "Json.hpp"
+    #include "Expression.hpp"
     
     namespace mate
     {
@@ -23,7 +19,7 @@
             EXP_UN_NUM_PREF_DEC
         };
         
-        class NumExpression : public Command
+        class NumExpression : public Expression
         {
         private:
             JsonNumberNode* op1;
@@ -34,6 +30,7 @@
             ~NumExpression();
 
             static const CommandType CMD_TYPE = CMD_EXP_NUM;
+            static const ExpressionType EXP_TYPE = EXP_NUM;
             static const NumExpressionType NUM_EXP_TYPE = NUM_EXP_JSON_NODE;
             JsonNumberNode *executeAsNum();
             JsonNode *execute();

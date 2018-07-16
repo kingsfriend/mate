@@ -1,12 +1,7 @@
 #ifndef MATE_DATE_EXPRESSION_HH
     #define MATE_DATE_EXPRESSION_HH
     
-    #include <cmath>
-    #include <memory>
-    #include <stdlib.h>
-    #include <ctime>
-    #include "Command.hpp"
-    #include "Json.hpp"
+    #include "Expression.hpp"
     
     namespace mate
     {
@@ -20,7 +15,7 @@
             EXP_UN_DATE_PREF_MINUS
         };
         
-        class DateExpression : public Command
+        class DateExpression : public Expression
         {
         private:
             JsonDateNode* op1;
@@ -31,6 +26,7 @@
             ~DateExpression();
 
             static const CommandType CMD_TYPE = CMD_EXP_DATE;
+            static const ExpressionType EXP_TYPE = EXP_DATE;
             static const DateExpressionType DATE_EXP_TYPE = DATE_EXP_JSON_NODE;
             JsonDateNode *executeAsDate();
             JsonNode *execute();

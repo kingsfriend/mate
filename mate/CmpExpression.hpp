@@ -1,11 +1,7 @@
 #ifndef MATE_CMP_EXPRESSION_HH
     #define MATE_CMP_EXPRESSION_HH
     
-    #include <cmath>
-    #include <memory>
-    #include <stdlib.h>
-    #include "Command.hpp"
-    #include "Json.hpp"
+    #include "Expression.hpp"
     
     namespace mate
     {
@@ -18,13 +14,14 @@
             CMP_OP_GR_OR_EQ
         };
         
-        class CmpExpression : public Command
+        class CmpExpression : public Expression
         {
         public:
             ~CmpExpression();
             CmpExpression(CmpType op);
 
             static const CommandType CMD_TYPE = CMD_CMP;
+            static const ExpressionType EXP_TYPE = EXP_CMP;
 
             virtual JsonBoolNode *executeAsBool()=0;
             JsonNode *execute();
