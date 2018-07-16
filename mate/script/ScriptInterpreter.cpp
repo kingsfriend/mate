@@ -39,14 +39,12 @@ std::string ScriptInterpreter::str() const {
 
 }
 
-void ScriptInterpreter::switchInputStream(std::istream *is, std::ostream *os)
-{
+void ScriptInterpreter::switchInputStream(std::istream *is, std::ostream *os){
     scanner->switch_streams(is, os);
      commands.clear();    
 }
 
-void ScriptInterpreter::addCommand(const Command &cmd)
-{
+void ScriptInterpreter::addCommand(Command* cmd){
      commands.push_back(cmd);
 }
 

@@ -32,14 +32,14 @@ public:
     friend class ScriptScanner;
     
 private:
-    void addCommand(const Command &cmd);
+    void addCommand(Command* cmd);
     void increaseLocation(unsigned int loc);
     unsigned int getLocation() const;
     
 private:
     ScriptScanner* scanner;
     ScriptParser* parser;
-    std::vector<Command>  commands;
+    std::vector<Command*>  commands;
     mate::Context context;
     unsigned int location;
 };
