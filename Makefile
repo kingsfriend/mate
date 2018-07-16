@@ -25,6 +25,7 @@ script-build-test script-bt  : script-build-base
 			$(src_script_dir)/ScriptScanner.cpp \
 			$(src_script_dir)/ScriptInterpreter.cpp \
 			$(src_ast_dir)/Command.cpp \
+			$(src_ast_dir)/EchoCommand.cpp \
 			$(src_ast_dir)/Interpreter.cpp \
 			$(src_ast_dir)/Json.cpp \
 			$(src_ast_dir)/Context.cpp \

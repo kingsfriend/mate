@@ -31,7 +31,7 @@
         CMD_CONTINUE_BLOCK_WHILE,
         CMD_CONTINUE_BLOCK_FOR,
         CMD_CONTINUE_BLOCK_FOREACH,
-        CMD_FILEWORD,
+        CMD_ECHO,
     };
 
     class Context;
