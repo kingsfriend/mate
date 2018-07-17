@@ -19,7 +19,6 @@ int main(int argc, char const *argv[])
     JsonStringNode jsString("test");
     JsonNumberNode jsNumber1(132);
     JsonNumberNode jsNumber2(150);
-    JsonNumberNode* sumResult;
     JsonBoolNode jsBool(true);
     JsonObjectNode jsObject;
     JsonObjectNode jsObject1;
@@ -48,7 +47,6 @@ int main(int argc, char const *argv[])
 
     jsObject1.push("num1", &jsNumber1);
     jsObject1.push("num2", &jsNumber2);
-    jsObject1.push("sum", sumResult);
     jsObject1.push("str", &jsString);
     jsObject1.push("bool", &jsBool);
 

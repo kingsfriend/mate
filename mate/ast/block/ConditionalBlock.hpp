@@ -43,9 +43,9 @@
             static const CommandType CMD_TYPE = CMD_COND_EXP;
             static const ConditionalBlockType COND_BLOCK_TYPE = COND_BLOCK;
 
-            bool valuateCondition();
+            bool valuateCondition(Interpreter* interpreter);
 
-        protected:
+          protected:
             ConditionExpression* condition;
         };
 

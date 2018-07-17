@@ -66,7 +66,7 @@ JsonBoolNode *ConditionExpression::executeAsBool(Interpreter* interpreter){
 ConditionalBlock::ConditionalBlock(ConditionExpression *condition) : condition(condition){}
 ConditionalBlock::~ConditionalBlock(){}
 
-bool ConditionalBlock::valuateCondition(){
+bool ConditionalBlock::valuateCondition(Interpreter* interpreter){
     if (condition != NULL){
         return condition->executeAsBool(interpreter);
     }
@@ -79,13 +79,13 @@ IfBlock::IfBlock(ConditionExpression *condition) : ConditionalBlock(condition) {
 IfBlock::~IfBlock(){}
 
 JsonNode* IfBlock::execute(Interpreter* interpreter){
-    if(valuateCondition()){
+    if(valuateCondition(interpreter)){
         int i;
         int loopLimit = commandes.size();
         for (i = 0; i < loopLimit; i++){
             commandes[i]->execute(interpreter);
         }
-    }else if(nextBlok!=NULL && nextBlok->valuateCondition())
+    }else if(nextBlok!=NULL && nextBlok->valuateCondition(interpreter))
     {
         return nextBlok->execute(interpreter);
     }

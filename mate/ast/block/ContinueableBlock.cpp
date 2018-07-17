@@ -50,7 +50,7 @@ JsonNode *WhileBlock::execute(Interpreter* interpreter){
     if (!commands.empty()){
         int i, loopLimit = commands.size();
         setBroken(false);
-        while(valuateCondition()){
+        while(valuateCondition(interpreter)){
             int i, loopLimit = commands.size();
             setContinued(false);
             for (i = 0; i < loopLimit; i++)        {
