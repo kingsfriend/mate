@@ -38,14 +38,30 @@ Interpreter::Interpreter(ContextStack *contextStack, std::istream *new_in, std::
         location = 0;
     }
 
-void Interpreter::clear() {
+void Interpreter::clearAll() {
     location = 0;
-    ctxStack()->clearAll();
+    ctxStack()->clearAllContexts();
 }
-
 
 ContextStack * Interpreter::ctxStack(){
      return  contextStack;
+}
+
+Context *Interpreter::context(){
+        return contextStack->context();
+}
+
+void Interpreter::execute(){
+    context()->execute(this);
+    context()->clearCommands();
+}
+
+void Interpreter::addCommand(Command *cmd){
+    return context()->addCommand(cmd);
+}
+
+JsonNode* Interpreter::executeCommand(Command *cmd){
+    return cmd->execute(this);
 }
 
 void Interpreter::increaseLocation(unsigned int loc) {

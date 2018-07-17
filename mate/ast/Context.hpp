@@ -9,6 +9,8 @@
 #include "Command.hpp"
 #include "Interpreter.hpp"
 
+#include "../Log.hpp"
+
 using namespace std;
 namespace mate
 {
@@ -50,12 +52,12 @@ namespace mate
         bool containt(const std::string);
         bool remove(const std::string);
         void clear();
+        void clearVars();
+        void clearCommands();
 
         void addCommand(Command *cmd);
-        JsonNode *execute(Interpreter* interpreter);
-
+        void execute(Interpreter *interpreter);
         ContextType getType();
-
 
     };
 

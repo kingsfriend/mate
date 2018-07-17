@@ -46,7 +46,7 @@ void ScriptInterpreter::switchInputStream(std::istream *is, std::ostream *os){
     new_in = is;
     new_os = os;
     scanner->switch_streams(is, os);
-    clear();    
+    clearAll();    
 }
 
 ScriptScanner *ScriptInterpreter::getScanner(){

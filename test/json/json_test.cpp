@@ -44,7 +44,7 @@ int main(int argc, char const *argv[])
 
     BinaryNumberExp sum(EXP_BI_NUM_ADD, &numExp1, &numExp2);
 
-    sumResult = sum.executeAsNum();
+    // sumResult = sum.executeAsNum();
 
     jsObject1.push("num1", &jsNumber1);
     jsObject1.push("num2", &jsNumber2);

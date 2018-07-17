@@ -7,12 +7,13 @@
 #include <sstream>
 
 #include "ContextStack.hpp"
+#include "Context.hpp"
 #include "Command.hpp"
 
 namespace mate {
 
 class Command;
-
+class Context;
 class ContextStack;
 class Interpreter
 {
@@ -29,11 +30,14 @@ public:
     virtual void echo(const std::string s) = 0;
     virtual void switchInputStream(std::istream *is, std::ostream *os) = 0;
 
-    void clear();
+    void clearAll();
     ContextStack *ctxStack();
+    Context *context();
+    void execute();
+    void addCommand(Command *cmd);
+    JsonNode* executeCommand(Command *cmd);
 
-protected:
-    ContextStack* contextStack;
+    protected : ContextStack *contextStack;
     std::istream *new_in;
     std::ostream *new_os;
     unsigned int location;

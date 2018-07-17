@@ -3,11 +3,15 @@
 
 #include <stack>
 #include "Context.hpp"
+#include "Interpreter.hpp"
+#include "Command.hpp"
 
 using namespace std;
 namespace mate
 {
+    class Command;
     class Context;
+    class Interpreter;
     class ContextStack
     {
     public:
@@ -18,9 +22,13 @@ namespace mate
         Context *context();
         int size();
         bool empty();
-        void clearLast();
+        void clearLastContext();
         bool succeed();
-        void clearAll();
+        void clearAllContexts();
+
+        void clearContext();
+        void clearContextVars();
+        void clearContextCommands();
 
         bool putVal(const std::string, JsonNode *var);
         bool setVal(const std::string, JsonNode* var);

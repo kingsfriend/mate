@@ -13,7 +13,7 @@
     #include <string>
     #include <vector>
     #include <stdint.h>
-    #include "../ast/Command.hpp"
+    #include "../ast/EchoCommand.hpp"
 
     using namespace std;
 
@@ -98,7 +98,7 @@
 %token <std::string> G_OP
 %token <std::string> CHAR
 
-%type <std::string> fileword
+%type <EchoCommand*> fileword
 %type <std::string> tokenword
 
 %start script
@@ -147,7 +147,11 @@ commands:
     | command commands
 ;
 command:
-    fileword{ scanner.echo($1); }
+    fileword{ 
+        driver.executeCommand($1);
+        driver.addCommand($1);
+        driver.execute();
+    }
     | valuation
     | alternative
     | loop
@@ -155,12 +159,15 @@ command:
 ;
 fileword: 
     tokenword{
-        $$ =  $1;    }
+        $$ = new EchoCommand($1);   
+    }
     | MAGICESC{
-        $$ ="@@";
+        std::string magicesc = "@@";
+        $$ = new EchoCommand(magicesc);   
     }
     | NEWLINE{
-        $$ ="\n";
+        std::string newline = "\n";
+        $$ = new EchoCommand(newline);   
     }
 ;
 tokenword:

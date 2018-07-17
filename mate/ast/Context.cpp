@@ -89,6 +89,27 @@ namespace mate {
     }
 
     void Context::clear(){
+        clearVars();
+        clearCommands();
+    }
+
+    void Context::clearVars(){
         vars.clear();
+    }
+
+    void Context::clearCommands(){
+        commands.clear();
+    }
+
+    void Context::addCommand(Command *cmd){
+        commands.push_back(cmd) ;
+    }
+
+    void Context::execute(Interpreter *interpreter){
+        int i;
+        int loopLimit = commands.size();
+        for (i = 0; i < loopLimit; i++){
+            commands[i]->execute(interpreter);
+        }
     }
 }

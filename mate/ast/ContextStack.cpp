@@ -1,8 +1,8 @@
 #include "ContextStack.hpp"
 
 namespace mate {
-    ContextStack::~ContextStack(){ 
-        clearAll();
+    ContextStack::~ContextStack(){
+        clearAllContexts();
     }
 
     ContextStack::ContextStack(){
@@ -32,7 +32,7 @@ namespace mate {
         return  contextStack.empty();
     }
 
-    void ContextStack::clearLast(){
+    void ContextStack::clearLastContext(){
         lastGetSucceed = false;
         if (size() > 1){
             Context *ctx = contextStack.top();
@@ -42,9 +42,10 @@ namespace mate {
         }
     }
 
-    void ContextStack::clearAll(){
+    void ContextStack::clearAllContexts(){
         while(!empty()){
             Context *ctx = contextStack.top();
+            ctx->clear();
             contextStack.pop();
             delete ctx;
             ctx = NULL;
@@ -83,4 +84,13 @@ namespace mate {
         return val;
     }
 
+    void ContextStack::clearContext(){
+        context()->clear();
+    }
+    void ContextStack::clearContextVars(){
+        context()->clearVars();
+    }
+    void ContextStack::clearContextCommands(){
+        context()->clearCommands();
+    }
 }
