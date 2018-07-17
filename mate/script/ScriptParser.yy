@@ -14,6 +14,8 @@
     #include <vector>
     #include <stdint.h>
     #include "../ast/command/EchoCommand.hpp"
+    #include "../ast/command/ValuationCommand.hpp"
+    #include "../ast/command/ValuationCommand.hpp"
 
     using namespace std;
 
@@ -51,7 +53,7 @@
 
 %token END 0 "end of file"
 
-%token MAGICESC NEWLINE BLOCKEND
+%token MAGIC MAGICESC NEWLINE BLOCKEND
 
 %token BREAK
 %token CASE
@@ -71,6 +73,8 @@
 %token SWITCH
 %token USE
 %token WHILE
+
+%token <std::string> UNDEFINED
 
 %token <std::string> IDENTIFIER
 %token <std::string> INTEGER
@@ -99,6 +103,7 @@
 %token <std::string> CHAR
 
 %type <EchoCommand*> fileword
+%type <ValuationCommand*> valuation
 %type <std::string> tokenword
 
 %start script
@@ -150,10 +155,18 @@ command:
     fileword{ 
         driver.executeCommand($1);
     }
-    | valuation
-    | alternative
-    | loop
-    | command_directive
+    | valuation{
+        driver.executeCommand($1);
+    }
+    | alternative{
+        cout << "Parser: ALTERNATIVE" << endl;
+    }
+    | loop{
+        cout << "Parser: LOOP" << endl;
+    }
+    | command_directive{
+        cout << "Parser: COMMAND_DIRECTIVE" << endl;
+    }
 ;
 fileword: 
     tokenword{
@@ -173,10 +186,17 @@ tokenword:
     | INTEGER { $$ =  $1; } | NUMBER { $$ =  $1; } | STRING_LITERAL { $$ =  $1; } | WEQUAL { $$ =  $1; } | WHITESPACE { $$ =  $1; } | WCOLON { $$ =  $1; } | WCOMMA { $$ =  $1; } | WLBRACE { $$ =  $1; } | WRBRACE { $$ =  $1; } | WRBRACKET { $$ =  $1; } | WLBRACKET { $$ =  $1; }
     | INC_OP { $$ =  $1; } | DEC_OP { $$ =  $1; } | AND_OP { $$ =  $1; } | OR_OP { $$ =  $1; } | LE_OP { $$ =  $1; } | GE_OP { $$ =  $1; } | EQ_OP { $$ =  $1; } | NE_OP { $$ =  $1; } | L_OP { $$ =  $1; } | G_OP { $$ =  $1; }
     | CHAR { $$ =  $1; }
+    | UNDEFINED { $$ =  $1; }
 ;
 valuation:
-    '@' WLBRACKET expression WRBRACKET
-    | '@' WLBRACKET expression WCOMMA default_value WRBRACKET
+    MAGIC WLBRACKET expression WRBRACKET {
+        std::string exp = "var1";
+        $$ = new ValuationCommand(exp);
+    }
+    | MAGIC WLBRACKET expression WCOMMA default_value WRBRACKET{
+        std::string exp = "var2";
+        $$ = new ValuationCommand(exp);
+    }
 ;
 default_value:
     expression
@@ -279,12 +299,16 @@ loop_directive:
 template_name:
     IDENTIFIER
 ;
-expression:
-    primary_expression
-;
 expression_statement:
     ';'
 	| expression ';'
+;
+identifier_list: 
+    IDENTIFIER
+	| IDENTIFIER WCOMMA identifier_list
+;
+expression:
+    primary_expression
 ;
 primary_expression: 
     IDENTIFIER
@@ -292,10 +316,6 @@ primary_expression:
 	| INTEGER
 	| STRING_LITERAL
 	| WLBRACKET expression WRBRACKET
-;
-identifier_list: 
-    IDENTIFIER
-	| IDENTIFIER WCOMMA identifier_list
 ;
 end_block:
     BLOCKEND WHITESPACE

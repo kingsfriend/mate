@@ -67,7 +67,7 @@ void JsonStringNode::val(const std::string &v){
 }
 
 std::string JsonStringNode::toString(){
-    std::string str = "\"" + this->value + "\"";
+    std::string str = this->value;
     return str;
 }
 

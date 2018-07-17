@@ -3,8 +3,8 @@
 
 #include <stack>
 #include "Context.hpp"
-#include "Interpreter.hpp"
-#include "Command.hpp"
+#include "../Interpreter.hpp"
+#include "../command/Command.hpp"
 
 using namespace std;
 namespace mate

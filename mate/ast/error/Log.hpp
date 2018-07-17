@@ -1,5 +1,5 @@
-#ifndef MATE_INTERPRETER_H
-#define MATE_INTERPRETER_H
+#ifndef MATE_LOG_HH
+#define MATE_LOG_HH
 
 #include <iostream>
 #include <string>
@@ -12,13 +12,13 @@ class Log
 public:
     ~Log();
     static void e(std::string tag, std::string msg){
-        std::cout << "Error: " << tag << " <" << msg <<">" << std::endl;
+        std::cout << "<Error> " << tag << " : " << msg << std::endl;
     }
     static void i(std::string tag, std::string msg){
-        std::cout << "Info: " << tag << " <" << msg <<">" << std::endl;
+        std::cout << "<Info> " << tag << " : " << msg << std::endl;
     }
     static void d(std::string tag, std::string msg){
-        std::cout << "Debug: " << tag << " <" << msg <<">" << std::endl;
+        std::cout << "<Debug> " << tag << " : " << msg << std::endl;
     }
 private:
     Log();
@@ -26,4 +26,4 @@ private:
 
 } // namespace mate
 
-#endif // MATE_INTERPRETER_H
+#endif // MATE_LOG_HH

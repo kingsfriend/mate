@@ -29,6 +29,10 @@ E			[Ee][+-]?{D}+
 
 %%
 
+"@" { 
+	// cout << "Scanner: MAGIC [\" @ \"]" << endl;
+	return mate::ScriptParser::make_MAGIC(mate::location()); 
+}
 "@/*"([^*]|\*+[^*/])*\*+"/" { 
 	// cout << "Scanner: MULTICOMMENT [" << yytext << "]" << endl;
 }
@@ -299,7 +303,8 @@ L?\"(\\.|[^\\"])*\" {
 }
 
 . { 
-	// cout << "Scanner: ANY \"" << YYText() << "\"" << endl;
+	// cout << "Scanner: UNDEFINED \"" << YYText() << "\"" << endl;
+	return mate::ScriptParser::make_UNDEFINED(std::string(yytext, yyleng), mate::location()); 
 }
 
 <<EOF>> { 

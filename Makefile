@@ -7,9 +7,12 @@ clean c: script-clean json-clean
 
 src_dir = mate
 src_ast_dir = mate/ast
-src_ast_expression_dir = mate/ast/expression
-src_ast_block_dir = mate/ast/block
 src_ast_command_dir = mate/ast/command
+src_ast_command_expression_dir = mate/ast/command/expression
+src_ast_command_blok_dir = mate/ast/command/blok
+src_ast_context_dir = mate/ast/context
+src_ast_error_dir = mate/ast/error
+
 src_script_dir = mate/script
 test_script_dir = test/script
 
@@ -25,12 +28,13 @@ script-build-test script-bt  : script-build-base
 			$(src_script_dir)/ScriptParser.cpp \
 			$(src_script_dir)/ScriptScanner.cpp \
 			$(src_script_dir)/ScriptInterpreter.cpp \
-			$(src_ast_dir)/Command.cpp \
-			$(src_ast_command_dir)/EchoCommand.cpp \
 			$(src_ast_dir)/Interpreter.cpp \
 			$(src_ast_dir)/Json.cpp \
-			$(src_ast_dir)/Context.cpp \
-			$(src_ast_dir)/ContextStack.cpp \
+				$(src_ast_command_dir)/Command.cpp \
+				$(src_ast_command_dir)/EchoCommand.cpp \
+				$(src_ast_command_dir)/ValuationCommand.cpp \
+				$(src_ast_context_dir)/Context.cpp \
+				$(src_ast_context_dir)/ContextStack.cpp \
 			-o $(test_script_dir)/output/script_test.out
 
 	
@@ -58,19 +62,19 @@ test_json_dir = test/json
 json-build json-b:
 	mkdir -p $(test_json_dir)/output/
 	g++ $(test_json_dir)/json_test.cpp \
-		$(src_ast_dir)/Command.cpp \
-		$(src_ast_block_dir)/ConditionalBlock.cpp \
-		$(src_ast_dir)/Context.cpp \
 		$(src_ast_dir)/Json.cpp \
-		$(src_ast_dir)/ContextStack.cpp \
-		$(src_ast_block_dir)/BreakableBlock.cpp \
-		$(src_ast_block_dir)/ContinueableBlock.cpp \
-		$(src_ast_expression_dir)/CmpExpression.cpp \
-		$(src_ast_expression_dir)/BoolExpression.cpp \
-		$(src_ast_expression_dir)/DateExpression.cpp \
-		$(src_ast_expression_dir)/ExpressionCommand.cpp \
-		$(src_ast_expression_dir)/NumExpression.cpp \
-		$(src_ast_expression_dir)/StringExpression.cpp \
+			$(src_ast_command_dir)/Command.cpp \
+				$(src_ast_command_blok_dir)/ConditionalBlock.cpp \
+				$(src_ast_command_blok_dir)/BreakableBlock.cpp \
+				$(src_ast_command_blok_dir)/ContinueableBlock.cpp \
+				$(src_ast_command_expression_dir)/CmpExpression.cpp \
+				$(src_ast_command_expression_dir)/BoolExpression.cpp \
+				$(src_ast_command_expression_dir)/DateExpression.cpp \
+				$(src_ast_command_expression_dir)/ExpressionCommand.cpp \
+				$(src_ast_command_expression_dir)/NumExpression.cpp \
+				$(src_ast_command_expression_dir)/StringExpression.cpp \
+			$(src_ast_context_dir)/Context.cpp \
+			$(src_ast_context_dir)/ContextStack.cpp \
 		-o $(test_json_dir)/output/json_test.out
 
 json-run json-r: json-b

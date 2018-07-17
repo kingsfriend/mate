@@ -5,11 +5,11 @@
 #include <vector>
 #include <iterator>
 #include <string>
-#include "Json.hpp"
-#include "Command.hpp"
-#include "Interpreter.hpp"
+#include "../command/Command.hpp"
+#include "../Json.hpp"
+#include "../Interpreter.hpp"
 
-#include "../Log.hpp"
+#include "../error/Log.hpp"
 
 using namespace std;
 namespace mate

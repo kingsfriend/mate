@@ -5,8 +5,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "../ast/Context.hpp"
-#include "../ast/Command.hpp"
+#include "../ast/context/Context.hpp"
+#include "../ast/command/Command.hpp"
 #include "../ast/Interpreter.hpp"
 
 #include "ScriptScanner.hpp"

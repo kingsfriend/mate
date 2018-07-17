@@ -2,8 +2,8 @@
     #define MATE_COMMAND_HH
 
     #include <memory>
-    #include "Json.hpp"
-    #include "Interpreter.hpp"
+    #include "../Json.hpp"
+    #include "../Interpreter.hpp"
     
     namespace mate{
     enum CommandType
@@ -33,6 +33,7 @@
         CMD_CONTINUE_BLOCK_FOR,
         CMD_CONTINUE_BLOCK_FOREACH,
         CMD_ECHO,
+        CMD_VALUATION,
     };
 
     class Interpreter;

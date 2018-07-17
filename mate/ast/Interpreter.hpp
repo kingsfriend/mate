@@ -6,9 +6,9 @@
 #include <fstream>
 #include <sstream>
 
-#include "ContextStack.hpp"
-#include "Context.hpp"
-#include "Command.hpp"
+#include "context/ContextStack.hpp"
+#include "context/Context.hpp"
+#include "command/Command.hpp"
 
 namespace mate {
 
