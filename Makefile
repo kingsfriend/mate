@@ -9,6 +9,7 @@ src_dir = mate
 src_ast_dir = mate/ast
 src_ast_expression_dir = mate/ast/expression
 src_ast_block_dir = mate/ast/block
+src_ast_command_dir = mate/ast/command
 src_script_dir = mate/script
 test_script_dir = test/script
 
@@ -25,7 +26,7 @@ script-build-test script-bt  : script-build-base
 			$(src_script_dir)/ScriptScanner.cpp \
 			$(src_script_dir)/ScriptInterpreter.cpp \
 			$(src_ast_dir)/Command.cpp \
-			$(src_ast_dir)/EchoCommand.cpp \
+			$(src_ast_command_dir)/EchoCommand.cpp \
 			$(src_ast_dir)/Interpreter.cpp \
 			$(src_ast_dir)/Json.cpp \
 			$(src_ast_dir)/Context.cpp \

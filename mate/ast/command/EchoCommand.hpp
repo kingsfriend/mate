@@ -2,7 +2,7 @@
     #define MATE_ECHO_COMMAND_HH
     
     #include <string>
-    #include "Command.hpp"
+    #include "../Command.hpp"
     
     namespace mate
     {

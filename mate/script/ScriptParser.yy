@@ -13,7 +13,7 @@
     #include <string>
     #include <vector>
     #include <stdint.h>
-    #include "../ast/EchoCommand.hpp"
+    #include "../ast/command/EchoCommand.hpp"
 
     using namespace std;
 
@@ -149,8 +149,6 @@ commands:
 command:
     fileword{ 
         driver.executeCommand($1);
-        driver.addCommand($1);
-        driver.execute();
     }
     | valuation
     | alternative
