@@ -4,13 +4,11 @@ namespace mate {
     Context::Context(){
         this->breakFlag = false;
         this->continueFlag = false;
-        this->lastGetSucceed = false;
         this->type = CONTEXT_NAVIGABLE;
     }
     Context::Context(ContextType type){
         this->breakFlag = false;
         this->continueFlag = false;
-        this->lastGetSucceed = false;
         this->type = type;
     }
     
@@ -44,10 +42,6 @@ namespace mate {
         continueFlag = true;
     }
 
-    bool Context::succeed(){
-        return lastGetSucceed;
-    }
-
     bool Context::put(const std::string key, JsonNode* var){
         if (!containt(key)){
             vars[key]= var;
@@ -67,10 +61,7 @@ namespace mate {
     JsonNode* Context::get(const std::string key){
         JsonNode *node = NULL;
         if(containt(key)){
-            lastGetSucceed = true;
             return vars[key];
-        }else{
-            lastGetSucceed = false;
         }
         return node;
     }

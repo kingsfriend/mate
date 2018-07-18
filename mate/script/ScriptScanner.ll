@@ -235,6 +235,11 @@ E			[Ee][+-]?{D}+
 	// cout << "Scanner: @while" << endl;
 	return mate::ScriptParser::make_BASE_DATA_TYPE(std::string(yytext, yyleng), mate::location()); 
 }
+	
+("true")|("false") {
+	// cout << "Scanner: @while" << endl;
+	return mate::ScriptParser::make_BOOL_CONST(std::string(yytext, yyleng), mate::location()); 
+}
 
 ("@"(L?\"(\\.|[^\\"])*\"))|("@"(L?'(\\.|[^\'])*')) { // "
 	std::string str(yytext, yyleng);

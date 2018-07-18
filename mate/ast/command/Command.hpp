@@ -9,9 +9,19 @@
     enum CommandType
     {
         CMD_BASE,
-        CMD_EXP,
         CMD_ECHO,
         CMD_VALUATION,
+        CMD_EXP,
+        CMD_EXP_ASSIGN,
+        CMD_EXP_PRIM,
+        CMD_EXP_PRIM_CAST,
+        CMD_EXP_PRIM_NUM,
+        CMD_EXP_PRIM_STR,
+        CMD_EXP_PRIM_DATE,
+        CMD_EXP_PRIM_BOOL,
+        CMD_EXP_PRIM_INDENTFIER,
+        CMD_EXP_PRIM_ARRAY,
+        CMD_EXP_PRIM_OBJECT,
     };
 
     class Interpreter;

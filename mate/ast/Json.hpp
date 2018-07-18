@@ -14,12 +14,12 @@ namespace mate
 {
     enum NodeType
     {
-        Object,
-        Number,
         Bool,
+        Number,
         String,
-        Array,
         Date,
+        Object,
+        Array,
         Undefined
     };
 
@@ -53,9 +53,10 @@ namespace mate
         bool val();
         void val(const bool &v);
         std::string toString();
-        bool equals(JsonNode* node);
+        static JsonNode *doCast(JsonNode *node);
+        bool equals(JsonNode *node);
 
-    private:
+      private:
         bool value;
     };
 
@@ -70,6 +71,7 @@ namespace mate
         std::string val();
         void val(const std::string &v);
         std::string toString();
+        static JsonNode *doCast(JsonNode *node);
         static std::string reverse(std::string s);
         std::string reverse();
         bool equals(JsonNode *node);
@@ -88,6 +90,7 @@ namespace mate
         time_t val();
         void val(const time_t &v);
         std::string toString();
+        static JsonNode *doCast(JsonNode *node);
         std::string format(std::string format);
         static  std::string format(JsonDateNode node, std::string format);
         static JsonDateNode now ();
@@ -116,9 +119,10 @@ namespace mate
         double val();
         void val(const double &v);
         std::string toString();
+        static JsonNode *doCast(JsonNode *node);
         bool equals(JsonNode *node);
 
-    private:
+      private:
         double value;
     };
 
@@ -128,15 +132,20 @@ namespace mate
         static const NodeType TYPE = Object;
         ~JsonObjectNode();
         JsonObjectNode();
+        JsonObjectNode(std::map<const std::string, JsonNode *> vals);
         std::string toString();
+        JsonObjectNode* clone();
+        JsonArrayNode* toArray();
+        static JsonNode *doCast(JsonNode *node);
         void push(const std::string &k, JsonDateNode *node);
         void push(const std::string &k, JsonBoolNode *node);
         void push(const std::string &k, JsonStringNode *node);
         void push(const std::string &k, JsonNumberNode *node);
         void push(const std::string &k, JsonArrayNode *node);
         void push(const std::string &k, JsonObjectNode *node);
-        void setValues(std::map<const std::string, JsonNode *> vals);
+        void val(std::map<const std::string, JsonNode *> vals);
         int size();
+        bool empty();
 
         JsonNode *get(const std::string k);
         std::map<const std::string, JsonNode *> getValues();
@@ -151,8 +160,12 @@ namespace mate
     {
     public:
         static const NodeType TYPE = Array;
+        static JsonNode *doCast(JsonNode *node);
         ~JsonArrayNode();
         JsonArrayNode();
+        JsonArrayNode(std::vector<JsonNode *> vals);
+        JsonArrayNode *clone();
+        JsonObjectNode *toObject();
         std::string toString();
         void push(JsonDateNode *node);
         void push(JsonBoolNode *node);
@@ -160,7 +173,9 @@ namespace mate
         void push(JsonNumberNode *node);
         void push(JsonObjectNode *node);
         void push(JsonArrayNode *node);
+        bool empty();
         int size();
+        void val(std::vector<JsonNode *> vals);
 
         JsonNode *get(int i);
 

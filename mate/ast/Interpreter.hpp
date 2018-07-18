@@ -9,6 +9,7 @@
 #include "context/ContextStack.hpp"
 #include "context/Context.hpp"
 #include "command/Command.hpp"
+#include "error/Error.hpp"
 
 namespace mate {
 
@@ -33,11 +34,13 @@ public:
     void clearAll();
     ContextStack *ctxStack();
     Context *context();
+    void pushError(Error e);
     void execute();
     void addCommand(Command *cmd);
     JsonNode* executeCommand(Command *cmd);
 
-    protected : ContextStack *contextStack;
+protected: 
+    ContextStack *contextStack;
     std::istream *new_in;
     std::ostream *new_os;
     unsigned int location;

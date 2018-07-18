@@ -35,6 +35,17 @@ script-build-test script-bt  : script-build-base
 				$(src_ast_command_dir)/ValuationCommand.cpp \
 				$(src_ast_context_dir)/Context.cpp \
 				$(src_ast_context_dir)/ContextStack.cpp \
+				$(src_ast_command_expression_dir)/ArrayExpression.cpp \
+				$(src_ast_command_expression_dir)/AssignmentExpression.cpp \
+				$(src_ast_command_expression_dir)/BoolExpression.cpp \
+				$(src_ast_command_expression_dir)/CastExpression.cpp \
+				$(src_ast_command_expression_dir)/DateExpression.cpp \
+				$(src_ast_command_expression_dir)/Expression.cpp \
+				$(src_ast_command_expression_dir)/IdentifierExpression.cpp \
+				$(src_ast_command_expression_dir)/NumExpression.cpp \
+				$(src_ast_command_expression_dir)/ObjectExpression.cpp \
+				$(src_ast_command_expression_dir)/PrimaryExpression.cpp \
+				$(src_ast_command_expression_dir)/StringExpression.cpp \
 			-o $(test_script_dir)/output/script_test.out
 
 	

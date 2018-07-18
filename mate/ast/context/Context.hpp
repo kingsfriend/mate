@@ -30,7 +30,6 @@ namespace mate
         unsigned int id;
         bool breakFlag;
         bool continueFlag;
-        bool lastGetSucceed;
         std::vector<Command *> commands;
 
       public:

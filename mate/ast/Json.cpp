@@ -41,6 +41,50 @@ std::string JsonBoolNode::toString(){
     return value ? "true" : "false";
 }
 
+JsonNode *JsonBoolNode::doCast(JsonNode *node){
+    JsonBoolNode* returnNode = new JsonBoolNode(true);
+    
+    JsonBoolNode *boolNode;
+    JsonNumberNode *numberNode;
+    JsonStringNode *stringNode;
+    JsonDateNode *dateNode;
+    JsonObjectNode *objectNode;
+    JsonArrayNode *arrayNode;
+    if (node != NULL)
+    {
+        switch (node->getType())
+        {
+        case  Bool:
+            boolNode = (JsonBoolNode *)node;
+            returnNode->val(boolNode->val());
+            break;
+        case  Number:
+            numberNode = (JsonNumberNode *)node;
+            returnNode->val(numberNode->val()!=0);
+            break;
+        case  String:
+            stringNode = (JsonStringNode *)node;
+            returnNode->val(!stringNode->val().empty());
+            break;
+        case  Date:
+            dateNode = (JsonDateNode *)node;
+            returnNode->val(dateNode->val()!=0);
+            break;
+        case  Object:
+            objectNode = (JsonObjectNode *)node;
+            returnNode->val(!stringNode->val().empty());
+            break;
+        case  Array:
+            arrayNode = (JsonArrayNode *)node;
+            returnNode->val(!arrayNode->empty());
+            break;
+        default:
+            break;
+        }
+    }
+    return returnNode;
+}
+
 bool JsonBoolNode::equals(JsonNode* node){
     if(node->TYPE == Bool){
         return value == ((JsonBoolNode*) node)->val();
@@ -69,6 +113,21 @@ void JsonStringNode::val(const std::string &v){
 std::string JsonStringNode::toString(){
     std::string str = this->value;
     return str;
+}
+
+JsonNode *JsonStringNode::doCast(JsonNode *node)
+{
+    JsonStringNode *returnNode = new JsonStringNode();
+
+    if (node != NULL){
+        if(node->getType() == String){
+            returnNode->val(node->toString());
+        }else{
+            JsonStringNode* stringNode = (JsonStringNode *)node;
+            returnNode->val(stringNode->val());
+        }
+    }
+    return returnNode;
 }
 
 std::string JsonStringNode::reverse(std::string s){
@@ -115,6 +174,16 @@ std::string JsonDateNode::toString(){
     std::string str = ctime(&value);
     str.erase(std::remove(str.begin(), str.end(), '\n'), str.end());
     return "\"" + str + "\"";
+}
+
+JsonNode *JsonDateNode::doCast(JsonNode *node){
+    JsonDateNode *returnNode = new JsonDateNode(0);
+    JsonNumberNode *numberNode;
+    if (node != NULL&&node->getType() == Number){
+        numberNode = (JsonNumberNode *)node;
+        returnNode->val(numberNode->val() != 0);
+    }
+    return returnNode;
 }
 
 std::string JsonDateNode::format(std::string format){
@@ -196,6 +265,51 @@ std::string JsonNumberNode::toString(){
     return str;
 }
 
+JsonNode *JsonNumberNode::doCast(JsonNode *node)
+{
+    JsonNumberNode *returnNode = new JsonNumberNode(true);
+
+    JsonBoolNode *boolNode;
+    JsonNumberNode *numberNode;
+    JsonStringNode *stringNode;
+    JsonDateNode *dateNode;
+    JsonObjectNode *objectNode;
+    JsonArrayNode *arrayNode;
+    if (node != NULL)
+    {
+        switch (node->getType())
+        {
+        case Bool:
+            boolNode = (JsonBoolNode *)node;
+            returnNode->val(boolNode->val());
+            break;
+        case Number:
+            numberNode = (JsonNumberNode *)node;
+            returnNode->val(numberNode->val() != 0);
+            break;
+        case String:
+            stringNode = (JsonStringNode *)node;
+            returnNode->val(stringNode->val().size());
+            break;
+        case Date:
+            dateNode = (JsonDateNode *)node;
+            returnNode->val(dateNode->val());
+            break;
+        case Object:
+            objectNode = (JsonObjectNode *)node;
+            returnNode->val(!stringNode->val().size());
+            break;
+        case Array:
+            arrayNode = (JsonArrayNode *)node;
+            returnNode->val(!arrayNode->size());
+            break;
+        default:
+            break;
+        }
+    }
+    return returnNode;
+}
+
 bool JsonNumberNode::equals(JsonNode *node){ 
     if (node->TYPE == Number){
         return value == ((JsonNumberNode *)node)->val();
@@ -208,6 +322,9 @@ bool JsonNumberNode::equals(JsonNode *node){
 JsonObjectNode::~JsonObjectNode(){}
 
 JsonObjectNode::JsonObjectNode(){}
+
+JsonObjectNode::JsonObjectNode(std::map<const std::string, JsonNode *> vals)
+    : values(vals) {}
 
 std::string JsonObjectNode::toString(){
     std::map<const std::string, JsonNode *> vals = this->values;
@@ -224,6 +341,71 @@ std::string JsonObjectNode::toString(){
     str += "}";
     return str;
 }
+
+JsonNode *JsonObjectNode::doCast(JsonNode *node)
+{
+    JsonObjectNode *returnNode = new JsonObjectNode();
+
+    JsonBoolNode *boolNode;
+    JsonNumberNode *numberNode;
+    JsonStringNode *stringNode;
+    JsonDateNode *dateNode;
+    JsonObjectNode *objectNode;
+    JsonArrayNode *arrayNode;
+    if (node != NULL)
+    {
+        switch (node->getType())
+        {
+        case Bool:
+            boolNode = (JsonBoolNode *)node;
+            returnNode->push("value", boolNode);
+            break;
+        case Number:
+            numberNode = (JsonNumberNode *)node;
+            returnNode->push("value", numberNode);
+            break;
+        case String:
+            stringNode = (JsonStringNode *)node;
+            returnNode->push("value", stringNode);
+            break;
+        case Date:
+            dateNode = (JsonDateNode *)node;
+            returnNode->push("value", dateNode);
+            break;
+        case Object:
+            objectNode = (JsonObjectNode *)node;
+            delete returnNode;
+            returnNode = NULL;
+            returnNode = objectNode->clone();
+            break;
+        case Array:
+            arrayNode = (JsonArrayNode *)node;
+            delete returnNode;
+            returnNode = NULL;
+            returnNode = arrayNode->toObject();
+            break;
+        default:
+            break;
+        }
+    }
+    return returnNode;
+}
+
+JsonObjectNode *JsonObjectNode::clone(){
+    JsonObjectNode *node = new JsonObjectNode(this->values);
+    return node;
+}
+
+JsonArrayNode *JsonObjectNode::toArray(){ 
+    std::vector<JsonNode *> vals;
+    std::map<const std::string, JsonNode *>::iterator it;
+    for (it = values.begin(); it != values.end(); ++it){
+        vals.push_back(it->second);
+    }
+    JsonArrayNode *node = new JsonArrayNode(vals);
+    return node;
+}
+
 void JsonObjectNode::push(const std::string &k, JsonDateNode *node){
     values.insert(make_pair(k, node));
 }
@@ -251,12 +433,16 @@ void JsonObjectNode::push(const std::string &k, JsonObjectNode *node){
         values.insert(make_pair(k, node));
     }
 }
-void JsonObjectNode::setValues(std::map<const std::string, JsonNode *> vals){
+void JsonObjectNode::val(std::map<const std::string, JsonNode *> vals){
     values = vals;
 }
 
 int JsonObjectNode::size(){
     return values.size();
+}
+
+bool JsonObjectNode::empty(){
+    return values.empty();
 }
 
 JsonNode *JsonObjectNode::get(const std::string k){
@@ -295,6 +481,26 @@ JsonArrayNode::~JsonArrayNode(){}
 
 JsonArrayNode::JsonArrayNode(){}
 
+JsonArrayNode::JsonArrayNode(std::vector<JsonNode *> vals)
+    : values(vals) {}
+
+JsonArrayNode *JsonArrayNode::clone(){
+    JsonArrayNode *node = new JsonArrayNode(values);
+    return node;
+}
+
+JsonObjectNode *JsonArrayNode::toObject(){
+    std::map<const std::string, JsonNode *> vals;
+    int i, loopLimit = values.size();
+    std::ostringstream s;
+    for(i=0;i<loopLimit;i++){
+        s << "value" << i;
+        vals[s.str()] = values[i];
+    }
+    JsonObjectNode *node = new JsonObjectNode(vals);
+    return node;
+}
+
 std::string JsonArrayNode::toString(){
     std::vector<JsonNode *> vals = this->values;
     std::string str = "[";
@@ -309,6 +515,54 @@ std::string JsonArrayNode::toString(){
     str += "]";
     return str;
 }
+JsonNode *JsonArrayNode::doCast(JsonNode *node){
+    JsonArrayNode *returnNode = new JsonArrayNode();
+
+    JsonBoolNode *boolNode;
+    JsonNumberNode *numberNode;
+    JsonStringNode *stringNode;
+    JsonDateNode *dateNode;
+    JsonObjectNode *objectNode;
+    JsonArrayNode *arrayNode;
+    if (node != NULL)
+    {
+        switch (node->getType())
+        {
+        case Bool:
+            boolNode = (JsonBoolNode *)node;
+            returnNode->push(boolNode);
+            break;
+        case Number:
+            numberNode = (JsonNumberNode *)node;
+            returnNode->push(numberNode);
+            break;
+        case String:
+            stringNode = (JsonStringNode *)node;
+            returnNode->push(stringNode);
+            break;
+        case Date:
+            dateNode = (JsonDateNode *)node;
+            returnNode->push(dateNode);
+            break;
+        case Object:
+            objectNode = (JsonObjectNode *)node;
+            delete returnNode;
+            returnNode = NULL;
+            returnNode = objectNode->toArray();
+            break;
+        case Array:
+            arrayNode = (JsonArrayNode *)node;
+            delete returnNode;
+            returnNode = NULL;
+            returnNode = arrayNode->clone();
+            break;
+        default:
+            break;
+        }
+    }
+    return returnNode;
+}
+
 void JsonArrayNode::push(JsonDateNode *node){
     values.push_back(node);
 }
@@ -330,6 +584,14 @@ void JsonArrayNode::push(JsonArrayNode *node){
 
 int JsonArrayNode::size(){
     return values.size();
+}
+
+void JsonArrayNode::val(std::vector<JsonNode *> vals){
+    values = vals;
+}
+
+bool JsonArrayNode::empty(){
+    return values.empty();
 }
 
 JsonNode *JsonArrayNode::get(int i){

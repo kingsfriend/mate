@@ -13,6 +13,8 @@
     {
         enum ExpressionType{
             EXP,
+            EXP_PRIMARY,
+            EXP_ASSIGN,
         };
         
         class Expression : public Command
@@ -21,7 +23,7 @@
             ~Expression();
 
             static const CommandType CMD_TYPE = CMD_EXP;
-            static const ExpressionType DATE_EXP_TYPE = EXP;
+            static const ExpressionType EXP_TYPE = EXP;
 
         protected:
             Expression();
