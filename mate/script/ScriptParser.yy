@@ -55,6 +55,8 @@
 
 %token MAGIC MAGICESC NEWLINE BLOCKEND
 
+%token <std::string> BASE_DATA_TYPE
+
 %token BREAK
 %token CASE
 %token CONTINUE
@@ -72,23 +74,27 @@
 %token REQUIRE
 %token SWITCH
 %token USE
+%token VAR
+%token VAL
 %token WHILE
 
 %token <std::string> UNDEFINED
 
 %token <std::string> IDENTIFIER
-%token <std::string> INTEGER
 %token <std::string> NUMBER
 %token <std::string> STRING_LITERAL
 %token <std::string> WAS
 %token <std::string> WEQUAL
 %token <std::string> WHITESPACE
 %token <std::string> WCOMMA
+%token <std::string> WSEMICOLON
 %token <std::string> WCOLON
 %token <std::string> WLBRACE
 %token <std::string> WRBRACE
 %token <std::string> WLBRACKET
 %token <std::string> WRBRACKET
+%token <std::string> WLANGLE_BRACKET
+%token <std::string> WRANGLE_BRACKET
 
 %token <std::string> INC_OP
 %token <std::string> DEC_OP
@@ -121,31 +127,45 @@ header_directives:
     | require_directive header_directives
     | use_directive
     | use_directive header_directives
+    | var_directive
+    | var_directive header_directives
+    | value_assignment
+    | value_assignment header_directives
 ;
 require_directive:
-    REQUIRE WLBRACKET full_class_name WHITESPACE identifier_list WRBRACKET
+    REQUIRE WLBRACKET var_declaration_list WRBRACKET
+;
+var_directive:
+    VAR WLBRACKET var_declaration_list WRBRACKET
+;
+var_declaration_list:
+    var_declaration
+    | var_declaration WSEMICOLON var_declaration_list
+;
+var_declaration:
+    data_type WHITESPACE identifier_list
 ;
 use_directive:
     USE WLBRACKET use_stms WRBRACKET
 ;
 use_stms:
-    full_class_name
-    | full_class_name WAS IDENTIFIER
-    | full_class_name WCOMMA use_stms
-    | full_class_name WAS IDENTIFIER WCOMMA use_stms
+    data_type
+    | data_type WAS IDENTIFIER
+    | data_type WCOMMA use_stms
+    | data_type WAS IDENTIFIER WCOMMA use_stms
 ;
 namespace:
     NAMESPACE WLBRACKET IDENTIFIER WRBRACKET
 ;
-class_name:
-    IDENTIFIER
-;
-full_class_name:
-    class_name
-    | class_name '.' full_class_name
+data_type:
+    BASE_DATA_TYPE
+    | IDENTIFIER
 ;
 define_directive:
-    DEFINE WLBRACKET class_name WRBRACKET
+    DEFINE WLBRACKET data_type WRBRACKET
+;
+value_assignment:
+    VAL WLBRACKET assignment_expression_list WRBRACKET
 ;
 commands:  
     command 
@@ -157,6 +177,9 @@ command:
     }
     | valuation{
         driver.executeCommand($1);
+    }
+    | value_assignment{
+        cout << "Parser: ALTERNATIVE" << endl;
     }
     | alternative{
         cout << "Parser: ALTERNATIVE" << endl;
@@ -173,7 +196,7 @@ fileword:
         $$ = new EchoCommand($1);   
     }
     | MAGICESC{
-        std::string magicesc = "@@";
+        std::string magicesc = "@";
         $$ = new EchoCommand(magicesc);   
     }
     | NEWLINE{
@@ -183,10 +206,10 @@ fileword:
 ;
 tokenword:
     IDENTIFIER { $$ =  $1; } | PARAM { $$ =  $1; }
-    | INTEGER { $$ =  $1; } | NUMBER { $$ =  $1; } | STRING_LITERAL { $$ =  $1; } | WEQUAL { $$ =  $1; } | WHITESPACE { $$ =  $1; } | WCOLON { $$ =  $1; } | WCOMMA { $$ =  $1; } | WLBRACE { $$ =  $1; } | WRBRACE { $$ =  $1; } | WRBRACKET { $$ =  $1; } | WLBRACKET { $$ =  $1; }
+    | NUMBER { $$ =  $1; } | WEQUAL { $$ =  $1; } | WHITESPACE { $$ =  $1; } | WCOLON { $$ =  $1; } | WCOMMA { $$ =  $1; } | WLBRACE { $$ =  $1; } | WRBRACE { $$ =  $1; } | WRBRACKET { $$ =  $1; } | WLBRACKET { $$ =  $1; }
     | INC_OP { $$ =  $1; } | DEC_OP { $$ =  $1; } | AND_OP { $$ =  $1; } | OR_OP { $$ =  $1; } | LE_OP { $$ =  $1; } | GE_OP { $$ =  $1; } | EQ_OP { $$ =  $1; } | NE_OP { $$ =  $1; } | L_OP { $$ =  $1; } | G_OP { $$ =  $1; }
     | CHAR { $$ =  $1; }
-    | UNDEFINED { $$ =  $1; }
+    | UNDEFINED { $$ =  $1; } | BASE_DATA_TYPE { $$ =  $1; }
 ;
 valuation:
     MAGIC WLBRACKET expression WRBRACKET {
@@ -291,10 +314,8 @@ param_init:
     PARAM WEQUAL expression
 ;
 loop_directive:
-    BREAK WHITESPACE
-    | CONTINUE WHITESPACE
-    | BREAK WLBRACKET INTEGER WRBRACKET
-    | CONTINUE WLBRACKET INTEGER WRBRACKET
+    BREAK
+    | CONTINUE
 ;
 template_name:
     IDENTIFIER
@@ -309,13 +330,41 @@ identifier_list:
 ;
 expression:
     primary_expression
+    | assignment_expression
+;
+assignment_expression:
+    IDENTIFIER WEQUAL expression
+;
+assignment_expression_list:
+    assignment_expression
+    | assignment_expression WCOMMA assignment_expression_list
 ;
 primary_expression: 
     IDENTIFIER
 	| NUMBER
-	| INTEGER
 	| STRING_LITERAL
 	| WLBRACKET expression WRBRACKET
+	| json_array
+	| json_object
+;
+primary_expression_list:
+    primary_expression
+    | primary_expression WCOMMA primary_expression_list
+;
+json_array:
+    WLANGLE_BRACKET WRANGLE_BRACKET
+    | WLANGLE_BRACKET primary_expression_list WRANGLE_BRACKET
+;
+key_value_expression:
+    IDENTIFIER WCOLON expression
+;
+key_value_expression_list:
+    key_value_expression
+    | key_value_expression WCOMMA key_value_expression_list
+;
+json_object:
+    WLBRACE WRBRACE
+    | WLBRACE key_value_expression_list WRBRACE
 ;
 end_block:
     BLOCKEND WHITESPACE

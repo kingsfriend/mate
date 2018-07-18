@@ -6,28 +6,35 @@
   */
 @namespace(test)
 
-@use(lang)
+@use(String)
 
-@require(String fatherName, motherName)
-@require(Array childrenNames)
-
+@require(String var1, var2)
 @require(Number familiesCount)
+
+@var(String fatherName, motherName)
+@var(Bool hasChild; Array childrenNames)
+@var(Ojbect mateLang)
+
+@val(fatherName=@"Bruce", motherName=@"Lee")
+@val(hasChild=true, childrenNames=[@"Cedric", @"Martin", @"Pierre", @"Lea"])
+
 @define( Family )
 Family Description
 ==================
+@val(mateLang= { nom:@"Mate", description :@"Programming Lang", keyords:[@"mate", 155, true]} )
 
-    Father's Name: @(fatherName) @\
+    Father's Name: @(fatherName, j) @\
     Mother's Name: @(motherName) @@\
 	Number of child: @(childrenNamesCount,0) @// valuation operator is null safe
 
-	@@include( ChildrenSection, { @fatherName = 1, @motherName = "bla" })
+	@@include( ChildrenSection, { @fatherName = 1, @motherName = @@"bla" })
 
 	List of children's names
 	------------------------
 @	@foreach( childName : childrenNames )
 		> @(childName)
-		@break(21)
-		@continue(3)
+		@break @
+		@continue @
 	@empty 
 		> there is no child name to display.
 	@end 

@@ -20,7 +20,7 @@ script-build script-b: script-build-base script-build-test
 
 script-build-base script-bb :
 	flex -o $(src_script_dir)/ScriptScanner.cpp $(src_script_dir)/ScriptScanner.ll
-	bison -o $(src_script_dir)/ScriptParser.cpp $(src_script_dir)/ScriptParser.yy -d
+	bison -o $(src_script_dir)/ScriptParser.cpp $(src_script_dir)/ScriptParser.yy -d -v
 
 script-build-test script-bt  : script-build-base
 	mkdir -p $(test_script_dir)/output/

@@ -126,6 +126,14 @@ E			[Ee][+-]?{D}+
 	// cout << "Scanner: @use" << endl;
 	return mate::ScriptParser::make_USE(mate::location()); 
 }
+"@val" {
+	// cout << "Scanner: @val" << endl;
+	return mate::ScriptParser::make_VAL(mate::location()); 
+}
+"@var" {
+	// cout << "Scanner: @var" << endl;
+	return mate::ScriptParser::make_VAR(mate::location()); 
+}
 "@while" {
 	// cout << "Scanner: @while" << endl;
 	return mate::ScriptParser::make_WHILE(mate::location()); 
@@ -173,25 +181,12 @@ E			[Ee][+-]?{D}+
 	return mate::ScriptParser::make_G_OP(std::string(yytext, yyleng), mate::location()); 
 }
 
-
-";" { 
-	// cout << "Scanner: ;" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"]" { 
-	// cout << "Scanner: ]" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
 "." { 
 	// cout << "Scanner: ." << endl;
 	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
 }
 "&" { 
 	// cout << "Scanner: &" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"[" { 
-	// cout << "Scanner: [" << endl;
 	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
 }
 "!" { 
@@ -235,9 +230,14 @@ E			[Ee][+-]?{D}+
 	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
 }
 
+	
+("Bool")|("Number")|("String")|("Date")|("Object")|("Array") {
+	// cout << "Scanner: @while" << endl;
+	return mate::ScriptParser::make_BASE_DATA_TYPE(std::string(yytext, yyleng), mate::location()); 
+}
 
-L?\"(\\.|[^\\"])*\" { 
-	// cout << "Scanner: STRING_LITERAL" << endl;
+("@"(L?\"(\\.|[^\\"])*\"))|("@"(L?'(\\.|[^\'])*')) { // "
+	// cout << "Scanner: STRING_LITERAL " << yytext << endl;
 	return mate::ScriptParser::make_STRING_LITERAL(std::string(yytext, yyleng), mate::location()); 
 }
 
@@ -245,11 +245,7 @@ L?\"(\\.|[^\\"])*\" {
 	// cout << "Scanner: IDENTIFIER" << endl;
 	return mate::ScriptParser::make_IDENTIFIER(std::string(yytext, yyleng), mate::location()); 
 }
-{D}+ { 
-	// cout << "Scanner: INTEGER" << endl;
-	return mate::ScriptParser::make_INTEGER(std::string(yytext, yyleng), mate::location()); 
-}
-{D}+"."{D}*({E}) { 
+{D}+("."{D}*({E}))? { 
 	// cout << "Scanner: NUMBER" << endl;
 	return mate::ScriptParser::make_NUMBER(std::string(yytext, yyleng), mate::location()); 
 }
@@ -289,6 +285,10 @@ L?\"(\\.|[^\\"])*\" {
 	// cout << "Scanner: WCOMMA" << endl;
 	return mate::ScriptParser::make_WCOMMA(std::string(yytext, yyleng), mate::location());
 }
+{W}*";"{W}* { 
+	// cout << "Scanner: WSEMICOLON" << endl;
+	return mate::ScriptParser::make_WSEMICOLON(std::string(yytext, yyleng), mate::location());
+}
 {W}*"="{W}* { 
 	// cout << "Scanner: WEQUAL" << endl;
 	return mate::ScriptParser::make_WEQUAL(std::string(yytext, yyleng), mate::location());
@@ -296,6 +296,14 @@ L?\"(\\.|[^\\"])*\" {
 {W}*"@as"{W}* { 
 	// cout << "Scanner: WAS" << endl;
 	return mate::ScriptParser::make_WAS(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"["{W}* { 
+	// cout << "Scanner: [" << endl;
+	return mate::ScriptParser::make_WLANGLE_BRACKET(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"]"{W}* { 
+	// cout << "Scanner: ]" << endl;
+	return mate::ScriptParser::make_WRANGLE_BRACKET(std::string(yytext, yyleng), mate::location()); 
 }
 "@"{L}({L}|{D})* { 
 	// cout << "Scanner: PARAM" << endl;
