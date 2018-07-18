@@ -1,5 +1,5 @@
-#ifndef MATE_EXPRESSION_COMMAND_HH
-    #define MATE_EXPRESSION_COMMAND_HH
+#ifndef MATE_EXPRESSION_HH
+    #define MATE_EXPRESSION_HH
     
     #include <cmath>
     #include <memory>
@@ -13,12 +13,6 @@
     {
         enum ExpressionType{
             EXP,
-            EXP_STRING,
-            EXP_NUM,
-            EXP_DATE,
-            EXP_CMP,
-            EXP_BOOL,
-            EXP_,
         };
         
         class Expression : public Command
@@ -35,4 +29,4 @@
         
     } // mate
 
-#endif //MATE_EXPRESSION_COMMAND_HH
+#endif //MATE_EXPRESSION_HH

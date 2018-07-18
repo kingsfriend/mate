@@ -237,8 +237,11 @@ E			[Ee][+-]?{D}+
 }
 
 ("@"(L?\"(\\.|[^\\"])*\"))|("@"(L?'(\\.|[^\'])*')) { // "
-	// cout << "Scanner: STRING_LITERAL " << yytext << endl;
-	return mate::ScriptParser::make_STRING_LITERAL(std::string(yytext, yyleng), mate::location()); 
+	std::string str(yytext, yyleng);
+	str.erase(0,2);
+	str.erase(str.size()-1);
+	// cout << "Scanner: STRING_LITERAL " << str << endl;
+	return mate::ScriptParser::make_STRING_LITERAL(str, mate::location()); 
 }
 
 {L}({L}|{D})* { 

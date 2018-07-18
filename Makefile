@@ -64,15 +64,7 @@ json-build json-b:
 	g++ $(test_json_dir)/json_test.cpp \
 		$(src_ast_dir)/Json.cpp \
 			$(src_ast_command_dir)/Command.cpp \
-				$(src_ast_command_blok_dir)/ConditionalBlock.cpp \
-				$(src_ast_command_blok_dir)/BreakableBlock.cpp \
-				$(src_ast_command_blok_dir)/ContinueableBlock.cpp \
-				$(src_ast_command_expression_dir)/CmpExpression.cpp \
-				$(src_ast_command_expression_dir)/BoolExpression.cpp \
-				$(src_ast_command_expression_dir)/DateExpression.cpp \
-				$(src_ast_command_expression_dir)/ExpressionCommand.cpp \
-				$(src_ast_command_expression_dir)/NumExpression.cpp \
-				$(src_ast_command_expression_dir)/StringExpression.cpp \
+				$(src_ast_command_expression_dir)/Expression.cpp \
 			$(src_ast_context_dir)/Context.cpp \
 			$(src_ast_context_dir)/ContextStack.cpp \
 		-o $(test_json_dir)/output/json_test.out

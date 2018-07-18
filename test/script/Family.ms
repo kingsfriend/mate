@@ -11,23 +11,26 @@
 @require(String var1, var2)
 @require(Number familiesCount)
 
-@var(String fatherName, motherName)
-@var(Bool hasChild; Array childrenNames)
+@var(String fatherName=@"", motherName)
+@var(Bool hasChild)
+@var(Array childrenNames)
 @var(Ojbect mateLang)
 
-@val(fatherName=@"Bruce", motherName=@"Lee")
-@val(hasChild=true, childrenNames=[@"Cedric", @"Martin", @"Pierre", @"Lea"])
-
+@/*
+	@val(fatherName=@"Bruce", motherName=@"Lee")
+	@val(hasChild=true, childrenNames=[@"Cedric", @"Martin", @"Pierre", @"Lea"])
+*/
 @define( Family )
 Family Description
 ==================
-@val(mateLang= { nom:@"Mate", description :@"Programming Lang", keyords:[@"mate", 155, true]} )
-
+@/*
+	@val(mateLang= { nom:@"Mate", description :@"Programming Lang", keyords:[@"mate", 155, true]} )
+*/
     Father's Name: @(fatherName, j) @\
     Mother's Name: @(motherName) @@\
 	Number of child: @(childrenNamesCount,0) @// valuation operator is null safe
 
-	@@include( ChildrenSection, { @fatherName = 1, @motherName = @@"bla" })
+	@@include( ChildrenSection, { @@fatherName = 1, @@motherName = @@"bla" })
 
 	List of children's names
 	------------------------

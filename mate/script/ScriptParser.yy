@@ -133,17 +133,13 @@ header_directives:
     | value_assignment header_directives
 ;
 require_directive:
-    REQUIRE WLBRACKET var_declaration_list WRBRACKET
+    REQUIRE WLBRACKET var_declaration WRBRACKET
 ;
 var_directive:
-    VAR WLBRACKET var_declaration_list WRBRACKET
-;
-var_declaration_list:
-    var_declaration
-    | var_declaration WSEMICOLON var_declaration_list
+    VAR WLBRACKET var_declaration WRBRACKET
 ;
 var_declaration:
-    data_type WHITESPACE identifier_list
+    data_type WHITESPACE identifier_init_list
 ;
 use_directive:
     USE WLBRACKET use_stms WRBRACKET
@@ -205,7 +201,7 @@ fileword:
     }
 ;
 tokenword:
-    IDENTIFIER { $$ =  $1; } | PARAM { $$ =  $1; }
+    IDENTIFIER { $$ =  $1; }
     | NUMBER { $$ =  $1; } | WEQUAL { $$ =  $1; } | WHITESPACE { $$ =  $1; } | WCOLON { $$ =  $1; } | WCOMMA { $$ =  $1; } | WLBRACE { $$ =  $1; } | WRBRACE { $$ =  $1; } | WRBRACKET { $$ =  $1; } | WLBRACKET { $$ =  $1; }
     | INC_OP { $$ =  $1; } | DEC_OP { $$ =  $1; } | AND_OP { $$ =  $1; } | OR_OP { $$ =  $1; } | LE_OP { $$ =  $1; } | GE_OP { $$ =  $1; } | EQ_OP { $$ =  $1; } | NE_OP { $$ =  $1; } | L_OP { $$ =  $1; } | G_OP { $$ =  $1; }
     | CHAR { $$ =  $1; }
@@ -324,9 +320,13 @@ expression_statement:
     ';'
 	| expression ';'
 ;
-identifier_list: 
+identifier_init: 
     IDENTIFIER
-	| IDENTIFIER WCOMMA identifier_list
+    | IDENTIFIER WEQUAL expression
+;
+identifier_init_list: 
+    identifier_init
+	| identifier_init WCOMMA identifier_init_list
 ;
 expression:
     primary_expression

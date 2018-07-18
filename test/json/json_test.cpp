@@ -1,12 +1,6 @@
 #include "../../mate/ast/Json.hpp"
 #include "../../mate/ast/context/Context.hpp"
 #include "../../mate/ast/context/ContextStack.hpp"
-#include "../../mate/ast/command/expression/BoolExpression.hpp"
-#include "../../mate/ast/command/expression/CmpExpression.hpp"
-#include "../../mate/ast/command/expression/DateExpression.hpp"
-#include "../../mate/ast/command/expression/NumExpression.hpp"
-#include "../../mate/ast/command/expression/StringExpression.hpp"
-#include "../../mate/ast/command/blok/ContinueableBlock.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -38,12 +32,6 @@ int main(int argc, char const *argv[])
     reverse = JsonStringNode::reverse(str);
     std::cout << "Reverse : " << str << " => " << reverse << "\n";
 
-    NumExpression numExp1(&jsNumber1);
-    NumExpression numExp2(100);
-
-    BinaryNumberExp sum(EXP_BI_NUM_ADD, &numExp1, &numExp2);
-
-    // sumResult = sum.executeAsNum();
 
     jsObject1.push("num1", &jsNumber1);
     jsObject1.push("num2", &jsNumber2);
