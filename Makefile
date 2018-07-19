@@ -49,7 +49,10 @@ script-build-test script-bt  : script-build-base
 				$(src_ast_command_expression_dir)/VariableDeclaration.cpp \
 			-o $(test_script_dir)/output/script_test.out
 
-	
+script-debug-test script-dt  : script-build-test
+	gdb $(test_script_dir)/output/script_test.out
+
+
 script-run script-r script-rt: script-build-test
 	./$(test_script_dir)/output/script_test.out
 

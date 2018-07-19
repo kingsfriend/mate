@@ -164,8 +164,12 @@ header_directives:
     | require_directive header_directives
     | use_directive
     | use_directive header_directives
-    | var_directive
-    | var_directive header_directives
+    | var_directive {
+        driver.executeCommand($1);
+    }
+    | var_directive{
+        driver.executeCommand($1);
+    } header_directives
     | value_assignment
     | value_assignment header_directives
 ;

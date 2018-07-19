@@ -16,13 +16,13 @@
 @var(Array childrenNames)
 @var(Object mateLang)
 
-@val(fatherName=@"Bruce", motherName=@"Lee")
-@val(hasChild=true, childrenNames=[@"Cedric", @"Martin", @"Pierre", @"Lea"])
+@value(fatherName=@"Bruce", motherName=@"Lee")
+@value(hasChild=true, childrenNames=[@"Cedric", @"Martin", @"Pierre", @"Lea"])
 
 @define( Family )
 Family Description
 ==================
-@val(mateLang= { nom:@"Mate", description :@"Programming Lang", keyords:[@"mate", 155, true]} )
+@value(mateLang= { nom:@"Mate", description :@"Programming Lang", keyords:[@"mate", 155, true]} )
 
     Father's Name: @(fatherName, j) @\
     Mother's Name: @(motherName) @\

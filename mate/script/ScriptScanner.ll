@@ -125,8 +125,8 @@ E			[Ee][+-]?{D}+
 	// cout << "Scanner: @use" << endl;
 	return mate::ScriptParser::make_USE(mate::location()); 
 }
-"@val" {
-	// cout << "Scanner: @val" << endl;
+"@value" {
+	// cout << "Scanner: @value" << endl;
 	return mate::ScriptParser::make_VAL(mate::location()); 
 }
 "@var" {
