@@ -14,7 +14,7 @@
 @var(String fatherName=@"", motherName)
 @var(Bool hasChild)
 @var(Array childrenNames)
-@var(Ojbect mateLang)
+@var(Object mateLang)
 
 @/*
 	@val(fatherName=@"Bruce", motherName=@"Lee")

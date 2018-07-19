@@ -16,6 +16,7 @@
     #include <utility>
     #include <stdint.h>
     #include "../ast/Json.hpp"
+    #include "../ast/error/Log.hpp"
     #include "../ast/JsonPair.hpp"
     #include "../ast/command/EchoCommand.hpp"
     #include "../ast/command/ValuationCommand.hpp"
@@ -147,10 +148,9 @@
 %%
 script:
     header_directives define_directive
-    | header_directives define_directive commands
-    | WHITESPACE namespace header_directives define_directive commands
-    | namespace header_directives define_directive commands
-    | define_directive commands
+    | WHITESPACE  namespace header_directives define_directive
+    | namespace header_directives define_directive
+    | define_directive
 ;
 header_directives:
     WHITESPACE
@@ -204,7 +204,8 @@ data_type:
     }
 ;
 define_directive:
-    DEFINE WLBRACKET data_type WRBRACKET
+    DEFINE WLBRACKET IDENTIFIER WRBRACKET
+    | DEFINE WLBRACKET IDENTIFIER WRBRACKET commands
 ;
 value_assignment:
     VAL WLBRACKET assignment_expression_list WRBRACKET

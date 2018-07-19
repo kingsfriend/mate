@@ -39,7 +39,6 @@ E			[Ee][+-]?{D}+
 
 "@//"[^\n]*\n { 
 	// cout << "Scanner: INLINECOMMENT [" << yytext << "]" << endl;
-
  }
 "@@" { 
 	// cout << "Scanner: MAGICESC [\" @@ \"]" << endl;
