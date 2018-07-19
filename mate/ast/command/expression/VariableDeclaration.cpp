@@ -15,9 +15,8 @@ void VariableDeclaration::push(JsonPair val){
 
 JsonNode *VariableDeclaration::execute(Interpreter* interpreter) {
     int i, loopLimit = values.size();
-    std::ostringstream s;
     for (i = 0; i < loopLimit; i++){
-        const std::string key = values[i].key;
+        std::string key = values[i].key;
         JsonNode *val;
         Expression *exp = values[i].value;
         JsonNode *valuatedExp;

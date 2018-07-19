@@ -170,8 +170,12 @@ header_directives:
     | var_directive{
         driver.executeCommand($1);
     } header_directives
-    | value_assignment
-    | value_assignment header_directives
+    | value_assignment{
+        driver.executeCommand($1);
+    }
+    | value_assignment{
+        driver.executeCommand($1);
+    } header_directives
 ;
 require_directive:
     REQUIRE WLBRACKET variable_declaration WRBRACKET
@@ -238,7 +242,7 @@ command:
         driver.executeCommand($1);
     }
     | value_assignment{
-        cout << "Parser: ALTERNATIVE" << endl;
+        driver.executeCommand($1);
     }
     | alternative{
         cout << "Parser: ALTERNATIVE" << endl;
@@ -412,7 +416,7 @@ expression:
 ;
 assignment_expression:
     IDENTIFIER WEQUAL expression{
-
+        $$ = new AssignmentExpression($1, $3);
     }
 ;
 assignment_expression_list:

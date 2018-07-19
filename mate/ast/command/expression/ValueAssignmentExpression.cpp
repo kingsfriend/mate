@@ -15,7 +15,6 @@ ValueAssignmentExpression::ValueAssignmentExpression(std::vector<AssignmentExpre
 
 JsonNode *ValueAssignmentExpression::execute(Interpreter* interpreter){
     int i, loopLimit = values.size();
-    std::ostringstream s;
     for (i = 0; i < loopLimit; i++){
         values[i]->execute(interpreter);
     }

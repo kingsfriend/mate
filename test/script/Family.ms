@@ -11,12 +11,12 @@
 @require(String var1, var2)
 @require(Number familiesCount)
 
-@var(String fatherName=@"MR T.")
+@var(String fatherName, motherName=@"Lee")
 @var(Bool hasChild=true)
 @var(Array childrenNames = [])
 @var(Object mateLang = {})
 
-@value(fatherName=@"Bruce", motherName=@"Lee")
+@value(fatherName=@"Bruce P.")
 @value(hasChild=true, childrenNames=[@"Cedric", @"Martin", @"Pierre", @"Lea"])
 
 @define( Family )
