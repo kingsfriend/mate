@@ -272,16 +272,13 @@ tokenword:
 ;
 valuation:
     MAGIC WLBRACKET expression WRBRACKET {
-        std::string exp = "var1";
-        $$ = new ValuationCommand(exp);
+        Expression* exp;
+        $$ = new ValuationCommand($3);
     }
-    | MAGIC WLBRACKET expression WCOMMA default_value WRBRACKET{
-        std::string exp = "var2";
-        $$ = new ValuationCommand(exp);
+    | MAGIC WLBRACKET expression WCOMMA expression WRBRACKET{
+        Expression* exp;
+        $$ = new ValuationCommand($3, $5);
     }
-;
-default_value:
-    expression
 ;
 alternative:
     if_alternative    

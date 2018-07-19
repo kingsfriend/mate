@@ -11,10 +11,10 @@
 @require(String var1, var2)
 @require(Number familiesCount)
 
-@var(String fatherName=@"", motherName)
-@var(Bool hasChild)
-@var(Array childrenNames)
-@var(Object mateLang)
+@var(String fatherName=@"MR T.")
+@var(Bool hasChild=true)
+@var(Array childrenNames = [])
+@var(Object mateLang = {})
 
 @value(fatherName=@"Bruce", motherName=@"Lee")
 @value(hasChild=true, childrenNames=[@"Cedric", @"Martin", @"Pierre", @"Lea"])
@@ -24,9 +24,9 @@ Family Description
 ==================
 @value(mateLang= { nom:@"Mate", description :@"Programming Lang", keyords:[@"mate", 155, true]} )
 
-    Father's Name: @(fatherName, j) @\
-    Mother's Name: @(motherName) @\
-	Number of child: @(childrenNamesCount,0) @// valuation operator is null safe
+    Father's Name: @(fatherName) @\
+    Mother's Name: @(motherName, @"Nothing to display") @\
+	Number of child: @(childrenNamesCount, 0) @// valuation operator is null safe
 
 	@@include( ChildrenSection, { @@fatherName = 1, @@motherName = @@"bla" })
 

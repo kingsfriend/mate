@@ -20,7 +20,10 @@ JsonNode *VariableDeclaration::execute(Interpreter* interpreter) {
         const std::string key = values[i].key;
         JsonNode *val;
         Expression *exp = values[i].value;
-        JsonNode *valuatedExp = exp->execute(interpreter);
+        JsonNode *valuatedExp;
+        if(exp != NULL){
+            valuatedExp = exp->execute(interpreter);
+        }
         switch (dataType)
         {
         case  Bool:

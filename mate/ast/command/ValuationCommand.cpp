@@ -4,19 +4,31 @@ namespace mate
 {
 // ValuationCommand ----------------------
 
-const std::string ValuationCommand::VALUATION_NULL = "<undefined>";
+const std::string ValuationCommand::VALUATION_NULL = "<null>";
 
-ValuationCommand::ValuationCommand(std::string varKey) : varKey(varKey) {}
+ValuationCommand::ValuationCommand(Expression *exp) 
+    : exp(exp) {
+        defExp = NULL;
+    }
+
+ValuationCommand::ValuationCommand(Expression *exp, Expression *defExp)
+    : exp(exp), defExp(defExp) {}
 
 ValuationCommand::~ValuationCommand(){}
 
 JsonNode *ValuationCommand::execute(Interpreter* interpreter){
-    JsonNode *val = interpreter->context()->get(varKey);
-    if(val!=NULL){
-        interpreter->echo(val->toString());
-    }else{
-        interpreter->echo(VALUATION_NULL);
+    JsonNode *node = NULL;
+    if (exp != NULL){
+        node = exp->execute(interpreter);
     }
+    if(node==NULL && defExp!=NULL){
+        node = defExp->execute(interpreter);
+    }
+    if(node!=NULL){
+        interpreter->echo(node->toString());
+        return NULL;
+    }
+    interpreter->echo(VALUATION_NULL);
     return NULL;
 }
 

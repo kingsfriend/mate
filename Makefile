@@ -56,6 +56,9 @@ script-debug-test script-dt  : script-build-test
 script-run script-r script-rt: script-build-test
 	./$(test_script_dir)/output/script_test.out
 
+script-run-only script-ro :
+	./$(test_script_dir)/output/script_test.out
+
 script-clean script-c: script-clean-test script-clean-base
 
 script-clean-base script-cb:
