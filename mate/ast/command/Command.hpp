@@ -22,6 +22,8 @@
         CMD_EXP_PRIM_INDENTFIER,
         CMD_EXP_PRIM_ARRAY,
         CMD_EXP_PRIM_OBJECT,
+        CMD_EXP_VAL_ASSIGN,
+        CMD_EXP_VAR_DECLARATION,
     };
 
     class Interpreter;

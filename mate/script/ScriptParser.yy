@@ -17,7 +17,6 @@
     #include <stdint.h>
     #include "../ast/Json.hpp"
     #include "../ast/error/Log.hpp"
-    #include "../ast/JsonPair.hpp"
     #include "../ast/command/EchoCommand.hpp"
     #include "../ast/command/ValuationCommand.hpp"
     #include "../ast/command/ValuationCommand.hpp"
@@ -28,10 +27,13 @@
     #include "../ast/command/expression/DateExpression.hpp"
     #include "../ast/command/expression/Expression.hpp"
     #include "../ast/command/expression/IdentifierExpression.hpp"
+    #include "../ast/command/expression/JsonPair.hpp"
     #include "../ast/command/expression/NumExpression.hpp"
     #include "../ast/command/expression/ObjectExpression.hpp"
     #include "../ast/command/expression/PrimaryExpression.hpp"
     #include "../ast/command/expression/StringExpression.hpp"
+    #include "../ast/command/expression/ValueAssignmentExpression.hpp"
+    #include "../ast/command/expression/VariableDeclaration.hpp"
 
     using namespace std;
 
@@ -138,9 +140,15 @@
 %type <BoolExpression*> bool_expression
 %type <ArrayExpression*> array_expression
 %type <ObjectExpression*> object_expression
+%type <ValueAssignmentExpression*> value_assignment
 %type <NodeType> data_type
 %type <JsonPair> key_value_expression
 %type <std::map<const std::string, Expression *>> key_value_expression_list
+
+%type <VariableDeclaration*> var_directive
+%type <VariableDeclaration*> variable_declaration
+%type <std::vector<JsonPair>> variable_init_list
+%type <JsonPair> variable_init
 
 %start script
 %%
@@ -162,13 +170,17 @@ header_directives:
     | value_assignment header_directives
 ;
 require_directive:
-    REQUIRE WLBRACKET var_declaration WRBRACKET
+    REQUIRE WLBRACKET variable_declaration WRBRACKET
 ;
 var_directive:
-    VAR WLBRACKET var_declaration WRBRACKET
+    VAR WLBRACKET variable_declaration WRBRACKET{
+        $$ = $3;
+    }
 ;
-var_declaration:
-    data_type WHITESPACE identifier_init_list
+variable_declaration:
+    data_type WHITESPACE variable_init_list{
+        $$ = new VariableDeclaration($1,$3);
+    }
 ;
 use_directive:
     USE WLBRACKET use_stms WRBRACKET
@@ -206,7 +218,9 @@ define_directive:
     | DEFINE WLBRACKET IDENTIFIER WRBRACKET commands
 ;
 value_assignment:
-    VAL WLBRACKET assignment_expression_list WRBRACKET
+    VAL WLBRACKET assignment_expression_list WRBRACKET{
+        $$ = new ValueAssignmentExpression($3);
+    }
 ;
 commands:  
     command 
@@ -365,13 +379,27 @@ expression_statement:
     ';'
 	| expression ';'
 ;
-identifier_init: 
-    IDENTIFIER
-    | IDENTIFIER WEQUAL expression
+variable_init: 
+    IDENTIFIER{
+        JsonPair jsPair($1, NULL);
+        $$ = jsPair;
+    }
+    | IDENTIFIER WEQUAL expression{
+        JsonPair jsPair($1, $3);
+        $$ = jsPair;
+    }
 ;
-identifier_init_list: 
-    identifier_init
-	| identifier_init WCOMMA identifier_init_list
+variable_init_list: 
+    variable_init{
+        std::vector<JsonPair> vect;
+        $$ = vect;
+        $$.push_back($1);
+    }
+	| variable_init WCOMMA variable_init_list{
+        std::vector<JsonPair> &arg3 = $3;
+        arg3.push_back($1);
+        $$ = arg3;
+    }
 ;
 expression:
     assignment_expression{

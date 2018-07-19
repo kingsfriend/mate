@@ -45,6 +45,8 @@ script-build-test script-bt  : script-build-base
 				$(src_ast_command_expression_dir)/ObjectExpression.cpp \
 				$(src_ast_command_expression_dir)/PrimaryExpression.cpp \
 				$(src_ast_command_expression_dir)/StringExpression.cpp \
+				$(src_ast_command_expression_dir)/ValueAssignmentExpression.cpp \
+				$(src_ast_command_expression_dir)/VariableDeclaration.cpp \
 			-o $(test_script_dir)/output/script_test.out
 
 	

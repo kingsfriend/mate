@@ -1,7 +1,7 @@
 #ifndef MATE_PAIR_HH
 #define MATE_PAIR_HH
     #include <string>
-    #include "command/expression/Expression.hpp"
+    #include "Expression.hpp"
 namespace mate
 {
     class JsonPair{

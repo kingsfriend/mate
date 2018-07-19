@@ -16,16 +16,14 @@
 @var(Array childrenNames)
 @var(Object mateLang)
 
-@/*
-	@val(fatherName=@"Bruce", motherName=@"Lee")
-	@val(hasChild=true, childrenNames=[@"Cedric", @"Martin", @"Pierre", @"Lea"])
-*/
+@val(fatherName=@"Bruce", motherName=@"Lee")
+@val(hasChild=true, childrenNames=[@"Cedric", @"Martin", @"Pierre", @"Lea"])
+
 @define( Family )
 Family Description
 ==================
-@/*
-	@val(mateLang= { nom:@"Mate", description :@"Programming Lang", keyords:[@"mate", 155, true]} )
-*/
+@val(mateLang= { nom:@"Mate", description :@"Programming Lang", keyords:[@"mate", 155, true]} )
+
     Father's Name: @(fatherName, j) @\
     Mother's Name: @(motherName) @\
 	Number of child: @(childrenNamesCount,0) @// valuation operator is null safe

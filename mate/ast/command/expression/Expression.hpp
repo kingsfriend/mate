@@ -11,23 +11,26 @@
     
     namespace mate
     {
-        enum ExpressionType{
-            EXP,
-            EXP_PRIMARY,
-            EXP_ASSIGN,
-        };
-        
-        class Expression : public Command
-        {
-        public:
-            ~Expression();
+    enum ExpressionType
+    {
+        EXP,
+        EXP_PRIMARY,
+        EXP_ASSIGN,
+        EXP_VAL_ASSIGN,
+        EXP_VAR_DECLARATION,
+    };
 
-            static const CommandType CMD_TYPE = CMD_EXP;
-            static const ExpressionType EXP_TYPE = EXP;
+    class Expression : public Command
+    {
+    public:
+        ~Expression();
 
-        protected:
-            Expression();
-        };
+        static const CommandType CMD_TYPE = CMD_EXP;
+        static const ExpressionType EXP_TYPE = EXP;
+
+    protected:
+        Expression();
+    };
         
     } // mate
 
