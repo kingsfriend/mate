@@ -405,34 +405,14 @@ JsonArrayNode *JsonObjectNode::toArray(){
     JsonArrayNode *node = new JsonArrayNode(vals);
     return node;
 }
-
-void JsonObjectNode::push(const std::string &k, JsonDateNode *node){
-    values.insert(make_pair(k, node));
-}
-
-void JsonObjectNode::push(const std::string &k, JsonBoolNode *node){
-    values.insert(make_pair(k, node));
-}
-
-void JsonObjectNode::push(const std::string &k, JsonStringNode *node){
-    values.insert(make_pair(k, node));
-}
-
-void JsonObjectNode::push(const std::string &k, JsonNumberNode *node){
-    values.insert(make_pair(k, node));
-}
-
-void JsonObjectNode::push(const std::string &k, JsonArrayNode *node){
-    values.insert(make_pair(k, node));
-}
-
-void JsonObjectNode::push(const std::string &k, JsonObjectNode *node){
+void JsonObjectNode::push(const std::string &k, JsonNode *node){
     if (node == this){
         std::cout << "EXCEP: CANNOT PUSH AN OBJECT TO ITSELF \n";
     }else{
         values.insert(make_pair(k, node));
     }
 }
+
 void JsonObjectNode::val(std::map<const std::string, JsonNode *> vals){
     values = vals;
 }
@@ -563,25 +543,9 @@ JsonNode *JsonArrayNode::doCast(JsonNode *node){
     return returnNode;
 }
 
-void JsonArrayNode::push(JsonDateNode *node){
+void JsonArrayNode::push(JsonNode *node){
     values.push_back(node);
 }
-void JsonArrayNode::push(JsonBoolNode *node){
-    values.push_back(node);
-}
-void JsonArrayNode::push(JsonStringNode *node){
-    values.push_back(node);
-}
-void JsonArrayNode::push(JsonNumberNode *node){
-    values.push_back(node);
-}
-void JsonArrayNode::push(JsonObjectNode *node){
-    values.push_back(node);
-}
-void JsonArrayNode::push(JsonArrayNode *node){
-    values.push_back(node);
-}
-
 int JsonArrayNode::size(){
     return values.size();
 }

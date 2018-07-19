@@ -25,7 +25,6 @@
     #include "../ast/command/expression/ArrayExpression.hpp"
     #include "../ast/command/expression/AssignmentExpression.hpp"
     #include "../ast/command/expression/BoolExpression.hpp"
-    #include "../ast/command/expression/CastExpression.hpp"
     #include "../ast/command/expression/DateExpression.hpp"
     #include "../ast/command/expression/Expression.hpp"
     #include "../ast/command/expression/IdentifierExpression.hpp"
@@ -133,13 +132,12 @@
 %type <IdentifierExpression*> identifier_expression
 %type <std::vector<AssignmentExpression*>> assignment_expression_list
 %type <PrimaryExpression*> primary_expression
-%type <std::vector<PrimaryExpression*>> primary_expression_list
+%type <std::vector<Expression*>> expression_list
 %type <NumExpression*> number_expression
 %type <StringExpression*> string_expression
 %type <BoolExpression*> bool_expression
 %type <ArrayExpression*> array_expression
 %type <ObjectExpression*> object_expression
-%type <CastExpression*> cast_expression
 %type <NodeType> data_type
 %type <JsonPair> key_value_expression
 %type <std::map<const std::string, Expression *>> key_value_expression_list
@@ -419,9 +417,6 @@ primary_expression:
 	| object_expression{
         $$ = (PrimaryExpression*)$1;
     }
-	| cast_expression{
-        $$ = (PrimaryExpression*)$1;
-    }
 ;
 identifier_expression:
     IDENTIFIER{
@@ -448,8 +443,8 @@ array_expression:
     WLANGLE_BRACKET WRANGLE_BRACKET {
         $$ = new ArrayExpression();
     }
-    | WLANGLE_BRACKET primary_expression_list WRANGLE_BRACKET {
-        // $$ = new ArrayExpression($2);
+    | WLANGLE_BRACKET expression_list WRANGLE_BRACKET {
+        $$ = new ArrayExpression($2);
     }
 ;
 object_expression:
@@ -457,21 +452,17 @@ object_expression:
         $$ = new ObjectExpression();
     }
     | WLBRACE key_value_expression_list WRBRACE{
-        // $$ = new ObjectExpression($2);
+        $$ = new ObjectExpression($2);
     }
 ;
-cast_expression:
-    WLBRACKET data_type WRBRACKET expression{
-        // $$ = new CastExpression($2, $4);
+expression_list:
+    expression{
+        std::vector<Expression*> arg;
+        arg.push_back($1);
+        $$ = arg;
     }
-;
-primary_expression_list:
-    primary_expression{
-        // $$ = std::vector<PrimaryExpression*>;
-        // $$.push_back($1);
-    }
-    | primary_expression WCOMMA primary_expression_list{
-        std::vector<PrimaryExpression*> &arg3 = $3;
+    | expression WCOMMA expression_list{
+        std::vector<Expression*> arg3 = $3;
         arg3.push_back($1);
         $$ = arg3;
     }
@@ -489,9 +480,9 @@ key_value_expression_list:
         $$.insert(std::make_pair($1.key, $1.value));
     }
     | key_value_expression WCOMMA key_value_expression_list{
-        //std::map<const std::string, JsonNode *> &arg3 = $3;
-        //arg3.insert($1);
-        //$$ = arg3;
+        std::map<const std::string, Expression *> &arg3 = $3;
+        arg3.insert(std::make_pair($1.key, $1.value));
+        $$ = arg3;
     }
 ;
 end_block:

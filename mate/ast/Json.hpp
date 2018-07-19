@@ -137,12 +137,7 @@ namespace mate
         JsonObjectNode* clone();
         JsonArrayNode* toArray();
         static JsonNode *doCast(JsonNode *node);
-        void push(const std::string &k, JsonDateNode *node);
-        void push(const std::string &k, JsonBoolNode *node);
-        void push(const std::string &k, JsonStringNode *node);
-        void push(const std::string &k, JsonNumberNode *node);
-        void push(const std::string &k, JsonArrayNode *node);
-        void push(const std::string &k, JsonObjectNode *node);
+        void push(const std::string &k, JsonNode *node);
         void val(std::map<const std::string, JsonNode *> vals);
         int size();
         bool empty();
@@ -167,12 +162,7 @@ namespace mate
         JsonArrayNode *clone();
         JsonObjectNode *toObject();
         std::string toString();
-        void push(JsonDateNode *node);
-        void push(JsonBoolNode *node);
-        void push(JsonStringNode *node);
-        void push(JsonNumberNode *node);
-        void push(JsonObjectNode *node);
-        void push(JsonArrayNode *node);
+        void push(JsonNode *node);
         bool empty();
         int size();
         void val(std::vector<JsonNode *> vals);

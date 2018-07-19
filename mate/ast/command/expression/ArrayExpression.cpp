@@ -4,27 +4,30 @@ namespace mate
 {
 // ArrayExpression ----------------------
 
-ArrayExpression::ArrayExpression(JsonArrayNode *value)
-    : value(value) {}
-ArrayExpression::ArrayExpression(std::vector<JsonNode *> v) {
-    value = new JsonArrayNode(v);
-}
-ArrayExpression::ArrayExpression(){
-    value = new JsonArrayNode();
-}
+
+ArrayExpression::ArrayExpression(std::vector<Expression *> vals) 
+    : values(vals){}
+
+ArrayExpression::ArrayExpression(){}
 
 ArrayExpression::~ArrayExpression(){}
 
-JsonArrayNode *ArrayExpression::executeAsString(Interpreter* interpreter) {
-    return value;
+void ArrayExpression::push(Expression *val){
+    values.push_back(val);
+}
+
+JsonArrayNode *ArrayExpression::executeAsArray(Interpreter* interpreter) {
+    int i, loopLimit = values.size();
+    JsonArrayNode* node= new JsonArrayNode();
+    std::ostringstream s;
+    for (i = 0; i < loopLimit; i++){
+        node->push(values[i]->execute(interpreter));
+    }
+    return node;
 }
 
 JsonNode* ArrayExpression::execute(Interpreter* interpreter){
-    return executeAsString(interpreter);
-}
-
-void ArrayExpression::val(std::vector<JsonNode *> v1){
-    value->val(v1);
+    return executeAsArray(interpreter);
 }
 
 } // namespace mate

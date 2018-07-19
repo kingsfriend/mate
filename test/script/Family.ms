@@ -27,7 +27,7 @@ Family Description
 	@val(mateLang= { nom:@"Mate", description :@"Programming Lang", keyords:[@"mate", 155, true]} )
 */
     Father's Name: @(fatherName, j) @\
-    Mother's Name: @(motherName) @@\
+    Mother's Name: @(motherName) @\
 	Number of child: @(childrenNamesCount,0) @// valuation operator is null safe
 
 	@@include( ChildrenSection, { @@fatherName = 1, @@motherName = @@"bla" })

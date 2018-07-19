@@ -8,19 +8,19 @@ namespace mate
 class ArrayExpression : public PrimaryExpression
 {
   private:
-    JsonArrayNode *value;
+    std::vector<Expression *> values;
 
   public:
-    ArrayExpression(JsonArrayNode *value);
-    ArrayExpression(std::vector<JsonNode *> v);
-    ~ArrayExpression();
     ArrayExpression();
+    ArrayExpression(std::vector<Expression *> values);
+    ~ArrayExpression();
 
     static const CommandType CMD_TYPE = CMD_EXP_PRIM_ARRAY;
     static const PrimaryExpressionType PRIM_EXP_TYPE = PRIM_ARRAY;
-    JsonArrayNode *executeAsString(Interpreter *interpreter);
+
+    void push(Expression * val);
+    JsonArrayNode *executeAsArray(Interpreter* interpreter);
     JsonNode *execute(Interpreter* interpreter);
-    void val(std::vector<JsonNode *> v1);
 };
 
 } // mate

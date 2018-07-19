@@ -38,7 +38,6 @@ script-build-test script-bt  : script-build-base
 				$(src_ast_command_expression_dir)/ArrayExpression.cpp \
 				$(src_ast_command_expression_dir)/AssignmentExpression.cpp \
 				$(src_ast_command_expression_dir)/BoolExpression.cpp \
-				$(src_ast_command_expression_dir)/CastExpression.cpp \
 				$(src_ast_command_expression_dir)/DateExpression.cpp \
 				$(src_ast_command_expression_dir)/Expression.cpp \
 				$(src_ast_command_expression_dir)/IdentifierExpression.cpp \
@@ -55,6 +54,7 @@ script-run script-r script-rt: script-build-test
 script-clean script-c: script-clean-test script-clean-base
 
 script-clean-base script-cb:
+	rm -f $(src_script_dir)/ScriptParser.output
 	rm -f $(src_script_dir)/ScriptScanner.cpp
 	rm -f $(src_script_dir)/location.hh $(src_script_dir)/position.hh $(src_script_dir)/stack.hh
 	rm -f $(src_script_dir)/ScriptParser.cpp $(src_script_dir)/ScriptParser.hpp 
