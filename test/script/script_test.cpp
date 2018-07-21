@@ -43,6 +43,6 @@ int main(int argc, char **argv) {
     inStream.close();
     outStream.close();
 
-    cout << "Parse complete. Result = " << res << endl;
+    cout << "SCRIPT Parse complete. Result = " << res << endl;
     return 0;
 }

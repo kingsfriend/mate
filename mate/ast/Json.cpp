@@ -12,6 +12,9 @@ NodeType JsonNode::getType(){
 std::string JsonNode::toString(){
     return "undefined";
 }
+std::string JsonNode::toQuotedString(){
+    return toString();
+}
 
 bool JsonNode::equals(JsonNode* node){
     return false;
@@ -114,9 +117,12 @@ std::string JsonStringNode::toString(){
     std::string str = this->value;
     return str;
 }
+std::string JsonStringNode::toQuotedString(){
+    std::string str = "\"" + toString()+"\"";
+    return str;
+}
 
-JsonNode *JsonStringNode::doCast(JsonNode *node)
-{
+JsonNode *JsonStringNode::doCast(JsonNode *node){
     JsonStringNode *returnNode = new JsonStringNode();
 
     if (node != NULL){
@@ -334,9 +340,13 @@ std::string JsonObjectNode::toString(){
         std::map<const std::string, JsonNode *>::reverse_iterator it;
         for (it = vals.rbegin(); it != vals.rend(); it++)
         {
-            str += it->first + ":" + it->second->toString() + ",";
+            if(it->second!=NULL){
+                str += "\"" + it->first + "\": " + it->second->toQuotedString() + ", ";
+            }else{
+                str += it->first + ": null, ";
+            }
         }
-        str.erase(str.size() - 1);
+        str.erase(str.size() - 2);
     }
     str += "}";
     return str;
@@ -487,10 +497,14 @@ std::string JsonArrayNode::toString(){
     if (!vals.empty()){
         int i;
         int loopLimit = vals.size() - 1;
-        for (i = 0; i < loopLimit; i++)        {
-            str += vals[i]->toString() + ",";
+        for (i = 0; i < loopLimit; i++){
+            if (vals[i]!=NULL){
+                str += vals[i]->toQuotedString() + ", ";
+            }else{
+                str +=" null,";
+            }
         }
-        str += vals[i]->toString();
+        str += vals[i]->toQuotedString();
     }
     str += "]";
     return str;

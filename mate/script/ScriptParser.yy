@@ -27,7 +27,7 @@
     #include "../ast/command/expression/DateExpression.hpp"
     #include "../ast/command/expression/Expression.hpp"
     #include "../ast/command/expression/IdentifierExpression.hpp"
-    #include "../ast/command/expression/JsonPair.hpp"
+    #include "../ast/command/expression/KeyExpressionPair.hpp"
     #include "../ast/command/expression/NumExpression.hpp"
     #include "../ast/command/expression/ObjectExpression.hpp"
     #include "../ast/command/expression/PrimaryExpression.hpp"
@@ -101,29 +101,56 @@
 %token <std::string> PARAM
 %token <std::string> STRING_LITERAL
 %token <std::string> UNDEFINED
-%token <std::string> WAS
-%token <std::string> WEQUAL
+%token <std::string> AS
 %token <std::string> WHITESPACE
-%token <std::string> WCOMMA
-%token <std::string> WSEMICOLON
-%token <std::string> WCOLON
-%token <std::string> WLBRACE
-%token <std::string> WRBRACE
-%token <std::string> WLBRACKET
-%token <std::string> WRBRACKET
-%token <std::string> WLANGLE_BRACKET
-%token <std::string> WRANGLE_BRACKET
+%token <std::string> COMMA
+%token <std::string> SEMICOLON
+%token <std::string> COLON
+%token <std::string> LBRACE
+%token <std::string> QUESTION
+%token <std::string> RBRACE
+%token <std::string> LBRACKET
+%token <std::string> RBRACKET
+%token <std::string> LANGLE_BRACKET
+%token <std::string> RANGLE_BRACKET
+
+%token <std::string> ASSIGN
+%token <std::string> MUL_ASSIGN
+%token <std::string> DIV_ASSIGN
+%token <std::string> MOD_ASSIGN
+%token <std::string> ADD_ASSIGN
+%token <std::string> SUB_ASSIGN
+%token <std::string> AND_ASSIGN
+%token <std::string> XOR_ASSIGN
+%token <std::string> OR_ASSIGN
+%token <std::string> EXC_ASSIGN
+
+%token <std::string> MUL_SIGN
+%token <std::string> DIV_SIGN
+%token <std::string> MOD_SIGN
+%token <std::string> ADD_SIGN
+%token <std::string> SUB_SIGN
+%token <std::string> AND_SIGN
+%token <std::string> XOR_SIGN
+%token <std::string> OR_SIGN
 
 %token <std::string> INC_OP
 %token <std::string> DEC_OP
 %token <std::string> AND_OP
 %token <std::string> OR_OP
-%token <std::string> LE_OP
-%token <std::string> GE_OP
-%token <std::string> EQ_OP
-%token <std::string> NE_OP
-%token <std::string> L_OP
-%token <std::string> G_OP
+
+%token <std::string> AND_LOGIC
+%token <std::string> EXC_LOGIC
+%token <std::string> OR_LOGIC
+
+%token <std::string> LE_CMP
+%token <std::string> GE_CMP
+%token <std::string> EQ_CMP
+%token <std::string> NE_CMP
+%token <std::string> L_CMP
+%token <std::string> G_CMP
+
+%token <std::string> PERIOD
 
 %type <EchoCommand*> fileword
 %type <ValuationCommand*> valuation
@@ -142,13 +169,13 @@
 %type <ObjectExpression*> object_expression
 %type <ValueAssignmentExpression*> value_assignment
 %type <NodeType> data_type
-%type <JsonPair> key_value_expression
+%type <KeyExpressionPair> key_value_expression
 %type <std::map<const std::string, Expression *>> key_value_expression_list
 
 %type <VariableDeclaration*> var_directive
 %type <VariableDeclaration*> variable_declaration
-%type <std::vector<JsonPair>> variable_init_list
-%type <JsonPair> variable_init
+%type <std::vector<KeyExpressionPair>> variable_init_list
+%type <KeyExpressionPair> variable_init
 
 %start script
 %%
@@ -178,10 +205,10 @@ header_directives:
     } header_directives
 ;
 require_directive:
-    REQUIRE WLBRACKET variable_declaration WRBRACKET
+    REQUIRE LBRACKET variable_declaration RBRACKET
 ;
 var_directive:
-    VAR WLBRACKET variable_declaration WRBRACKET{
+    VAR LBRACKET variable_declaration RBRACKET{
         $$ = $3;
     }
 ;
@@ -191,16 +218,16 @@ variable_declaration:
     }
 ;
 use_directive:
-    USE WLBRACKET use_stms WRBRACKET
+    USE LBRACKET use_stms RBRACKET
 ;
 use_stms:
     data_type
-    | data_type WAS IDENTIFIER
-    | data_type WCOMMA use_stms
-    | data_type WAS IDENTIFIER WCOMMA use_stms
+    | data_type AS IDENTIFIER
+    | data_type COMMA use_stms
+    | data_type AS IDENTIFIER COMMA use_stms
 ;
 namespace:
-    NAMESPACE WLBRACKET IDENTIFIER WRBRACKET
+    NAMESPACE LBRACKET IDENTIFIER RBRACKET
 ;
 data_type:
     BASE_DATA_TYPE{
@@ -222,11 +249,11 @@ data_type:
     }
 ;
 define_directive:
-    DEFINE WLBRACKET IDENTIFIER WRBRACKET
-    | DEFINE WLBRACKET IDENTIFIER WRBRACKET commands
+    DEFINE LBRACKET IDENTIFIER RBRACKET
+    | DEFINE LBRACKET IDENTIFIER RBRACKET commands
 ;
 value_assignment:
-    VAL WLBRACKET assignment_expression_list WRBRACKET{
+    VAL LBRACKET assignment_expression_list RBRACKET{
         $$ = new ValueAssignmentExpression($3);
     }
 ;
@@ -269,17 +296,17 @@ fileword:
 ;
 tokenword:
     IDENTIFIER { $$ =  $1; }
-    | NUMBER { $$ =  $1; } | WEQUAL { $$ =  $1; } | WHITESPACE { $$ =  $1; } | WCOLON { $$ =  $1; } | WCOMMA { $$ =  $1; } | WLBRACE { $$ =  $1; } | WRBRACE { $$ =  $1; } | WRBRACKET { $$ =  $1; } | WLBRACKET { $$ =  $1; }
-    | INC_OP { $$ =  $1; } | DEC_OP { $$ =  $1; } | AND_OP { $$ =  $1; } | OR_OP { $$ =  $1; } | LE_OP { $$ =  $1; } | GE_OP { $$ =  $1; } | EQ_OP { $$ =  $1; } | NE_OP { $$ =  $1; } | L_OP { $$ =  $1; } | G_OP { $$ =  $1; }
+    | NUMBER { $$ =  $1; } | ASSIGN { $$ =  $1; } | WHITESPACE { $$ =  $1; } | COLON { $$ =  $1; } | COMMA { $$ =  $1; } | LBRACE { $$ =  $1; } | RBRACE { $$ =  $1; } | RBRACKET { $$ =  $1; } | LBRACKET { $$ =  $1; }
+    | INC_OP { $$ =  $1; } | DEC_OP { $$ =  $1; } | AND_OP { $$ =  $1; } | OR_OP { $$ =  $1; } | LE_CMP { $$ =  $1; } | GE_CMP { $$ =  $1; } | EQ_CMP { $$ =  $1; } | NE_CMP { $$ =  $1; } | L_CMP { $$ =  $1; } | G_CMP { $$ =  $1; }
     | CHAR { $$ =  $1; }
     | UNDEFINED { $$ =  $1; } | BASE_DATA_TYPE { $$ =  $1; }
 ;
 valuation:
-    MAGIC WLBRACKET expression WRBRACKET {
+    MAGIC LBRACKET expression RBRACKET {
         Expression* exp;
         $$ = new ValuationCommand($3);
     }
-    | MAGIC WLBRACKET expression WCOMMA expression WRBRACKET{
+    | MAGIC LBRACKET expression COMMA expression RBRACKET{
         Expression* exp;
         $$ = new ValuationCommand($3, $5);
     }
@@ -295,16 +322,16 @@ if_alternative:
     | if_block elseif_blocks else_block end_block
 ;
 if_block:
-    IF WLBRACKET expression WRBRACKET
-    | IF WLBRACKET expression WRBRACKET commands
+    IF LBRACKET expression RBRACKET
+    | IF LBRACKET expression RBRACKET commands
 ;
 elseif_blocks:
     elseif_block
     | elseif_block elseif_blocks
 ;
 elseif_block:
-    ELSEIF WLBRACKET expression WRBRACKET
-    | ELSEIF WLBRACKET expression WRBRACKET commands
+    ELSEIF LBRACKET expression RBRACKET
+    | ELSEIF LBRACKET expression RBRACKET commands
 ;
 else_block:
     ELSE WHITESPACE
@@ -317,16 +344,16 @@ switch_alternative:
     | switch_block case_blocks default_block end_block
 ;
 switch_block:
-    SWITCH WLBRACKET expression WCOMMA expression WRBRACKET
-    | SWITCH WLBRACKET expression WCOMMA expression WRBRACKET commands
+    SWITCH LBRACKET expression COMMA expression RBRACKET
+    | SWITCH LBRACKET expression COMMA expression RBRACKET commands
 ;
 case_blocks:
     case_block
     | case_block case_blocks
 ;
 case_block:
-    CASE WLBRACKET expression WRBRACKET
-    | CASE WLBRACKET expression WRBRACKET commands
+    CASE LBRACKET expression RBRACKET
+    | CASE LBRACKET expression RBRACKET commands
 ;
 default_block:
     DEFAULT WHITESPACE
@@ -338,20 +365,20 @@ loop:
     | while_loop
 ;
 while_loop:
-    WHILE WLBRACKET expression WRBRACKET end_block
-    | WHILE WLBRACKET expression WRBRACKET commands end_block
+    WHILE LBRACKET expression RBRACKET end_block
+    | WHILE LBRACKET expression RBRACKET commands end_block
 ;
 for_loop:
-    FOR WLBRACKET expression_statement expression_statement expression WRBRACKET end_block
-    | FOR WLBRACKET expression_statement expression_statement expression WRBRACKET commands end_block
+    FOR LBRACKET expression_statement expression_statement expression RBRACKET end_block
+    | FOR LBRACKET expression_statement expression_statement expression RBRACKET commands end_block
 ;
 foreach_loop:
     foreach_block end_block
     | foreach_block empty_block end_block
 ;
 foreach_block:
-    FOREACH WLBRACKET IDENTIFIER WRBRACKET
-    | FOREACH WLBRACKET IDENTIFIER WCOLON expression WRBRACKET commands
+    FOREACH LBRACKET IDENTIFIER RBRACKET
+    | FOREACH LBRACKET IDENTIFIER COLON expression RBRACKET commands
 ;
 empty_block:
     EMPTY
@@ -362,16 +389,16 @@ command_directive:
     | loop_directive
 ;
 include_directive:
-    INCLUDE WLBRACKET template_name WRBRACKET
-    | INCLUDE WLBRACKET template_name WCOMMA WLBRACE WRBRACE WRBRACKET
-    | INCLUDE WLBRACKET template_name WCOMMA WLBRACE param_init_list WRBRACE WRBRACKET
+    INCLUDE LBRACKET template_name RBRACKET
+    | INCLUDE LBRACKET template_name COMMA LBRACE RBRACE RBRACKET
+    | INCLUDE LBRACKET template_name COMMA LBRACE param_init_list RBRACE RBRACKET
 ;
 param_init_list:
     param_init
-    | param_init WCOMMA param_init_list
+    | param_init COMMA param_init_list
 ;
 param_init:
-    PARAM WEQUAL expression
+    PARAM ASSIGN expression
 ;
 loop_directive:
     BREAK
@@ -386,22 +413,22 @@ expression_statement:
 ;
 variable_init: 
     IDENTIFIER{
-        JsonPair jsPair($1, NULL);
+        KeyExpressionPair jsPair($1, NULL);
         $$ = jsPair;
     }
-    | IDENTIFIER WEQUAL expression{
-        JsonPair jsPair($1, $3);
+    | IDENTIFIER ASSIGN expression{
+        KeyExpressionPair jsPair($1, $3);
         $$ = jsPair;
     }
 ;
 variable_init_list: 
     variable_init{
-        std::vector<JsonPair> vect;
+        std::vector<KeyExpressionPair> vect;
         $$ = vect;
         $$.push_back($1);
     }
-	| variable_init WCOMMA variable_init_list{
-        std::vector<JsonPair> &arg3 = $3;
+	| variable_init COMMA variable_init_list{
+        std::vector<KeyExpressionPair> &arg3 = $3;
         arg3.push_back($1);
         $$ = arg3;
     }
@@ -415,7 +442,7 @@ expression:
     }
 ;
 assignment_expression:
-    IDENTIFIER WEQUAL expression{
+    IDENTIFIER ASSIGN expression{
         $$ = new AssignmentExpression($1, $3);
     }
 ;
@@ -425,7 +452,7 @@ assignment_expression_list:
         $$ = vect;
         $$.push_back($1);
     }
-    | assignment_expression WCOMMA assignment_expression_list{
+    | assignment_expression COMMA assignment_expression_list{
         std::vector<AssignmentExpression*> &arg3 = $3;
         arg3.push_back($1);
         $$ = arg3;
@@ -473,18 +500,18 @@ bool_expression:
     }
 ;
 array_expression:
-    WLANGLE_BRACKET WRANGLE_BRACKET {
+    LANGLE_BRACKET RANGLE_BRACKET {
         $$ = new ArrayExpression();
     }
-    | WLANGLE_BRACKET expression_list WRANGLE_BRACKET {
+    | LANGLE_BRACKET expression_list RANGLE_BRACKET {
         $$ = new ArrayExpression($2);
     }
 ;
 object_expression:
-    WLBRACE WRBRACE{
+    LBRACE RBRACE{
         $$ = new ObjectExpression();
     }
-    | WLBRACE key_value_expression_list WRBRACE{
+    | LBRACE key_value_expression_list RBRACE{
         $$ = new ObjectExpression($2);
     }
 ;
@@ -494,15 +521,15 @@ expression_list:
         arg.push_back($1);
         $$ = arg;
     }
-    | expression WCOMMA expression_list{
+    | expression COMMA expression_list{
         std::vector<Expression*> arg3 = $3;
         arg3.push_back($1);
         $$ = arg3;
     }
 ;
 key_value_expression:
-    IDENTIFIER WCOLON expression{
-        JsonPair p($1, $3);
+    IDENTIFIER COLON expression{
+        KeyExpressionPair p($1, $3);
         $$ = p;
     }
 ;
@@ -512,7 +539,7 @@ key_value_expression_list:
         $$ = m;
         $$.insert(std::make_pair($1.key, $1.value));
     }
-    | key_value_expression WCOMMA key_value_expression_list{
+    | key_value_expression COMMA key_value_expression_list{
         std::map<const std::string, Expression *> &arg3 = $3;
         arg3.insert(std::make_pair($1.key, $1.value));
         $$ = arg3;

@@ -18,6 +18,7 @@
         EXP_ASSIGN,
         EXP_VAL_ASSIGN,
         EXP_VAR_DECLARATION,
+        EXP_UNARY,
     };
 
     class Expression : public Command

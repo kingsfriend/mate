@@ -32,6 +32,7 @@ namespace mate
         static const JsonNode UNDEFINED();
         
         NodeType getType();
+        virtual std::string toQuotedString();
         virtual std::string toString();
         virtual bool equals(JsonNode *node);
 
@@ -70,6 +71,7 @@ namespace mate
 
         std::string val();
         void val(const std::string &v);
+        std::string toQuotedString();
         std::string toString();
         static JsonNode *doCast(JsonNode *node);
         static std::string reverse(std::string s);
@@ -175,6 +177,16 @@ namespace mate
       private:
         NodeType type;
         std::vector<JsonNode *> values;
+    };
+
+    class KeyJsonNodePair{
+    public:
+        std::string key;
+        JsonNode *value;
+        KeyJsonNodePair(){
+            value = NULL;
+        }
+        KeyJsonNodePair(std::string key, JsonNode *value) : key(key), value(value) {}
     };
 } // namespace mate
 

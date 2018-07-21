@@ -2,7 +2,7 @@
     #define MATE_VARIABLE_DECLARATION_HH
 
 #include "Expression.hpp"
-#include "JsonPair.hpp"
+#include "KeyExpressionPair.hpp"
 #include "../../Json.hpp"
 
 namespace mate
@@ -10,17 +10,17 @@ namespace mate
 class VariableDeclaration : public Expression
 {
   private:
-    std::vector<JsonPair> values;
+    std::vector<KeyExpressionPair> values;
     NodeType dataType;
 
   public:
-    VariableDeclaration(NodeType dataType, std::vector<JsonPair> values);
+    VariableDeclaration(NodeType dataType, std::vector<KeyExpressionPair> values);
     ~VariableDeclaration();
 
     static const CommandType CMD_TYPE = CMD_EXP_VAR_DECLARATION;
     static const ExpressionType PRIM_EXP_TYPE = EXP_VAR_DECLARATION;
 
-    void push(JsonPair val);
+    void push(KeyExpressionPair val);
     JsonArrayNode *executeAsArray(Interpreter* interpreter);
     JsonNode *execute(Interpreter* interpreter);
 };

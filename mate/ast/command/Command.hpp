@@ -24,6 +24,7 @@
         CMD_EXP_PRIM_OBJECT,
         CMD_EXP_VAL_ASSIGN,
         CMD_EXP_VAR_DECLARATION,
+        CMD_EXP_UNARY,
     };
 
     class Interpreter;

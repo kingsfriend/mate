@@ -3,8 +3,6 @@ all: script-run json-run
 
 clean c: script-clean json-clean
 
-## SCRIPT module ------------------------------------------ 
-
 src_dir = mate
 src_ast_dir = mate/ast
 src_ast_command_dir = mate/ast/command
@@ -12,6 +10,8 @@ src_ast_command_expression_dir = mate/ast/command/expression
 src_ast_command_blok_dir = mate/ast/command/blok
 src_ast_context_dir = mate/ast/context
 src_ast_error_dir = mate/ast/error
+
+## SCRIPT module ------------------------------------------ 
 
 src_script_dir = mate/script
 test_script_dir = test/script
@@ -76,24 +76,45 @@ script-clean-test script-ct:
 ## JSON module -------------------------------------------- 
 
 #json_base_dir = mate/json
+
+
+src_json_dir = mate/json
 test_json_dir = test/json
 
-json-build json-b:
-	mkdir -p $(test_json_dir)/output/
-	g++ $(test_json_dir)/json_test.cpp \
-		$(src_ast_dir)/Json.cpp \
-			$(src_ast_command_dir)/Command.cpp \
-				$(src_ast_command_expression_dir)/Expression.cpp \
-			$(src_ast_context_dir)/Context.cpp \
-			$(src_ast_context_dir)/ContextStack.cpp \
-		-o $(test_json_dir)/output/json_test.out
+json-build json-b: json-build-base json-build-test
 
-json-run json-r: json-b
+json-build-base json-bb :
+	flex -o $(src_json_dir)/JsonScanner.cpp $(src_json_dir)/JsonScanner.ll
+	bison -o $(src_json_dir)/JsonParser.cpp $(src_json_dir)/JsonParser.yy -d -v
+
+json-build-test json-bt  : json-build-base
+	mkdir -p $(test_json_dir)/output/
+	g++ -g 	$(test_json_dir)/json_test.cpp \
+			$(src_json_dir)/JsonParser.cpp \
+			$(src_json_dir)/JsonScanner.cpp \
+			$(src_json_dir)/JsonInterpreter.cpp \
+			$(src_ast_dir)/Json.cpp \
+			-o $(test_json_dir)/output/json_test.out
+
+json-debug-test json-dt  : json-build-test
+	gdb $(test_json_dir)/output/json_test.out
+
+
+json-run json-r json-rt: json-build-test
 	./$(test_json_dir)/output/json_test.out
 
-json-clean json-c: json-test-c
+json-run-only json-ro :
+	./$(test_json_dir)/output/json_test.out
 
-json-test-clean json-test-c:
+json-clean json-c: json-clean-test json-clean-base
+
+json-clean-base json-cb:
+	rm -f $(src_json_dir)/JsonParser.output
+	rm -f $(src_json_dir)/JsonScanner.cpp
+	rm -f $(src_json_dir)/location.hh $(src_json_dir)/position.hh $(src_json_dir)/stack.hh
+	rm -f $(src_json_dir)/JsonParser.cpp $(src_json_dir)/JsonParser.hpp 
+
+json-clean-test json-ct:
 	rm -rf $(test_json_dir)/output/
 
 ## END JSON module ----------------------------------------- script-base-build

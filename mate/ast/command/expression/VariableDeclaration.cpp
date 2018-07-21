@@ -6,10 +6,10 @@ namespace mate
 
 VariableDeclaration::~VariableDeclaration(){}
 
-VariableDeclaration::VariableDeclaration(NodeType dataType, std::vector<JsonPair> vals) 
+VariableDeclaration::VariableDeclaration(NodeType dataType, std::vector<KeyExpressionPair> vals) 
     : dataType(dataType), values(vals){}
 
-void VariableDeclaration::push(JsonPair val){
+void VariableDeclaration::push(KeyExpressionPair val){
     values.push_back(val);
 }
 

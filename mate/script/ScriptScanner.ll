@@ -139,95 +139,6 @@ E			[Ee][+-]?{D}+
 }
 	
 
-"++" { 
-	// cout << "Scanner: ++" << endl;
-	return mate::ScriptParser::make_INC_OP(std::string(yytext, yyleng), mate::location()); 
-}
-"--" { 
-	// cout << "Scanner: --" << endl;
-	return mate::ScriptParser::make_DEC_OP(std::string(yytext, yyleng), mate::location()); 
-}
-"&&" { 
-	// cout << "Scanner: &&" << endl;
-	return mate::ScriptParser::make_AND_OP(std::string(yytext, yyleng), mate::location()); 
-}
-"||" { 
-	// cout << "Scanner: ||" << endl;
-	return mate::ScriptParser::make_OR_OP(std::string(yytext, yyleng), mate::location()); 
-}
-"<=" { 
-	// cout << "Scanner: <=" << endl;
-	return mate::ScriptParser::make_LE_OP(std::string(yytext, yyleng), mate::location()); 
-}
-">=" { 
-	// cout << "Scanner: >=" << endl;
-	return mate::ScriptParser::make_GE_OP(std::string(yytext, yyleng), mate::location()); 
-}
-"==" { 
-	// cout << "Scanner: ==" << endl;
-	return mate::ScriptParser::make_EQ_OP(std::string(yytext, yyleng), mate::location()); 
-}
-"!=" { 
-	// cout << "Scanner: !=" << endl;
-	return mate::ScriptParser::make_NE_OP(std::string(yytext, yyleng), mate::location()); 
-}
-"<" { 
-	// cout << "Scanner: <" << endl;
-	return mate::ScriptParser::make_L_OP(std::string(yytext, yyleng), mate::location()); 
-}
-">" { 
-	// cout << "Scanner: >" << endl;
-	return mate::ScriptParser::make_G_OP(std::string(yytext, yyleng), mate::location()); 
-}
-
-"." { 
-	// cout << "Scanner: ." << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"&" { 
-	// cout << "Scanner: &" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"!" { 
-	// cout << "Scanner: !" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"~" { 
-	// cout << "Scanner: ~" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"-" { 
-	// cout << "Scanner: -" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"+" { 
-	// cout << "Scanner: +" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"*" { 
-	// cout << "Scanner: *" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"/" { 
-	// cout << "Scanner: /" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"%" { 
-	// cout << "Scanner: %" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"^" { 
-	// cout << "Scanner: ^" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"|" { 
-	// cout << "Scanner: |" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
-"?" { 
-	// cout << "Scanner: ?" << endl;
-	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
-}
 
 	
 ("Bool")|("Number")|("String")|("Date")|("Object")|("Array") {
@@ -261,57 +172,183 @@ E			[Ee][+-]?{D}+
 	return mate::ScriptParser::make_WHITESPACE(std::string(yytext, yyleng), mate::location()); 
 }
 {W}*":"{W}* { 
-	// cout << "Scanner: WCOLON" << endl;
-	return mate::ScriptParser::make_WCOLON(std::string(yytext, yyleng), mate::location());
+	// cout << "Scanner: COLON" << endl;
+	return mate::ScriptParser::make_COLON(std::string(yytext, yyleng), mate::location());
 }
 {W}*"("{W}* { 
-	// cout << "Scanner: WLBRACKET" << endl;
-	return mate::ScriptParser::make_WLBRACKET(std::string(yytext, yyleng), mate::location());
+	// cout << "Scanner: LBRACKET" << endl;
+	return mate::ScriptParser::make_LBRACKET(std::string(yytext, yyleng), mate::location());
 }
 {W}*"{"{W}* { 
-	// cout << "Scanner: WLBRACE" << endl;
-	return mate::ScriptParser::make_WLBRACE(std::string(yytext, yyleng), mate::location());
+	// cout << "Scanner: LBRACE" << endl;
+	return mate::ScriptParser::make_LBRACE(std::string(yytext, yyleng), mate::location());
 }
 {W}*"}"{W}* { 
-	// cout << "Scanner: WRBRACE" << endl;
-	return mate::ScriptParser::make_WRBRACE(std::string(yytext, yyleng), mate::location());
+	// cout << "Scanner: RBRACE" << endl;
+	return mate::ScriptParser::make_RBRACE(std::string(yytext, yyleng), mate::location());
 }
 <CONTENT_SECTION>{W}*")"([ \t\v\f])*\n { 
-	// cout << "Scanner: WRBRACKET" << endl;
-	return mate::ScriptParser::make_WRBRACKET(std::string(yytext, yyleng), mate::location());
+	// cout << "Scanner: RBRACKET" << endl;
+	return mate::ScriptParser::make_RBRACKET(std::string(yytext, yyleng), mate::location());
 }
 <CONTENT_SECTION>{W}*")" { 
-	// cout << "Scanner: WRBRACKET" << endl;
-	return mate::ScriptParser::make_WRBRACKET(std::string(yytext, yyleng), mate::location());
+	// cout << "Scanner: RBRACKET" << endl;
+	return mate::ScriptParser::make_RBRACKET(std::string(yytext, yyleng), mate::location());
 }
 <INITIAL>{W}*")"{W}* { 
-	// cout << "Scanner: WRBRACKET" << endl;
-	return mate::ScriptParser::make_WRBRACKET(std::string(yytext, yyleng), mate::location());
+	// cout << "Scanner: RBRACKET" << endl;
+	return mate::ScriptParser::make_RBRACKET(std::string(yytext, yyleng), mate::location());
 }
 {W}*","{W}* { 
-	// cout << "Scanner: WCOMMA" << endl;
-	return mate::ScriptParser::make_WCOMMA(std::string(yytext, yyleng), mate::location());
+	// cout << "Scanner: COMMA" << endl;
+	return mate::ScriptParser::make_COMMA(std::string(yytext, yyleng), mate::location());
 }
 {W}*";"{W}* { 
-	// cout << "Scanner: WSEMICOLON" << endl;
-	return mate::ScriptParser::make_WSEMICOLON(std::string(yytext, yyleng), mate::location());
-}
-{W}*"="{W}* { 
-	// cout << "Scanner: WEQUAL" << endl;
-	return mate::ScriptParser::make_WEQUAL(std::string(yytext, yyleng), mate::location());
+	// cout << "Scanner: SEMICOLON" << endl;
+	return mate::ScriptParser::make_SEMICOLON(std::string(yytext, yyleng), mate::location());
 }
 {W}*"@as"{W}* { 
-	// cout << "Scanner: WAS" << endl;
-	return mate::ScriptParser::make_WAS(std::string(yytext, yyleng), mate::location()); 
+	// cout << "Scanner: AS" << endl;
+	return mate::ScriptParser::make_AS(std::string(yytext, yyleng), mate::location()); 
 }
 {W}*"["{W}* { 
 	// cout << "Scanner: [" << endl;
-	return mate::ScriptParser::make_WLANGLE_BRACKET(std::string(yytext, yyleng), mate::location()); 
+	return mate::ScriptParser::make_LANGLE_BRACKET(std::string(yytext, yyleng), mate::location()); 
 }
 {W}*"]"{W}* { 
 	// cout << "Scanner: ]" << endl;
-	return mate::ScriptParser::make_WRANGLE_BRACKET(std::string(yytext, yyleng), mate::location()); 
+	return mate::ScriptParser::make_RANGLE_BRACKET(std::string(yytext, yyleng), mate::location()); 
 }
+
+{W}*"="{W}* { 
+	// cout << "Scanner: ASSIGN" << endl;
+	return mate::ScriptParser::make_ASSIGN(std::string(yytext, yyleng), mate::location());
+}
+{W}*"++"{W}* { 
+	// cout << "Scanner: ++" << endl;
+	return mate::ScriptParser::make_INC_OP(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"--"{W}* { 
+	// cout << "Scanner: --" << endl;
+	return mate::ScriptParser::make_DEC_OP(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"&&"{W}* { 
+	// cout << "Scanner: &&" << endl;
+	return mate::ScriptParser::make_AND_OP(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"||"{W}* { 
+	// cout << "Scanner: ||" << endl;
+	return mate::ScriptParser::make_OR_OP(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"<="{W}* { 
+	// cout << "Scanner: <=" << endl;
+	return mate::ScriptParser::make_LE_CMP(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*">="{W}* { 
+	// cout << "Scanner: >=" << endl;
+	return mate::ScriptParser::make_GE_CMP(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"=="{W}* { 
+	// cout << "Scanner: ==" << endl;
+	return mate::ScriptParser::make_EQ_CMP(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"!="{W}* { 
+	// cout << "Scanner: !=" << endl;
+	return mate::ScriptParser::make_NE_CMP(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"<"{W}* { 
+	// cout << "Scanner: <" << endl;
+	return mate::ScriptParser::make_L_CMP(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*">"{W}* { 
+	// cout << "Scanner: >" << endl;
+	return mate::ScriptParser::make_G_CMP(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"?"{W}* { 
+	// cout << "Scanner: ?" << endl;
+	return mate::ScriptParser::make_QUESTION(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"^"{W}* { 
+	// cout << "Scanner: ^" << endl;
+	return mate::ScriptParser::make_EXC_LOGIC(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"|"{W}* { 
+	// cout << "Scanner: |" << endl;
+	return mate::ScriptParser::make_OR_LOGIC(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"&"{W}* { 
+	// cout << "Scanner: &" << endl;
+	return mate::ScriptParser::make_AND_LOGIC(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"*"{W}* { 
+	// cout << "Scanner: *" << endl;
+	return mate::ScriptParser::make_MUL_SIGN(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"/"{W}* { 
+	// cout << "Scanner: /" << endl;
+	return mate::ScriptParser::make_DIV_SIGN(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"%"{W}* { 
+	// cout << "Scanner: %" << endl;
+	return mate::ScriptParser::make_MOD_SIGN(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"+"{W}* { 
+	// cout << "Scanner: +" << endl;
+	return mate::ScriptParser::make_ADD_SIGN(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"-"{W}* { 
+	// cout << "Scanner: -" << endl;
+	return mate::ScriptParser::make_SUB_SIGN(std::string(yytext, yyleng), mate::location()); 
+}
+
+{W}*"*="{W}* { 
+	// cout << "Scanner: *" << endl;
+	return mate::ScriptParser::make_MUL_ASSIGN(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"/="{W}* { 
+	// cout << "Scanner: /" << endl;
+	return mate::ScriptParser::make_DIV_ASSIGN(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"%="{W}* { 
+	// cout << "Scanner: %" << endl;
+	return mate::ScriptParser::make_MOD_ASSIGN(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"+="{W}* { 
+	// cout << "Scanner: +" << endl;
+	return mate::ScriptParser::make_ADD_ASSIGN(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"-="{W}* { 
+	// cout << "Scanner: -" << endl;
+	return mate::ScriptParser::make_SUB_ASSIGN(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"^="{W}* { 
+	// cout << "Scanner: ^" << endl;
+	return mate::ScriptParser::make_EXC_ASSIGN(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"|="{W}* { 
+	// cout << "Scanner: |" << endl;
+	return mate::ScriptParser::make_OR_ASSIGN(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"&="{W}* { 
+	// cout << "Scanner: &" << endl;
+	return mate::ScriptParser::make_AND_ASSIGN(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"."{W}* { 
+	// cout << "Scanner: PERIOD" << endl;
+	return mate::ScriptParser::make_PERIOD(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"!"{W}* { 
+	// cout << "Scanner: !" << endl;
+	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
+}
+{W}*"~"{W}* { 
+	// cout << "Scanner: ~" << endl;
+	return mate::ScriptParser::make_CHAR(std::string(yytext, yyleng), mate::location()); 
+}
+
+
+
+
 "@"{L}({L}|{D})* { 
 	// cout << "Scanner: PARAM" << endl;
 	return mate::ScriptParser::make_PARAM(std::string(yytext, yyleng), mate::location()); 
