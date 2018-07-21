@@ -295,7 +295,7 @@ fileword:
     }
 ;
 tokenword:
-    IDENTIFIER { $$ =  $1; }
+    IDENTIFIER { $$ =  $1; } | PERIOD { $$ =  $1; }
     | NUMBER { $$ =  $1; } | ASSIGN { $$ =  $1; } | WHITESPACE { $$ =  $1; } | COLON { $$ =  $1; } | COMMA { $$ =  $1; } | LBRACE { $$ =  $1; } | RBRACE { $$ =  $1; } | RBRACKET { $$ =  $1; } | LBRACKET { $$ =  $1; }
     | INC_OP { $$ =  $1; } | DEC_OP { $$ =  $1; } | AND_OP { $$ =  $1; } | OR_OP { $$ =  $1; } | LE_CMP { $$ =  $1; } | GE_CMP { $$ =  $1; } | EQ_CMP { $$ =  $1; } | NE_CMP { $$ =  $1; } | L_CMP { $$ =  $1; } | G_CMP { $$ =  $1; }
     | CHAR { $$ =  $1; }

@@ -1,60 +1,29 @@
-#include "../../mate/ast/Json.hpp"
-#include "../../mate/ast/context/Context.hpp"
-#include "../../mate/ast/context/ContextStack.hpp"
-
 #include <iostream>
-#include <sstream>
-#include <string>
+#include <iostream>
+#include <fstream>
+
+#include "../../mate/json/JsonScanner.hpp"
+#include "../../mate/json/JsonParser.hpp"
+#include "../../mate/json/JsonInterpreter.hpp"
+
+#include "../../mate/ast/Json.hpp"
 
 using namespace mate;
 int main(int argc, char const *argv[])
 {
+    ifstream inStream;
+    inStream.open("test/json/test_glossary.json");
 
-    JsonStringNode jsString("test");
-    JsonNumberNode jsNumber1(132);
-    JsonNumberNode jsNumber2(150);
-    JsonBoolNode jsBool(true);
-    JsonObjectNode jsObject;
-    JsonObjectNode jsObject1;
-    JsonArrayNode jsArray;
-    JsonArrayNode jsArray1;
-    JsonDateNode jsdate1;
+    JsonInterpreter i(&inStream);
+    int res = i.parse();
 
-    std::string str("abcde");
-    std::string str2("abcde");
+    inStream.close();
 
-    std::cout << "String cmp : " << (str<=str2) << "\n";
+    cout << "test_glossary.json content" << endl;
+    cout << "-------------------------------------" << endl;
+    cout << i.getObject().toString() << endl;
+    cout << "-------------------------------------" << endl;
+    cout << "JSON Parse complete. Result = " << res << endl;
 
-    std::string now(JsonDateNode::now().toString());
-    std::cout << "Now : " << now << "\n";
-
-    std::string reverse;
-    reverse = JsonStringNode::reverse(str);
-    std::cout << "Reverse : " << str << " => " << reverse << "\n";
-
-
-    jsObject1.push("num1", &jsNumber1);
-    jsObject1.push("num2", &jsNumber2);
-    jsObject1.push("str", &jsString);
-    jsObject1.push("bool", &jsBool);
-
-    jsObject.push("num", &jsNumber1);
-    jsObject.push("str", &jsString);
-    jsObject.push("obj", &jsObject1);
-    jsObject.push("arry", &jsArray1);
-
-    jsArray.push(&jsBool);
-    jsArray.push(&jsNumber1);
-    jsArray.push(&jsString);
-    jsArray.push(&jsObject);
-    jsArray.push(&jsArray1);
-
-    std::cout << "jsdate1 : " << jsdate1.toString() << "\n";
-    std::cout << "jsString : " << jsString.toString() << "\n";
-    std::cout << "jsObject : " << jsObject.toString() << "\n";
-    std::cout << "jsObject1 : " << jsObject1.toString() << "\n";
-    std::cout << "jsObject1[str] : " << jsObject1.get("str")->toString() << "\n";
-    std::cout << "jsArray : " << jsArray.toString() << "\n";
-    std::cout << "jsArray[2] : " << jsArray.get(2)->toString() << "\n";
     return 0;
 }
