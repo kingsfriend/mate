@@ -57,17 +57,40 @@
 %token <std::string> IDENTIFIER
 %token <std::string> STRING_LITERAL VALUABLE_STRING
 %token <double> NUMBER
-%token <NodeType> BOOL_TYPE NUMBER_TYPE STRING_TYPE DATE_TYPE OBJECT_TYPE ARRAY_TYPE VOID_TYPE
 %token <bool> TRUE FALSE 
+%token <NodeType> BOOL_TYPE NUMBER_TYPE STRING_TYPE DATE_TYPE OBJECT_TYPE ARRAY_TYPE VOID_TYPE
 
 
 %token AS BREAK CASE CLASS CONTINUE DEFAULT EMPTY ELSE ELSEIF FINAL FOR FOREACH IF IN PUBLIC NAMESPACE INTERNAL STATIC SWITCH USE WHILE
-
 %token LBRACKET RBRACKET LBRACE RBRACE LANGLE_BRACKET RANGLE_BRACKET MATCH_ANY
-
 %token COMMA SEMICOLON COLON PERIOD
 
+%token QUESTION
+
 %token <std::string> UNDEFINED
+
+
+%token CMP_NE CMP_EQ 
+%token CMP_GE CMP_LE CMP_GT CMP_LT 
+
+
+%token OP_OR
+%token OP_AND
+
+
+%right ASSIGN ASSIGN_MUL ASSIGN_DIV ASSIGN_MOD ASSIGN_PLS ASSIGN_MIN
+
+%nonassoc OP_INC OP_DEC OP_NEG
+
+%left OP_PLS OP_MIN
+%left OP_MUL OP_DIV OP_MOD 
+
+%nonassoc EXP_UNARY
+%nonassoc EXP_POSTFIX
+%nonassoc EXP_PRIMARY
+
+
+
 
 %start lang
 %%
@@ -167,9 +190,107 @@ method_params:
 method_param:
     data_type IDENTIFIER
 ;
-code_blok: LBRACE RBRACE
+code_blok: 
+    LBRACE commands RBRACE
+;
+commands:
+    command
+    | command commands
+;
+command:
+    expression_statement
+;
+expression_statement:
+    SEMICOLON
+    | expression SEMICOLON;
+;
+expression:
+    assignment_expression
+	| expression ',' assignment_expression
+;
+assignment_expression:
+    conditional_expression
+	| unary_expression assignment_operator assignment_expression
+;
+assignment_operator:
+    ASSIGN
+    | ASSIGN_MUL
+    | ASSIGN_DIV
+    | ASSIGN_MOD
+    | ASSIGN_PLS
+    | ASSIGN_MIN
+;
+conditional_expression:
+    logical_or_expression
+	| logical_or_expression QUESTION expression COLON conditional_expression
+;
+logical_or_expression:
+    logical_and_expression
+	| logical_or_expression OP_OR logical_and_expression
+;
+logical_and_expression:
+    equality_expression
+	| logical_and_expression OP_AND equality_expression
+;
+equality_expression:
+    relational_expression
+	| equality_expression CMP_EQ relational_expression
+	| equality_expression CMP_NE relational_expression
+;
+relational_expression:
+    arithmetic_expression
+	| relational_expression CMP_LT arithmetic_expression
+	| relational_expression CMP_GT arithmetic_expression
+	| relational_expression CMP_LE arithmetic_expression
+	| relational_expression CMP_GE arithmetic_expression
+;
+arithmetic_expression:
+    additive_expression
+;
+additive_expression:
+    multiplicative_expression
+	| additive_expression OP_PLS multiplicative_expression
+	| additive_expression OP_MIN multiplicative_expression
+;
+multiplicative_expression:
+    unary_expression
+	| multiplicative_expression OP_MUL unary_expression
+	| multiplicative_expression OP_DIV unary_expression
+	| multiplicative_expression OP_MOD unary_expression
+;
+unary_expression:
+    postfix_expression
+	| OP_PLS unary_expression %prec EXP_UNARY
+	| OP_MIN unary_expression %prec EXP_UNARY
+	| OP_INC unary_expression
+	| OP_DEC unary_expression
+;
+postfix_expression:
+	primary_expression
+	| postfix_expression LANGLE_BRACKET expression RANGLE_BRACKET
+	| postfix_expression LBRACKET RBRACKET
+    | postfix_expression LBRACKET argument_expression_list RBRACKET
+	| postfix_expression PERIOD IDENTIFIER
+	| postfix_expression OP_INC %prec EXP_POSTFIX
+	| postfix_expression OP_DEC %prec EXP_POSTFIX
+;
+argument_expression_list:
+    assignment_expression
+	| argument_expression_list COMMA assignment_expression
+;
+primary_expression:
+    IDENTIFIER
+	| STRING_LITERAL
+	| VALUABLE_STRING
+	| NUMBER
+    | boolean_const
+    | LBRACKET expression RBRACKET %prec EXP_PRIMARY
+;
+boolean_const:
+	TRUE
+	| FALSE
+;
 %%
-
 void mate::LangParser::error(const location &loc , const std::string &message) {
     cout << "Error: " << message << " [line " << driver.getCurrentLine() << "]" << endl << "Error location: " << driver.getLocation() << endl;
 }

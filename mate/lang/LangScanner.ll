@@ -153,6 +153,107 @@ E			[Ee][+-]?{D}+
 }
 
 
+"?" { 
+	// cout << "Scanner: QUESTION" << endl;
+	return mate::LangParser::make_QUESTION(mate::location()); 
+}
+">=" {
+	// cout << "Scanner: CMP_GE" << endl;
+	return mate::LangParser::make_CMP_GE(mate::location()); 
+}
+"<=" {
+	// cout << "Scanner: CMP_LE" << endl;
+	return mate::LangParser::make_CMP_LE(mate::location()); 
+}
+"!=" {
+	// cout << "Scanner: CMP_NE" << endl;
+	return mate::LangParser::make_CMP_NE(mate::location()); 
+}
+"==" {
+	// cout << "Scanner: CMP_EQ" << endl;
+	return mate::LangParser::make_CMP_EQ(mate::location()); 
+}
+">" {
+	// cout << "Scanner: CMP_GT" << endl;
+	return mate::LangParser::make_CMP_GT(mate::location()); 
+}
+"<" {
+	// cout << "Scanner: CMP_LT" << endl;
+	return mate::LangParser::make_CMP_LT(mate::location()); 
+}
+
+
+"++" {
+	// cout << "Scanner: OP_INC" << endl;
+	return mate::LangParser::make_OP_INC(mate::location()); 
+}
+"--" {
+	// cout << "Scanner: OP_DEC" << endl;
+	return mate::LangParser::make_OP_DEC(mate::location()); 
+}
+"!" {
+	// cout << "Scanner: OP_NEG" << endl;
+	return mate::LangParser::make_OP_NEG(mate::location()); 
+}
+
+"&&" {
+	// cout << "Scanner: OP_AND" << endl;
+	return mate::LangParser::make_OP_AND(mate::location()); 
+}
+"||" {
+	// cout << "Scanner: OP_OR" << endl;
+	return mate::LangParser::make_OP_OR(mate::location()); 
+}
+"*" {
+	// cout << "Scanner: OP_MUL" << endl;
+	return mate::LangParser::make_OP_MUL(mate::location()); 
+}
+"/" {
+	// cout << "Scanner: OP_DIV" << endl;
+	return mate::LangParser::make_OP_DIV(mate::location()); 
+}
+"%" {
+	// cout << "Scanner: OP_MOD" << endl;
+	return mate::LangParser::make_OP_MOD(mate::location()); 
+}
+"+" {
+	// cout << "Scanner: OP_PLS" << endl;
+	return mate::LangParser::make_OP_PLS(mate::location()); 
+}
+"-" {
+	// cout << "Scanner: OP_MIN" << endl;
+	return mate::LangParser::make_OP_MIN(mate::location()); 
+}
+
+
+"=" {
+	// cout << "Scanner: ASSIGN" << endl;
+	return mate::LangParser::make_ASSIGN(mate::location()); 
+}
+"*=" {
+	// cout << "Scanner: ASSIGN_MUL" << endl;
+	return mate::LangParser::make_ASSIGN_MUL(mate::location()); 
+}
+"/=" {
+	// cout << "Scanner: ASSIGN_DIV" << endl;
+	return mate::LangParser::make_ASSIGN_DIV(mate::location()); 
+}
+"%=" {
+	// cout << "Scanner: ASSIGN_MOD" << endl;
+	return mate::LangParser::make_ASSIGN_MOD(mate::location()); 
+}
+"+=" {
+	// cout << "Scanner: ASSIGN_PLS" << endl;
+	return mate::LangParser::make_ASSIGN_PLS(mate::location()); 
+}
+"-=" {
+	// cout << "Scanner: ASSIGN_MIN" << endl;
+	return mate::LangParser::make_ASSIGN_MIN(mate::location()); 
+}
+
+
+
+
 ((L?\"(\\.|[^\\"])*\"))|((L?'(\\.|[^\'])*')) { // "
 	std::string str(yytext, yyleng);
 	str.erase(0,1);
