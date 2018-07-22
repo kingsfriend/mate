@@ -44,10 +44,13 @@ protected:
     std::istream *new_in;
     std::ostream *new_os;
     unsigned int location;
+    unsigned int currentLine;
 
 protected:
     void increaseLocation(unsigned int loc);
     unsigned int getLocation() const;
+    void setCurrentLine(unsigned int loc);
+    unsigned int getCurrentLine() const;
 };
 
 }

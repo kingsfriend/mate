@@ -1,6 +1,6 @@
 @/*
   * @Template Family
-  * @Description sample script template for Mate Programming language
+  * @Description sample script template for Mate Programming language using Scripting Syntax
   * @Author TOUBE P.Pierre 
   *
   */

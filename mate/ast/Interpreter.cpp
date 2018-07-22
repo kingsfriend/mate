@@ -72,4 +72,12 @@ unsigned int Interpreter::getLocation() const {
     return location;
 }
 
+void Interpreter::setCurrentLine(unsigned int line) {
+    currentLine = line;
+}
+
+unsigned int Interpreter::getCurrentLine() const {
+    return currentLine;
+}
+
 } // namespace mate

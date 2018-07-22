@@ -20,6 +20,7 @@ namespace mate
         Date,
         Object,
         Array,
+        Void,
         Undefined
     };
 

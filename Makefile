@@ -1,7 +1,7 @@
 # build and run all test
-all: script-run json-run
+all: script-run json-run lang-run
 
-clean c: script-clean json-clean
+clean c: script-clean json-clean lang-clean
 
 src_dir = mate
 src_ast_dir = mate/ast
@@ -53,7 +53,7 @@ script-debug-test script-dt  : script-build-test
 	gdb $(test_script_dir)/output/script_test.out
 
 
-script-run script-r script-rt: script-build-test
+script script-run script-r script-rt: script-build-test
 	./$(test_script_dir)/output/script_test.out
 
 script-run-only script-ro :
@@ -75,7 +75,7 @@ script-clean-test script-ct:
 ##
 ## JSON module -------------------------------------------- 
 
-#json_base_dir = mate/json
+##json_base_dir = mate/json
 
 
 src_json_dir = mate/json
@@ -100,7 +100,7 @@ json-debug-test json-dt  : json-build-test
 	gdb $(test_json_dir)/output/json_test.out
 
 
-json-run json-r json-rt: json-build-test
+json json-run json-r json-rt: json-build-test
 	./$(test_json_dir)/output/json_test.out
 
 json-run-only json-ro :
@@ -117,4 +117,50 @@ json-clean-base json-cb:
 json-clean-test json-ct:
 	rm -rf $(test_json_dir)/output/
 
-## END JSON module ----------------------------------------- script-base-build
+## END JSON module ----------------------------------------- 
+##
+## LANG module -------------------------------------------- 
+
+src_lang_dir = mate/lang
+test_lang_dir = test/lang
+
+lang-build lang-b: lang-build-base lang-build-test
+
+lang-build-base lang-bb :
+	flex -o $(src_lang_dir)/LangScanner.cpp $(src_lang_dir)/LangScanner.ll
+	bison -o $(src_lang_dir)/LangParser.cpp $(src_lang_dir)/LangParser.yy -d -v
+
+lang-build-test lang-bt  : lang-build-base
+	mkdir -p $(test_lang_dir)/output/
+	g++ -g 	$(test_lang_dir)/lang_test.cpp \
+			$(src_ast_dir)/Interpreter.cpp \
+			$(src_ast_context_dir)/Context.cpp \
+			$(src_ast_context_dir)/ContextStack.cpp \
+			$(src_ast_dir)/Json.cpp \
+			$(src_lang_dir)/LangParser.cpp \
+			$(src_lang_dir)/LangScanner.cpp \
+			$(src_lang_dir)/LangInterpreter.cpp \
+			-o $(test_lang_dir)/output/lang_test.out
+
+lang-debug-test lang-dt  : lang-build-test
+	gdb $(test_lang_dir)/output/lang_test.out
+
+
+lang lang-run lang-r lang-rt: lang-build-test
+	./$(test_lang_dir)/output/lang_test.out
+
+lang-run-only lang-ro :
+	./$(test_lang_dir)/output/lang_test.out
+
+lang-clean lang-c: lang-clean-test lang-clean-base
+
+lang-clean-base lang-cb:
+	rm -f $(src_lang_dir)/LangParser.output
+	rm -f $(src_lang_dir)/LangScanner.cpp
+	rm -f $(src_lang_dir)/location.hh $(src_lang_dir)/position.hh $(src_lang_dir)/stack.hh
+	rm -f $(src_lang_dir)/LangParser.cpp $(src_lang_dir)/LangParser.hpp 
+
+lang-clean-test lang-ct:
+	rm -rf $(test_lang_dir)/output/
+
+## LANG module -------------------------------------------- 
