@@ -29,6 +29,11 @@ E			[Ee][+-]?{D}+
 
 %%
 
+"@" { 
+	// cout << "Scanner: MAGIC" << endl;
+	return mate::LangParser::make_MAGIC(mate::location()); 
+}
+
 "as" { 
 	// cout << "Scanner: AS" << endl;
 	return mate::LangParser::make_AS(mate::location()); 
@@ -97,6 +102,10 @@ E			[Ee][+-]?{D}+
 	// cout << "Scanner: PUBLIC" << endl;
 	return mate::LangParser::make_PUBLIC(mate::location()); 
 }
+"return" {
+	// cout << "Scanner: RETURN" << endl;
+	return mate::LangParser::make_RETURN(mate::location()); 
+}
 "static" {
 	// cout << "Scanner: STATIC" << endl;
 	return mate::LangParser::make_STATIC(mate::location()); 
@@ -122,6 +131,10 @@ E			[Ee][+-]?{D}+
 "Number" {
 	// cout << "Scanner: NUMBER_TYPE" << endl;
 	return mate::LangParser::make_NUMBER_TYPE(Bool, mate::location()); 
+}
+"Null" {
+	// cout << "Scanner: NULL_CONST" << endl;
+	return mate::LangParser::make_NULL_CONST(mate::location()); 
 }
 "String" {
 	// cout << "Scanner: STRING_TYPE" << endl;
@@ -277,6 +290,12 @@ E			[Ee][+-]?{D}+
 {L}({L}|{D})* { 
 	// cout << "Scanner: IDENTIFIER" << endl;
 	return mate::LangParser::make_IDENTIFIER(std::string(yytext, yyleng), mate::location()); 
+}
+{D}+ { 
+	// cout << "Scanner: INTEGER" << endl;
+	std::string strVal = std::string(yytext, yyleng);
+	int val = atof(strVal.c_str());;
+	return mate::LangParser::make_INTEGER(val, mate::location()); 
 }
 {D}+("."{D}*({E}))? { 
 	// cout << "Scanner: NUMBER" << endl;

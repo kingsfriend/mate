@@ -57,15 +57,16 @@
 %token <std::string> IDENTIFIER
 %token <std::string> STRING_LITERAL VALUABLE_STRING
 %token <double> NUMBER
+%token <int> INTEGER
 %token <bool> TRUE FALSE 
 %token <NodeType> BOOL_TYPE NUMBER_TYPE STRING_TYPE DATE_TYPE OBJECT_TYPE ARRAY_TYPE VOID_TYPE
+%token NULL_CONST
 
-
-%token AS BREAK CASE CLASS CONTINUE DEFAULT EMPTY ELSE ELSEIF FINAL FOR FOREACH IF IN PUBLIC NAMESPACE INTERNAL STATIC SWITCH USE WHILE
+%token AS BREAK CASE CLASS CONTINUE DEFAULT EMPTY ELSE ELSEIF FINAL FOR FOREACH IF IN PUBLIC NAMESPACE INTERNAL RETURN STATIC SWITCH USE WHILE
 %token LBRACKET RBRACKET LBRACE RBRACE LANGLE_BRACKET RANGLE_BRACKET MATCH_ANY
 %token COMMA SEMICOLON COLON PERIOD
 
-%token QUESTION
+%token QUESTION MAGIC
 
 %token <std::string> UNDEFINED
 
@@ -157,7 +158,7 @@ class_field:
     | visibility_or_modifiers data_type IDENTIFIER
 ;
 class_constructor:
-    constructor_header code_blok
+    constructor_header compound_statement
 ;
 constructor_header:
     IDENTIFIER LBRACKET RBRACKET
@@ -166,7 +167,7 @@ constructor_header:
     | member_visibility IDENTIFIER LBRACKET method_params RBRACKET
 ;
 class_method:
-    method_header code_blok
+    method_header compound_statement
 ;
 method_header:
     data_type IDENTIFIER LBRACKET RBRACKET
@@ -190,23 +191,62 @@ method_params:
 method_param:
     data_type IDENTIFIER
 ;
-code_blok: 
-    LBRACE commands RBRACE
+compound_statement: 
+    LBRACE statements RBRACE
+    | LBRACE declarations RBRACE
+    | LBRACE declarations statements RBRACE
 ;
-commands:
-    command
-    | command commands
+declarations:
+    declaration
+    | declaration declarations
 ;
-command:
+declaration:
+	data_type init_declarators SEMICOLON
+;
+init_declarators:
+    init_declarator
+	| init_declarator COMMA init_declarators
+;
+init_declarator:
+    IDENTIFIER
+	| IDENTIFIER ASSIGN initializer
+;
+initializer:
+    assignment_expression
+;
+statements:
+    statement
+    | statement statements
+;
+statement:
     expression_statement
+    | jump_statement
+    | compound_statement
+;
+jump_statement:
+    return_statement;
+    | continue_statement
+    | break_statement
+;
+return_statement:
+	RETURN SEMICOLON
+	| RETURN expression SEMICOLON
+;
+continue_statement:
+	CONTINUE SEMICOLON
+    | CONTINUE LBRACKET INTEGER RBRACKET SEMICOLON
+;
+break_statement:
+	BREAK SEMICOLON
+    | BREAK LBRACKET INTEGER RBRACKET SEMICOLON
 ;
 expression_statement:
     SEMICOLON
-    | expression SEMICOLON;
+    | expression SEMICOLON
 ;
 expression:
     assignment_expression
-	| expression ',' assignment_expression
+	| expression COMMA assignment_expression
 ;
 assignment_expression:
     conditional_expression
@@ -282,14 +322,41 @@ primary_expression:
     IDENTIFIER
 	| STRING_LITERAL
 	| VALUABLE_STRING
-	| NUMBER
+	| NULL_CONST
+	| number_type
     | boolean_const
+    | json_array 
+    | json_object 
     | LBRACKET expression RBRACKET %prec EXP_PRIMARY
+;
+number_type:
+    INTEGER
+    | NUMBER
 ;
 boolean_const:
 	TRUE
 	| FALSE
 ;
+json_array:
+    LANGLE_BRACKET RANGLE_BRACKET
+    | LANGLE_BRACKET primary_expression_list RANGLE_BRACKET
+;
+json_object:
+    LBRACE RBRACE
+    | LBRACE primary_expression_pair_list RBRACE
+;
+primary_expression_list:
+    primary_expression
+    | primary_expression COMMA primary_expression_list
+;
+primary_expression_pair:
+    IDENTIFIER COLON primary_expression
+;
+primary_expression_pair_list:
+    primary_expression_pair
+    | primary_expression_pair COMMA primary_expression_pair_list
+;
+
 %%
 void mate::LangParser::error(const location &loc , const std::string &message) {
     cout << "Error: " << message << " [line " << driver.getCurrentLine() << "]" << endl << "Error location: " << driver.getLocation() << endl;
