@@ -47,4 +47,12 @@ JsonObjectNode JsonInterpreter::getObject(){
 void JsonInterpreter::setObject(JsonObjectNode object){
     obj = object;
 }
+
+void JsonInterpreter::setCurrentLine(unsigned int line) {
+    currentLine = line;
+}
+
+unsigned int JsonInterpreter::getCurrentLine() const {
+    return currentLine;
+}
 }

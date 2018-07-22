@@ -15,7 +15,7 @@ E			[Ee][+-]?{D}+
 	#include "ScriptInterpreter.hpp"
 
 	#define yyterminate() mate::ScriptParser::make_END(mate::location());
-	#define YY_USER_ACTION m_driver.increaseLocation(yyleng);
+	#define YY_USER_ACTION {m_driver.increaseLocation(yyleng); m_driver.setCurrentLine(yylineno);}
 
 	
 %}
@@ -24,6 +24,7 @@ E			[Ee][+-]?{D}+
 %option c++
 %option yyclass="ScriptScanner"
 %option prefix="Mate_"
+%option yylineno
 
 %s CONTENT_SECTION
 

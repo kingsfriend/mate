@@ -29,16 +29,21 @@ public:
 
     JsonScanner *getScanner();
     JsonParser *getParser();
+    unsigned int getCurrentLine() const;
 
     friend class JsonParser;
     friend class JsonScanner;
 
-    private:
+private:
     JsonObjectNode obj;
     JsonScanner *scanner;
     JsonParser *parser;
     unsigned int location;
+    unsigned int currentLine;
+
+private:
     void increaseLocation(unsigned int loc);
+    void setCurrentLine(unsigned int loc);
 };
 
 }

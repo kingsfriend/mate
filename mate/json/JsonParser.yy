@@ -132,6 +132,6 @@ json_pair_list:
 %%
 
 void mate::JsonParser::error(const location &loc , const std::string &message) {
-    cout << "Error: " << message << endl << "Error location: " << driver.getLocation() << endl;
+    cout << "Error: " << message << " [line " << driver.getCurrentLine() << "]" << endl << "Error location: " << driver.getLocation() << endl;
 }
 

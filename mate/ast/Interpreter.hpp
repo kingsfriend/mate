@@ -38,6 +38,7 @@ public:
     void execute();
     void addCommand(Command *cmd);
     JsonNode* executeCommand(Command *cmd);
+    unsigned int getCurrentLine() const;
 
 protected: 
     ContextStack *contextStack;
@@ -50,7 +51,6 @@ protected:
     void increaseLocation(unsigned int loc);
     unsigned int getLocation() const;
     void setCurrentLine(unsigned int loc);
-    unsigned int getCurrentLine() const;
 };
 
 }

@@ -16,7 +16,7 @@ E			[Ee][+-]?{D}+
 	#include "JsonInterpreter.hpp"
 
 	#define yyterminate() mate::JsonParser::make_END(mate::location());
-	#define YY_USER_ACTION m_driver.increaseLocation(yyleng);
+	#define YY_USER_ACTION {m_driver.increaseLocation(yyleng); m_driver.setCurrentLine(yylineno);}
 
 	
 %}
@@ -25,6 +25,7 @@ E			[Ee][+-]?{D}+
 %option c++
 %option yyclass="JsonScanner"
 %option prefix="Mate_"
+%option yylineno
 
 %s CONTENT_SECTION
 

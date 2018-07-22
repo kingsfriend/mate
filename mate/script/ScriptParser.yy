@@ -551,6 +551,6 @@ end_block:
 %%
 
 void mate::ScriptParser::error(const location &loc , const std::string &message) {
-    cout << "Error: " << message << endl << "Error location: " << driver.getLocation() << endl;
+    cout << "Error: " << message << " [line " << driver.getCurrentLine() << "]" << endl << "Error location: " << driver.getLocation() << endl;
 }
 
