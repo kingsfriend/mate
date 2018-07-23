@@ -19,8 +19,8 @@ class App {
 		Object parseRepport;
 
 		foreach(Object item in datas){
-			File out = File(outputDir+item.name+".txt");
-			Family f = Family(item);
+			Object out = File(".txt");
+			Object f = Family(item);
 			parseRepport = f.parse(out);
 		}empty{
 			Console.println("No data to process");

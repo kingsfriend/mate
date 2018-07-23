@@ -58,6 +58,10 @@ E			[Ee][+-]?{D}+
 	// cout << "Scanner: DEFAULT" << endl;
 	return mate::LangParser::make_DEFAULT(mate::location()); 
 }
+"do" {
+	// cout << "Scanner: DO" << endl;
+	return mate::LangParser::make_DO(mate::location()); 
+}
 "empty" {
 	// cout << "Scanner: EMPTY" << endl;
 	return mate::LangParser::make_EMPTY(mate::location()); 

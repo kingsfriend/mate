@@ -62,7 +62,7 @@
 %token <NodeType> BOOL_TYPE NUMBER_TYPE STRING_TYPE DATE_TYPE OBJECT_TYPE ARRAY_TYPE VOID_TYPE
 %token NULL_CONST
 
-%token AS BREAK CASE CLASS CONTINUE DEFAULT EMPTY ELSE ELSEIF FINAL FOR FOREACH IF IN PUBLIC NAMESPACE INTERNAL RETURN STATIC SWITCH USE WHILE
+%token AS BREAK CASE CLASS CONTINUE DEFAULT DO EMPTY ELSE ELSEIF FINAL FOR FOREACH IF IN PUBLIC NAMESPACE INTERNAL RETURN STATIC SWITCH USE WHILE
 %token LBRACKET RBRACKET LBRACE RBRACE LANGLE_BRACKET RANGLE_BRACKET MATCH_ANY
 %token COMMA SEMICOLON COLON PERIOD
 
@@ -154,8 +154,8 @@ class_member:
     | class_method
 ;
 class_field:
-    data_type IDENTIFIER
-    | visibility_or_modifiers data_type IDENTIFIER
+    base_type IDENTIFIER
+    | visibility_or_modifiers base_type IDENTIFIER
 ;
 class_constructor:
     constructor_header compound_statement
@@ -170,12 +170,12 @@ class_method:
     method_header compound_statement
 ;
 method_header:
-    data_type IDENTIFIER LBRACKET RBRACKET
-    | data_type IDENTIFIER LBRACKET method_params RBRACKET
-    | visibility_or_modifiers data_type IDENTIFIER LBRACKET RBRACKET
-    | visibility_or_modifiers data_type IDENTIFIER LBRACKET method_params RBRACKET
+    base_type IDENTIFIER LBRACKET RBRACKET
+    | base_type IDENTIFIER LBRACKET method_params RBRACKET
+    | visibility_or_modifiers base_type IDENTIFIER LBRACKET RBRACKET
+    | visibility_or_modifiers base_type IDENTIFIER LBRACKET method_params RBRACKET
 ;
-data_type:
+base_type:
     BOOL_TYPE
     | NUMBER_TYPE
     | DATE_TYPE
@@ -189,7 +189,7 @@ method_params:
     | method_param method_params
 ;
 method_param:
-    data_type IDENTIFIER
+    base_type IDENTIFIER
 ;
 compound_statement: 
     LBRACE statements RBRACE
@@ -201,7 +201,7 @@ declarations:
     | declaration declarations
 ;
 declaration:
-	data_type init_declarators SEMICOLON
+	base_type init_declarators SEMICOLON
 ;
 init_declarators:
     init_declarator
@@ -222,6 +222,15 @@ statement:
     expression_statement
     | jump_statement
     | compound_statement
+    | iteration_statement
+;
+iteration_statement:
+	WHILE LBRACKET expression RBRACKET statement
+	| DO statement WHILE LBRACKET expression RBRACKET SEMICOLON
+	| FOR LBRACKET expression_statement expression_statement RBRACKET statement
+	| FOR LBRACKET expression_statement expression_statement expression RBRACKET statement
+	| FOREACH LBRACKET base_type IDENTIFIER IN expression RBRACKET statement EMPTY statement
+	| FOREACH LBRACKET IDENTIFIER IN expression RBRACKET statement EMPTY statement
 ;
 jump_statement:
     return_statement;
