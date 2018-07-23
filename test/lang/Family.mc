@@ -6,11 +6,16 @@
  */
  namespace test;
 
-@Template(Family)
 class Family {
+	public static const String CLASS_NAME = "Family";
 	public String fatherName, motherName;
-	public Array childrenNames;
+	public Array<String> childrenNames;
 	static internal Number familyCount;
+	static(){
+
+	}
+	
+	Family(){}
 
 	Family(Object data){
 		motherName(data);

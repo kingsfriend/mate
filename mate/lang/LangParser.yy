@@ -62,7 +62,7 @@
 %token <NodeType> BOOL_TYPE NUMBER_TYPE STRING_TYPE DATE_TYPE OBJECT_TYPE ARRAY_TYPE VOID_TYPE
 %token NULL_CONST
 
-%token AS BREAK CASE CLASS CONTINUE DEFAULT DO EMPTY ELSE ELSEIF FINAL FOR FOREACH IF IN PUBLIC NAMESPACE INTERNAL RETURN STATIC SWITCH USE WHILE
+%token AS BREAK CASE CLASS CONTINUE CONST DEFAULT DO EMPTY ELSE ELSEIF FINAL FOR FOREACH IF IN PUBLIC NAMESPACE INTERNAL RETURN STATIC SWITCH USE WHILE
 %token LBRACKET RBRACKET LBRACE RBRACE LANGLE_BRACKET RANGLE_BRACKET MATCH_ANY
 %token COMMA SEMICOLON COLON PERIOD
 
@@ -98,6 +98,7 @@
 
 lang:
     namespace_directive use_directives main_class_definition
+    | namespace_directive main_class_definition
     | use_directives main_class_definition
     | main_class_definition
 ;
@@ -135,6 +136,7 @@ member_visibility:
 member_modifier:
     STATIC
     | FINAL
+    | CONST
 ;
 visibility_or_modifier:
     member_modifier
@@ -150,12 +152,16 @@ class_members:
 ;
 class_member:
     class_field
+    | static_initializer
     | class_constructor
     | class_method
 ;
 class_field:
-    base_type IDENTIFIER
-    | visibility_or_modifiers base_type IDENTIFIER
+    declaration
+    | visibility_or_modifiers declaration
+;
+static_initializer:
+    STATIC LBRACKET RBRACKET compound_statement
 ;
 class_constructor:
     constructor_header compound_statement
@@ -163,17 +169,26 @@ class_constructor:
 constructor_header:
     IDENTIFIER LBRACKET RBRACKET
     | IDENTIFIER LBRACKET method_params RBRACKET
-    | member_visibility IDENTIFIER LBRACKET RBRACKET
-    | member_visibility IDENTIFIER LBRACKET method_params RBRACKET
 ;
 class_method:
     method_header compound_statement
 ;
 method_header:
-    base_type IDENTIFIER LBRACKET RBRACKET
-    | base_type IDENTIFIER LBRACKET method_params RBRACKET
-    | visibility_or_modifiers base_type IDENTIFIER LBRACKET RBRACKET
-    | visibility_or_modifiers base_type IDENTIFIER LBRACKET method_params RBRACKET
+    typed_identifier LBRACKET RBRACKET
+    | typed_identifier LBRACKET method_params RBRACKET
+    | visibility_or_modifiers typed_identifier LBRACKET RBRACKET
+    | visibility_or_modifiers typed_identifier LBRACKET method_params RBRACKET
+;
+typed_identifier:
+    data_type IDENTIFIER
+;
+data_type:
+    base_type
+    | IDENTIFIER
+    | typed_array 
+;
+typed_array:
+    ARRAY_TYPE CMP_LT data_type CMP_GT
 ;
 base_type:
     BOOL_TYPE
@@ -189,19 +204,14 @@ method_params:
     | method_param method_params
 ;
 method_param:
-    base_type IDENTIFIER
+    data_type IDENTIFIER
 ;
 compound_statement: 
-    LBRACE statements RBRACE
-    | LBRACE declarations RBRACE
-    | LBRACE declarations statements RBRACE
-;
-declarations:
-    declaration
-    | declaration declarations
+    LBRACE RBRACE
+    | LBRACE statements RBRACE
 ;
 declaration:
-	base_type init_declarators SEMICOLON
+	data_type init_declarators SEMICOLON
 ;
 init_declarators:
     init_declarator
@@ -223,13 +233,14 @@ statement:
     | jump_statement
     | compound_statement
     | iteration_statement
+    | declaration
 ;
 iteration_statement:
 	WHILE LBRACKET expression RBRACKET statement
 	| DO statement WHILE LBRACKET expression RBRACKET SEMICOLON
 	| FOR LBRACKET expression_statement expression_statement RBRACKET statement
 	| FOR LBRACKET expression_statement expression_statement expression RBRACKET statement
-	| FOREACH LBRACKET base_type IDENTIFIER IN expression RBRACKET statement EMPTY statement
+	| FOREACH LBRACKET typed_identifier IN expression RBRACKET statement EMPTY statement
 	| FOREACH LBRACKET IDENTIFIER IN expression RBRACKET statement EMPTY statement
 ;
 jump_statement:
@@ -334,8 +345,7 @@ primary_expression:
 	| NULL_CONST
 	| number_type
     | boolean_const
-    | json_array 
-    | json_object 
+    | array 
     | LBRACKET expression RBRACKET %prec EXP_PRIMARY
 ;
 number_type:
@@ -346,13 +356,10 @@ boolean_const:
 	TRUE
 	| FALSE
 ;
-json_array:
+array:
     LANGLE_BRACKET RANGLE_BRACKET
+    | LANGLE_BRACKET primary_expression_pair_list RANGLE_BRACKET
     | LANGLE_BRACKET primary_expression_list RANGLE_BRACKET
-;
-json_object:
-    LBRACE RBRACE
-    | LBRACE primary_expression_pair_list RBRACE
 ;
 primary_expression_list:
     primary_expression

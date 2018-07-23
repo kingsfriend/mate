@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     ifstream inStream;
     ofstream outStream;
 
-    inStream.open ("test/lang/App.mc");
+    inStream.open("test/lang/App.mc");
     outStream.open ("test/lang/output/App.out");
     
     LangInterpreter i(&inStream, &outStream);

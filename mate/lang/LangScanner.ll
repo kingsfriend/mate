@@ -54,6 +54,10 @@ E			[Ee][+-]?{D}+
 	// cout << "Scanner: CONTINUE" << endl;
 	return mate::LangParser::make_CONTINUE(mate::location()); 
 }
+"const" {
+	// cout << "Scanner: CONST" << endl;
+	return mate::LangParser::make_CONST(mate::location()); 
+}
 "default" {
 	// cout << "Scanner: DEFAULT" << endl;
 	return mate::LangParser::make_DEFAULT(mate::location()); 

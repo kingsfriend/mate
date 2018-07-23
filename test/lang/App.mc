@@ -11,7 +11,10 @@ use mate.lang.io.*;
 use mate.Json;
 
 class App {
+	
+	App(){
 
+	}
 	public static Void main(Array args){
 		Object jsonData = Json.parseFile("source.json");
 		Array datas = jsonData.datas;
@@ -19,8 +22,8 @@ class App {
 		Object parseRepport;
 
 		foreach(Object item in datas){
-			Object out = File(".txt");
-			Object f = Family(item);
+			File out = File(outputDir+item.name+".txt");
+			Family f = Family(item);
 			parseRepport = f.parse(out);
 		}empty{
 			Console.println("No data to process");
