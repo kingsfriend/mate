@@ -62,13 +62,11 @@
 %token <NodeType> BOOL_TYPE NUMBER_TYPE STRING_TYPE DATE_TYPE OBJECT_TYPE ARRAY_TYPE VOID_TYPE
 %token NULL_CONST
 
-%token AS BREAK CASE CLASS CONTINUE CONST DEFAULT DO EMPTY ELSE ELSEIF FINAL FOR FOREACH IF IN PUBLIC NAMESPACE INTERNAL RETURN STATIC SWITCH USE WHILE
+%token AS BREAK CLASS CONTINUE CONST DO FINAL FOR FOREACH IF IN PUBLIC NAMESPACE INTERNAL RETURN STATIC SWITCH USE WHILE
 %token LBRACKET RBRACKET LBRACE RBRACE LANGLE_BRACKET RANGLE_BRACKET MATCH_ANY
 %token COMMA SEMICOLON COLON PERIOD
 
-%token QUESTION MAGIC
-
-%token <std::string> UNDEFINED
+%token QUESTION
 
 
 %token CMP_NE CMP_EQ 
@@ -80,6 +78,9 @@
 
 
 %right ASSIGN ASSIGN_MUL ASSIGN_DIV ASSIGN_MOD ASSIGN_PLS ASSIGN_MIN
+
+%nonassoc SUB_STATEMENT
+%nonassoc ELSE EMPTY CASE DEFAULT
 
 %nonassoc OP_INC OP_DEC OP_NEG
 
@@ -114,6 +115,7 @@ use_directives:
 ;
 use_directive:
     USE full_namespace SEMICOLON
+    | USE full_namespace SEMICOLON AS IDENTIFIER
     | USE full_namespace MATCH_ANY SEMICOLON
 ;
 full_namespace:
@@ -233,13 +235,26 @@ statement:
     | jump_statement
     | compound_statement
     | iteration_statement
+    | condition_statement
     | declaration
+;
+condition_statement:
+    IF LBRACKET expression RBRACKET statement %prec SUB_STATEMENT 
+	| IF LBRACKET expression RBRACKET statement ELSE statement
+	| SWITCH LBRACKET expression RBRACKET LBRACE case_statements RBRACE %prec SUB_STATEMENT
+	| SWITCH LBRACKET expression RBRACKET LBRACE case_statements DEFAULT COLON statements RBRACE
+;
+case_statements:
+    CASE expression COLON statements %prec SUB_STATEMENT
+	| CASE expression COLON statements case_statements
 ;
 iteration_statement:
 	WHILE LBRACKET expression RBRACKET statement
 	| DO statement WHILE LBRACKET expression RBRACKET SEMICOLON
 	| FOR LBRACKET expression_statement expression_statement RBRACKET statement
 	| FOR LBRACKET expression_statement expression_statement expression RBRACKET statement
+	| FOREACH LBRACKET typed_identifier IN expression RBRACKET statement %prec SUB_STATEMENT
+	| FOREACH LBRACKET IDENTIFIER IN expression RBRACKET statement %prec SUB_STATEMENT
 	| FOREACH LBRACKET typed_identifier IN expression RBRACKET statement EMPTY statement
 	| FOREACH LBRACKET IDENTIFIER IN expression RBRACKET statement EMPTY statement
 ;
@@ -324,6 +339,7 @@ unary_expression:
 	| OP_MIN unary_expression %prec EXP_UNARY
 	| OP_INC unary_expression
 	| OP_DEC unary_expression
+	| OP_NEG unary_expression
 ;
 postfix_expression:
 	primary_expression

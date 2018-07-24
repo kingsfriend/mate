@@ -29,6 +29,30 @@ class App {
 			Console.println("No data to process");
 		}
 
+		if(i>=10){
+			Console.println("i is greater than 10");
+		}else if(i>=0){
+			Console.println("i is lower than 10 but greater than 0");
+		}else{
+			Console.println("i is lower 0");
+		}
+
+		switch(i){
+			case 1:
+				1+2;
+				1+2;
+				1+2;
+				break(1);
+			case 2:
+				1+2;
+				break(2);
+				1+2;
+			default:
+				1+2;
+				1+2;
+				break;
+		}
+
 		Console.println("Job done...");
 		return;
 	}

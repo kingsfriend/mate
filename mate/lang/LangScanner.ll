@@ -29,11 +29,6 @@ E			[Ee][+-]?{D}+
 
 %%
 
-"@" { 
-	// cout << "Scanner: MAGIC" << endl;
-	return mate::LangParser::make_MAGIC(mate::location()); 
-}
-
 "as" { 
 	// cout << "Scanner: AS" << endl;
 	return mate::LangParser::make_AS(mate::location()); 
@@ -371,8 +366,7 @@ E			[Ee][+-]?{D}+
  }
 
 . { 
-	cout << "Scanner: UNDEFINED \"" << YYText() << "\"" << endl;
-	return mate::LangParser::make_UNDEFINED(std::string(yytext, yyleng), mate::location()); 
+	cout << "Scanner: INVALID_TOKEN \"" << YYText() << "\"" << endl;
 }
 <<EOF>> { 
 	return mate::LangParser::make_END(mate::location());
